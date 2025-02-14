@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+:root {
+  --color-lightest: #f7f4f2;
+  --color-lighter: #ebe5de;
+  --color-light: #d1c1b2;
+  --color-dark: #ac9586;
+}
+
+body {
+  background: var(--color-lighter);
+}
+
+.bg-footer {
+  background: var(--color-light);
+}

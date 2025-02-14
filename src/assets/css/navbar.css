@@ -1,0 +1,13 @@
+.wallpaper-navbar {
+  background-image: url('../img/bg-navbar.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .wallpaper-left-navbar {
+    background-size: 50%;
+    background-position: 75% 25%;
+  }
+}
