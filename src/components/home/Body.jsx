@@ -1,44 +1,47 @@
 import Servicio from './Servicio'
-import micro from '../../assets/img/body/micro.png'
-import extenciones from '../../assets/img/body/extensiones.png'
-import lifting from '../../assets/img/body/lifting.png'
-import cejas from '../../assets/img/body/cejas.png'
+import micro from '../../assets/img/body/micro.webp'
+import extenciones from '../../assets/img/body/extensiones.webp'
+import lifting from '../../assets/img/body/lifting.webp'
+import cejas from '../../assets/img/body/cejas.webp'
 
 const Body = () => {
   return (
     <div>
-      <div className='mt-[50px]'>
+      <div className='servicios]'>
         <p className='montserrat-semibold text-[28px] leading-[48.76px] tracking-[0] text-center mt-[20px] text-[#D8B192]'>
           SERVICIOS
         </p>
       </div>
-      <div className='flex justify-evenly mt-[50px]'>
-        <div data-aos='fade-down'>
-          <Servicio
-            url={micro}
-            text={
-              <>
-                micro pigmentación de labios <br /> cejas y párpados
-              </>
-            }
-          />
+      <div className='contenedor-servicios'>
+        <div className='fila-servicios flex justify-around'>
+          <div data-aos='flip-left'>
+            <Servicio
+              url={micro}
+              text={
+                <>
+                  micro pigmentación de labios <br /> cejas y párpados
+                </>
+              }
+            />
+          </div>
+          <div data-aos='flip-down'>
+            <Servicio url={extenciones} text={'Extensiones de pestañas'} />
+          </div>
         </div>
-        <div data-aos='fade-up'>
-          <Servicio url={extenciones} text={'Extensiones de pestañas'} />
-        </div>
-        <div data-aos='fade-down'>
-          <Servicio url={lifting} text={'Lifting de pestañas'} />
-        </div>
-        <div data-aos='fade-up'>
-          <Servicio
-            data-aos='fade-up'
-            url={cejas}
-            text={
-              <>
-                Diseño y depilación <br /> de cejas
-              </>
-            }
-          />
+        <div className='fila-servicios flex justify-around'>
+          <div data-aos='flip-left'>
+            <Servicio url={lifting} text={'Lifting de pestañas'} />
+          </div>
+          <div data-aos='flip-down'>
+            <Servicio
+              url={cejas}
+              text={
+                <>
+                  Diseño y depilación <br /> de cejas
+                </>
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

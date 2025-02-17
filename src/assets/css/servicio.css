@@ -1,0 +1,39 @@
+.contenedor-servicios {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 50px;
+}
+
+.servicios {
+  margin-top: 50px;
+}
+
+.fila-servicios {
+  width: 50%;
+}
+
+@media (max-width: 950px) {
+  .contenedor-servicios {
+    flex-direction: column;
+    margin-top: 50px;
+    align-items: center;
+    margin-top: 35px;
+    gap: 50px;
+  }
+
+  .servicios {
+    margin-top: 20px;
+  }
+}
+
+@media (min-width: 790px) and (max-width: 950px) {
+  .fila-servicios {
+    width: 60%;
+  }
+}
+
+@media (max-width: 790px) {
+  .fila-servicios {
+    width: 90%;
+  }
+}

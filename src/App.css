@@ -11,6 +11,11 @@ body {
   background: var(--color-lighter);
 }
 
+body,
+html {
+  overflow-x: hidden;
+}
+
 .bg-footer {
   background: var(--color-light);
 }

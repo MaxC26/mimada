@@ -2,11 +2,8 @@ import { IconBrandWhatsapp } from '@tabler/icons-react'
 
 const MenuNavbar = () => {
   return (
-    <div className='flex item-center gap-16'>
-      <nav
-        className='bg-[#ffffff25] p-2 ml-[65px] w-[280px] font-bold text-[13px] mt-[40px]'
-        data-aos='fade-up'
-      >
+    <div className='contenedor-menu' data-aos='zoom-in'>
+      <nav className='bg-[#ffffff25] font-bold navbar-list'>
         <ul className='flex justify-around'>
           <li>
             <a href='#' className='text-white hover:text-gray-400'>
@@ -25,9 +22,9 @@ const MenuNavbar = () => {
           </li>
         </ul>
       </nav>
-      <div className='flex items-end' data-aos='fade-down'>
+      <div className='flex items-end'>
         <a
-          href='https://wa.me/+50376394323'
+          href='https://wa.me/+50372755604'
           target='_blank'
           rel='noopener noreferrer'
           className='cursor-pointer'

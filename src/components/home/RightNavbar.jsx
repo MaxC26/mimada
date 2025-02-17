@@ -2,7 +2,7 @@ import MenuNavbar from './MenuNavbar'
 
 const RightNavbar = () => {
   return (
-    <div className='w-[45%] min-h-screen'>
+    <div className='contenedor-right'>
       <MenuNavbar />
     </div>
   )

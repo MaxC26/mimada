@@ -1,31 +1,24 @@
-import ourStory from '../../assets/img/ourstory.png'
+import ourStory from '../../assets/img/ourstory.webp'
 
 const OurStory = () => {
   return (
-    <div className='flex h-screen]'>
-      <div className='w-[55%] mt-[50px] pl-[60px]' data-aos='fade-right'>
+    <div className='flex mt-[30px] content-ourstory'>
+      <div className='img-ourstory' data-aos='flip-left'>
         <img src={ourStory} alt='our-story' />
       </div>
-      <div
-        className='w-[45%] flex flex-col justify-center pl-[20px] mb-[100px]'
-        data-aos='fade-left'
-      >
-        <p className='montserrat-semibold text-[40px] leading-[48.76px] tracking-[0] mt-[20px] text-[#D8B192] mb-[25px]'>
-          OUR STORY
+      <div className='flex flex-col justify-center txt-ourstory' data-aos='flip-right'>
+        <p className='txt-our-story montserrat-semibold text-[40px] leading-[48.76px] tracking-[0] mt-[20px] text-[#D8B192] mb-[25px]'>
+          NUESTRA HISTORIA
         </p>
-        <div className='w-[400px]'>
+        <div className='txt-description-ourstory'>
           <p className='text-[16px] leading-[25px] tracking-[0]'>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna. Enim facilisis gravida neque convallis a
-            cras semper.
+            Somos un studio especializado en realzar tu belleza con técnicas avanzadas en
+            pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
+            certificaciones para que también puedas convertir tu pasión en tu profesión.
             <br />
             <br />
-            <b>Always Clean</b> <br /> Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit, seddo.
-            <br />
-            <br />
-            <b>Always Leading And Ethical</b> <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, seddo.
+            Contamos con más 8 años de experiencia y certificaciones a nivel internacional
+            para ofrecerte un servido de la más alta calidad
           </p>
         </div>
       </div>

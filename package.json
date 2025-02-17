@@ -1,13 +1,16 @@
 {
   "name": "mimada-front",
+  "homepage": "https://maxc26.github.io/mimada/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.30.0",

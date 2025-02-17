@@ -7,7 +7,7 @@ import Home from './pages/Home'
 function App() {
   useEffect(() => {
     AOS.init({
-      once: true, // Ensures animations only happen once
+      once: true,
     })
   }, [])
 
