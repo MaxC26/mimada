@@ -8,40 +8,47 @@ const Footer = () => {
       </div>
       <div className='menu-contact'>
         <div className='h-[200px]'>
-          <p className='montserrat-semibold text-white text-[20px]'>Menu</p>
+          <p className='montserrat-semibold text-white text-[20px]'>Menú</p>
           <ul className='montserrat-regular text-[16px] mt-[20px]'>
             <li>
-              <a href='#' className='text-white hover:text-gray-400'>
+              <a href='#inicio' className='text-white hover:text-gray-400'>
                 Inicio
               </a>
             </li>
             <li>
-              <a href='#' className='text-white hover:text-gray-400'>
-                Servicio
+              <a href='#servicios' className='text-white hover:text-gray-400'>
+                Servicios
               </a>
             </li>
             <li>
-              <a href='#' className='text-white hover:text-gray-400'>
+              <a href='#nuestra-historia' className='text-white hover:text-gray-400'>
                 Nuestra historia
               </a>
             </li>
             <li>
-              <a href='#' className='text-white hover:text-gray-400'>
+              <a
+                href='https://wa.me/+50372755604'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-white hover:text-gray-400 cursor-pointer'
+              >
                 Hacer cita
               </a>
             </li>
           </ul>
         </div>
         <div className='h-[200px] contact'>
-          <p className='montserrat-semibold text-white text-[20px]'>Contact</p>
+          <p className='montserrat-semibold text-white text-[20px]'>Contacto</p>
           <p className='montserrat-regular text-[16px] text-white mt-[20px]'>
-            72755606 <br /> Centro comercial novo <br />
-            centro, Santa Tecla, El <br /> Salvador
+            72755606 <br /> Centro comercial las Ramblas, <br />
+            acceso al sótano <br /> local s104 B
           </p>
         </div>
       </div>
       <div className='content-social'>
-        <p className='montserrat-semibold text-white text-[20px] footer-social'>Social</p>
+        <p className='montserrat-semibold text-white text-[20px] footer-social'>
+          Redes sociales
+        </p>
         <div className='icon-social flex gap-[5px]'>
           <a
             href='https://wa.me/+50372755604'
@@ -70,3 +77,4 @@ const Footer = () => {
 }
 
 export default Footer
+

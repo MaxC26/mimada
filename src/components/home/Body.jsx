@@ -6,7 +6,7 @@ import cejas from '../../assets/img/body/cejas.webp'
 
 const Body = () => {
   return (
-    <div>
+    <div id='servicios'>
       <div className='servicios]'>
         <p className='montserrat-semibold text-[28px] leading-[48.76px] tracking-[0] text-center mt-[20px] text-[#D8B192]'>
           SERVICIOS
@@ -49,3 +49,4 @@ const Body = () => {
 }
 
 export default Body
+

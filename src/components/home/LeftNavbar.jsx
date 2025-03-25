@@ -22,16 +22,18 @@ const LeftNavbar = () => {
             <span className='cormorant-garamond-bold txt-philosophy'>Filosofía</span>
           </p>
           <p className='inter-regular txt-description'>
-            It is a long established fact that a reader will be <br /> distracted by the
-            readable content of a page <br /> when looking at its layout. The point of
-            using
-            <br /> Lorem Ipsum is that it has a more-or-less
+            La belleza es autenticidad y confianza. <br />
+            Cuando te cuidas y te sientes bien, brillas con luz <br /> propia.{' '}
+            <b>
+              Realza tu esencia, abraza tu belleza y <br /> refleja tu mejor versión.
+            </b>{' '}
+            ✨
           </p>
 
           <p className='inter-regular txt-description-mobil'>
-            It is a long established fact that a reader will be distracted by the readable
-            content of a page when looking at its layout. The point of using Lorem Ipsum
-            is that it has a more-or-less
+            La belleza es autenticidad y confianza. Cuando te cuidas y te sientes bien,
+            brillas con luz propia.{' '}
+            <b>Realza tu esencia, abraza tu belleza y refleja tu mejor versión.</b> ✨
           </p>
         </div>
       </div>

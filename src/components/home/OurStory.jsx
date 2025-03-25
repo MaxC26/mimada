@@ -2,7 +2,7 @@ import ourStory from '../../assets/img/ourstory.webp'
 
 const OurStory = () => {
   return (
-    <div className='flex mt-[30px] content-ourstory'>
+    <div className='flex mt-[30px] content-ourstory' id='nuestra-historia'>
       <div className='img-ourstory' data-aos='flip-left'>
         <img src={ourStory} alt='our-story' />
       </div>
@@ -27,3 +27,4 @@ const OurStory = () => {
 }
 
 export default OurStory
+

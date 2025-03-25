@@ -26,7 +26,7 @@
   .img-ourstory {
     width: 80%;
     margin-top: 0px;
-    paddind: 0px;
+    padding: 0px;
   }
 
   .content-ourstory {
@@ -43,7 +43,7 @@
   .img-ourstory {
     width: 100%;
     margin-top: 0px;
-    paddind: 0px;
+    padding: 0px;
   }
 
   .content-ourstory {
@@ -70,3 +70,4 @@
     text-align: center;
   }
 }
+

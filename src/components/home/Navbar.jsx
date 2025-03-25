@@ -3,7 +3,7 @@ import RightNavbar from './RightNavbar'
 
 const Navbar = () => {
   return (
-    <div className='flex wallpaper-navbar'>
+    <div className='flex wallpaper-navbar' id='inicio'>
       <LeftNavbar />
       <RightNavbar />
     </div>
@@ -11,3 +11,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+

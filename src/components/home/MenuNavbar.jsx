@@ -6,17 +6,17 @@ const MenuNavbar = () => {
       <nav className='bg-[#ffffff25] font-bold navbar-list'>
         <ul className='flex justify-around'>
           <li>
-            <a href='#' className='text-white hover:text-gray-400'>
+            <a href='#inicio' className='text-white hover:text-gray-400'>
               Inicio
             </a>
           </li>
           <li>
-            <a href='#' className='text-white hover:text-gray-400'>
+            <a href='#servicios' className='text-white hover:text-gray-400'>
               Servicios
             </a>
           </li>
           <li>
-            <a href='#' className='text-white hover:text-gray-400'>
+            <a href='#nuestra-historia' className='text-white hover:text-gray-400'>
               Nuestra historia
             </a>
           </li>
@@ -40,3 +40,4 @@ const MenuNavbar = () => {
 }
 
 export default MenuNavbar
+
