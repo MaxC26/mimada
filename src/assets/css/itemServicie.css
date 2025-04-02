@@ -1,0 +1,104 @@
+.container-items {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-wrapper {
+  position: relative;
+}
+
+.card {
+  position: relative;
+}
+
+.img-mask {
+  width: 220px;
+  height: 165px;
+  background-position: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  position: relative;
+}
+
+.img-mask {
+  -webkit-mask: url('../img/mask.svg') center / contain no-repeat,
+    linear-gradient(#000000 0 0);
+  mask: url('../img/mask.svg') center / contain no-repeat, linear-gradient(#000000 0 0);
+  mask-size: 4rem;
+  mask-position: bottom -1px right 0px;
+  mask-composite: exclude;
+}
+
+.text-items {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 13px;
+  width: 150px;
+  position: absolute;
+  left: 15px;
+  bottom: 10px;
+}
+
+.degradado {
+  width: 100%;
+  height: 20%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.enlace {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #d8b192a1;
+  padding: 10px 10px;
+  font-size: 16px;
+  position: absolute;
+  right: 8px;
+  bottom: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 1px 1px rgba(217, 217, 217, 0.39);
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .img-mask {
+    width: 170px;
+    height: 115px;
+    background-position: 0%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    position: relative;
+  }
+
+  .img-mask {
+    -webkit-mask: url('../img/mask.svg') center / contain no-repeat,
+      linear-gradient(#000000 0 0);
+    mask: url('../img/mask.svg') center / contain no-repeat, linear-gradient(#000000 0 0);
+    mask-size: 3.8rem;
+    mask-position: bottom -2px right -1px;
+    mask-composite: exclude;
+  }
+
+  .enlace {
+    right: 4px;
+    bottom: -4px;
+  }
+}
+

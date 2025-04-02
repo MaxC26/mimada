@@ -1,12 +1,15 @@
 import Footer from '../components/Footer'
+import { Head } from '../components/head/Head'
 import Body from '../components/home/Body'
-import Navbar from '../components/home/Navbar'
+
 import OurStory from '../components/home/OurStory'
+import { Navbar } from '../components/nabvar/Navbar'
 
 const Home = () => {
   return (
     <div>
       <Navbar />
+      <Head />
       <Body />
       <OurStory />
       <Footer />
@@ -15,3 +18,4 @@ const Home = () => {
 }
 
 export default Home
+

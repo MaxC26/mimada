@@ -1,28 +1,72 @@
-import ourStory from '../../assets/img/ourstory.webp'
+import React from 'react'
+import pestanias from '../../assets/img/extensionPsts.webp'
 
 const OurStory = () => {
   return (
-    <div className='flex mt-[30px] content-ourstory' id='nuestra-historia'>
-      <div className='img-ourstory' data-aos='flip-left'>
-        <img src={ourStory} alt='our-story' />
-      </div>
-      <div className='flex flex-col justify-center txt-ourstory' data-aos='flip-right'>
-        <p className='txt-our-story montserrat-semibold text-[40px] leading-[48.76px] tracking-[0] mt-[20px] text-[#D8B192] mb-[25px]'>
-          NUESTRA HISTORIA
-        </p>
-        <div className='txt-description-ourstory'>
-          <p className='text-[16px] leading-[25px] tracking-[0]'>
-            Somos un studio especializado en realzar tu belleza con técnicas avanzadas en
-            pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
-            certificaciones para que también puedas convertir tu pasión en tu profesión.
-            <br />
-            <br />
-            Contamos con más 8 años de experiencia y certificaciones a nivel internacional
-            para ofrecerte un servido de la más alta calidad
-          </p>
+    <section
+      id='nuestra-historia'
+      className='container mx-auto px-4 py-12 md:py-16 lg:py-24 min-h-[60vh] flex items-center'
+    >
+      <div className='w-full'>
+        {/* Versión móvil: columna */}
+        <div className='flex flex-col md:hidden gap-8'>
+          <div className='text-center' data-aos='fade-up'>
+            <h2 className='font-semibold text-3xl text-[#D8B192] mb-4'>
+              NUESTRA HISTORIA
+            </h2>
+            <p className='text-base leading-relaxed mx-auto max-w-md'>
+              Somos un studio especializado en realzar tu belleza con técnicas avanzadas
+              en pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
+              certificaciones para que también puedas convertir tu pasión en tu profesión.
+              Contamos con más 8 años de experiencia y certificaciones a nivel
+              internacional para ofrecerte un servido de la más alta calidad
+            </p>
+          </div>
+          <div className='flex justify-center'>
+            <div
+              className='w-56 h-56 overflow-hidden rounded-lg shadow-md'
+              data-aos='flip-left'
+            >
+              <img
+                src={pestanias}
+                alt='Extensión de pestañas'
+                className='w-full h-full object-cover'
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Versión tablet y desktop */}
+        <div className='hidden md:grid md:grid-cols-2 gap-8 lg:gap-16 items-center'>
+          {/* Contenedor de imagen - a la izquierda */}
+          <div className='flex justify-center' data-aos='fade-right'>
+            <div className='w-80 h-80 lg:w-96 lg:h-96 xl:w-full xl:h-auto xl:max-h-96 overflow-hidden rounded-lg shadow-md'>
+              <img
+                src={pestanias}
+                alt='Extensión de pestañas'
+                className='w-full h-full object-cover hover:scale-105 transition-transform duration-300'
+              />
+            </div>
+          </div>
+
+          {/* Contenedor de texto - a la derecha */}
+          <div data-aos='fade-left'>
+            <h2 className='font-semibold text-3xl lg:text-4xl xl:text-5xl text-[#D8B192] mb-6'>
+              NUESTRA HISTORIA
+            </h2>
+            <div>
+              <p className='text-base lg:text-lg leading-relaxed max-w-lg'>
+                Somos un studio especializado en realzar tu belleza con técnicas avanzadas
+                en pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
+                certificaciones para que también puedas convertir tu pasión en tu
+                profesión. Contamos con más 8 años de experiencia y certificaciones a
+                nivel internacional para ofrecerte un servido de la más alta calidad
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

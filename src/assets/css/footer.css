@@ -1,62 +1,167 @@
+/* Improved Footer responsive styles with centered mobile layout */
 .contenedor-footer {
-  width: 100%;
-  height: 355px;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  gap: 2.5rem;
+  position: relative;
+  background-color: #d1c1b2;
 }
 
-.content-social {
-  height: 200px;
-}
-
+/* Brand logo styling */
 .footer-mimada {
-  padding-bottom: 120px;
+  font-size: 2.5rem;
+  position: relative;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.footer-mimada::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background-color: white;
+}
+
+/* Menu and contact section */
+.menu-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.menu-contact > div {
+  width: 100%;
+  max-width: 280px;
+}
+
+.menu-contact ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-contact li {
+  margin-bottom: 1rem;
+}
+
+.menu-contact a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0.25rem 0;
+  display: inline-block;
+}
+
+/* Social media section */
+.content-social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-social {
+  margin-bottom: 1.25rem;
 }
 
 .icon-social {
-  margin-top: 20px;
-}
-
-.menu-contact {
   display: flex;
+  gap: 1rem;
+  justify-content: center;
 }
 
-.contact {
-  padding-left: 150px;
+.icon-social button {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 900px) and (max-width: 1150px) {
-  .contact {
-    padding-left: 100px;
-  }
+.icon-social button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 900px) {
-  .contact {
-    padding-left: 100px;
-  }
+/* Decorative elements */
+.bg-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center top,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
 
-  .footer-mimada {
-    padding-bottom: 20px;
-    padding-top: 20px;
-  }
-
+/* Responsive breakpoints */
+@media (min-width: 768px) {
   .contenedor-footer {
-    flex-direction: column;
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-between;
+    padding: 4rem 3rem;
+    align-items: flex-start;
   }
 
-  .footer-social {
-    display: none;
+  .footer-mimada::after {
+    left: 0;
+    transform: none;
+  }
+
+  .menu-contact {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    max-width: 50%;
+  }
+
+  .menu-contact > div {
+    align-items: flex-start;
+  }
+
+  .content-social {
+    align-items: flex-start;
+    max-width: 25%;
   }
 
   .icon-social {
-    margin-top: 0px;
+    justify-content: flex-start;
   }
 }
 
-@media (max-width: 700px) {
-  .contact {
-    padding-left: 30px;
+@media (min-width: 1024px) {
+  .contenedor-footer {
+    padding: 5rem 6rem;
   }
+
+  .footer-mimada {
+    font-size: 3rem;
+  }
+
+  .menu-contact {
+    gap: 4rem;
+  }
+}
+
+/* Animation enhancement */
+[data-aos='zoom-in'] {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+[data-aos='zoom-in'].aos-animate {
+  opacity: 1;
+  transform: scale(1);
 }

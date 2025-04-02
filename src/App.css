@@ -1,21 +1,28 @@
 @import 'tailwindcss';
+@plugin "daisyui";
 
 :root {
   --color-lightest: #f7f4f2;
   --color-lighter: #ebe5de;
   --color-light: #d1c1b2;
   --color-dark: #ac9586;
+
+  --color-lighter02: #fcf8ef;
 }
 
 body {
-  background: var(--color-lighter);
+  background: var(--color-lighter02);
 }
 
 body,
 html {
   overflow-x: hidden;
+  background: var(--color-lighter02);
+  margin: 0;
+  padding: 0;
 }
 
 .bg-footer {
   background: var(--color-light);
 }
+

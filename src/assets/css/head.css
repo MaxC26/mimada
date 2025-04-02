@@ -1,0 +1,30 @@
+/* Para mantener las fuentes personalizadas */
+.prata-regular {
+  font-family: 'Prata', serif;
+}
+
+.cormorant-garamond-semibold,
+.cormorant-garamond-bold {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+}
+
+.cormorant-garamond-bold {
+  font-weight: 700;
+}
+
+.corinthia-bold {
+  font-family: 'Corinthia', cursive;
+  font-weight: 700;
+}
+
+.inter-regular {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Para la imagen circular en móvil */
+@media (max-width: 768px) {
+  .rounded-full {
+    background-position: center 20%;
+  }
+}

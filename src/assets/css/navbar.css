@@ -20,9 +20,11 @@
 }
 
 .contenedor-menu {
+  width: 100%;
   display: flex;
-  justify-content: between;
+  justify-content: end;
   gap: 50px;
+  padding-right: 100px;
 }
 
 .contenedor-navbar {
@@ -32,11 +34,11 @@
   flex-direction: column;
 }
 
-.txt-mimada {
+/* .txt-mimada {
   font-size: 60px;
   margin-left: 150px;
   padding-top: 15px;
-}
+} */
 
 .txt-reveal {
   font-size: 76px;
@@ -44,14 +46,6 @@
   margin-top: 20px;
   line-height: 73.8px;
   letter-spacing: 0;
-}
-
-.content-our {
-  font-size: 30px;
-  line-height: 44px;
-  letter-spacing: 0;
-  margin-left: 80px;
-  margin-top: 60px;
 }
 
 .txt-our {
@@ -62,28 +56,7 @@
   margin-left: 10px;
 }
 
-.txt-description {
-  color: #1b1b1b;
-  font-size: 20px;
-  line-height: 24px;
-  letter-spacing: 0;
-  margin-left: 80px;
-  margin-top: 10px;
-}
-
 .img-lips {
-  display: none;
-}
-
-.navbar-list {
-  padding: 10px;
-  margin-left: 65px;
-  width: 280px;
-  font-size: 13px;
-  margin-top: 40px;
-}
-
-.txt-description-mobil {
   display: none;
 }
 
@@ -94,11 +67,11 @@
 }
 
 @media (min-width: 1050px) and (max-width: 1180px) {
-  .txt-mimada {
+  /* .txt-mimada {
     font-size: 45px;
     margin-left: 150px;
     padding-top: 15px;
-  }
+  } */
 
   .txt-reveal {
     font-size: 60px;
@@ -121,7 +94,7 @@
 }
 
 @media (min-width: 936px) and (max-width: 1049px) {
-  .navbar-list {
+  .txt-reveal {
     margin-left: 0px;
   }
 
@@ -163,41 +136,18 @@
     flex-direction: column;
   }
 
-  .contenedor-our-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .content-our,
-  .txt-description {
-    margin: 0px;
-    padding-left: 40px;
-    padding-right: 60px;
-  }
-
-  .contenedor-mimada-img {
+  /* .contenedor-mimada-img {
     display: flex;
     justify-content: center;
     gap: 50px;
-  }
+  } */
 
-  .txt-mimada {
+  /* .txt-mimada {
     margin-left: 0px;
-  }
+  } */
 }
 
 @media (max-width: 935px) {
-  .navbar-list {
-    margin-left: 0px;
-  }
-
-  .contenedor-mimada-img {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-  }
-
   .wallpaper-navbar {
     background-image: none;
     flex-direction: column-reverse;
@@ -230,19 +180,6 @@
     flex-direction: column;
   }
 
-  .contenedor-our-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .content-our,
-  .txt-description {
-    margin: 0px;
-    padding-left: 40px;
-    padding-right: 60px;
-  }
-
   .contenedor-menu {
     gap: 15px;
     padding: 0px 12px;
@@ -250,11 +187,11 @@
 }
 
 @media (min-width: 800px) and (max-width: 950px) {
-  .txt-mimada {
+  /* .txt-mimada {
     font-size: 50px;
     margin-left: 80px;
     padding-top: 15px;
-  }
+  } */
 
   .txt-reveal {
     font-size: 66px;
@@ -269,19 +206,19 @@
     width: 25%;
   }
 
-  .txt-mm-ryb {
+  /* .txt-mm-ryb {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
+  } */
 }
 
 @media (min-width: 700px) and (max-width: 800px) {
-  .txt-mimada {
+  /* .txt-mimada {
     font-size: 40px;
     margin-left: 80px;
     padding-top: 15px;
-  }
+  } */
 
   .txt-reveal {
     font-size: 56px;
@@ -296,44 +233,29 @@
     width: 30%;
   }
 
-  .txt-mm-ryb {
+  /* .txt-mm-ryb {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
+  } */
 }
 
 @media (max-width: 700px) {
-  .txt-description-mobil {
-    display: block;
-    color: #1b1b1b;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    text-align: center;
-  }
-
-  .txt-description {
-    display: none;
-  }
-
-  .contenedor-mimada-img {
+  /* .contenedor-mimada-img {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-left: 5px;
     padding-right: 5px;
     gap: 20px;
-  }
+  } */
 
-  .txt-mimada {
+  /* .txt-mimada {
     font-size: 35px;
     margin-left: 0px;
     padding-top: 0px;
     text-align: center;
-  }
+  } */
 
   .txt-reveal {
     font-size: 46px;
@@ -350,14 +272,10 @@
     padding-bottom: 60px;
   }
 
-  .txt-mm-ryb {
+  /* .txt-mm-ryb {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-
-  .content-our {
-    text-align: center;
-    padding-bottom: 20px;
-  }
+  } */
 }
+
