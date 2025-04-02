@@ -13,6 +13,7 @@ function App() {
 
   return (
     <div className='w-full min-h-screen'>
+      <h1>Prueba</h1>
       <Home />
     </div>
   )
