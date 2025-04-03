@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavItem } from '../components/nabvar/NavItem'
 import { IconClock2, IconMenu3, IconSmartHome, IconUsers } from '@tabler/icons-react'
+import { getContenidoBySeccion } from '../services/contenido'
 
 const DashboardPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -10,7 +11,18 @@ const DashboardPage = () => {
     if (mobileMenuOpen) {
       setMobileMenuOpen(false)
     }
+
+    if (activePage === 'Inicio') getAllContent('Head')
+    if (activePage === 'Servicios') getAllContent('servicio')
+    if (activePage === 'Nuestra Historia') getAllContent('historia')
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePage])
+
+  const getAllContent = async (seccion) => {
+    const contenido = await getContenidoBySeccion(seccion)
+    console.log(contenido)
+  }
 
   return (
     <div className='flex min-h-screen bg-gray-50'>

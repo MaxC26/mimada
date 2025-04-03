@@ -3,7 +3,10 @@ const urlContext = '/mmd/api'
 const routesBackend = Object.freeze({
   url: `${urlBackend}${urlContext}`,
   login: '/login',
-  contenido: '/contenido',
+  contenido: {
+    getAllContenido: '/contenido',
+    getContenidoBySeccion: '/contenido/contenidoBySeccion?seccion=:seccion',
+  },
 })
 export const context = '/mimada'
 
