@@ -12,7 +12,6 @@ export const ItenServicio = ({ img, descripcion, dataAos }) => {
               backgroundImage: `url(${img})`,
             }}
           >
-            <p className='text-items z-50'>{descripcion}</p>
             <div className='degradado'></div>
           </div>
           <a
@@ -24,6 +23,7 @@ export const ItenServicio = ({ img, descripcion, dataAos }) => {
             <IconArrowUpRight stroke={2} color='#ffffff' size={20} />
           </a>
         </div>
+        <p className='text-items z-50'>{descripcion}</p>
       </div>
     </div>
   )
