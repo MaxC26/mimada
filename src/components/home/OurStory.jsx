@@ -1,7 +1,6 @@
-import React from 'react'
-import pestanias from '../../assets/img/extensionPsts.webp'
+const OurStory = ({ content }) => {
+  const { imgHistoria, textHistoria } = content
 
-const OurStory = () => {
   return (
     <section
       id='nuestra-historia'
@@ -14,13 +13,7 @@ const OurStory = () => {
             <h2 className='font-semibold text-3xl text-[#D8B192] mb-4'>
               NUESTRA HISTORIA
             </h2>
-            <p className='text-base leading-relaxed mx-auto max-w-md'>
-              Somos un studio especializado en realzar tu belleza con técnicas avanzadas
-              en pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
-              certificaciones para que también puedas convertir tu pasión en tu profesión.
-              Contamos con más 8 años de experiencia y certificaciones a nivel
-              internacional para ofrecerte un servido de la más alta calidad
-            </p>
+            <p className='text-base leading-relaxed mx-auto max-w-md'>{textHistoria}</p>
           </div>
           <div className='flex justify-center'>
             <div
@@ -28,7 +21,7 @@ const OurStory = () => {
               data-aos='flip-left'
             >
               <img
-                src={pestanias}
+                src={imgHistoria}
                 alt='Extensión de pestañas'
                 className='w-full h-full object-cover'
               />
@@ -42,7 +35,7 @@ const OurStory = () => {
           <div className='flex justify-center' data-aos='fade-right'>
             <div className='w-80 h-80 lg:w-96 lg:h-96 xl:w-full xl:h-auto xl:max-h-96 overflow-hidden rounded-lg shadow-md'>
               <img
-                src={pestanias}
+                src={imgHistoria}
                 alt='Extensión de pestañas'
                 className='w-full h-full object-cover hover:scale-105 transition-transform duration-300'
               />
@@ -56,11 +49,7 @@ const OurStory = () => {
             </h2>
             <div>
               <p className='text-base lg:text-lg leading-relaxed max-w-lg'>
-                Somos un studio especializado en realzar tu belleza con técnicas avanzadas
-                en pestañas, cejas, labios y más. Ofrecemos servicios profesionales y
-                certificaciones para que también puedas convertir tu pasión en tu
-                profesión. Contamos con más 8 años de experiencia y certificaciones a
-                nivel internacional para ofrecerte un servido de la más alta calidad
+                {textHistoria}
               </p>
             </div>
           </div>
@@ -71,4 +60,3 @@ const OurStory = () => {
 }
 
 export default OurStory
-

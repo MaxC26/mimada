@@ -1,10 +1,17 @@
-import extensioncejas from '../../assets/img/extensioncejas.png'
-import micropigmentacion from '../../assets/img/micropigmentacion.png'
-import lifting from '../../assets/img/lifting.png'
-import cejas from '../../assets/img/disenoCejas.png'
 import { ItenServicio } from '../utils/ItenServicio'
 
-const Body = () => {
+const Body = ({ content }) => {
+  const {
+    imgServicio01,
+    textServicio01,
+    imgServicio02,
+    textServicio02,
+    imgServicio03,
+    textServicio03,
+    imgServicio04,
+    textServicio04,
+  } = content
+
   return (
     <div className='servicios w-full py-8 md:py-16' id='servicios'>
       {/* Title Section */}
@@ -21,23 +28,23 @@ const Body = () => {
       {/* Services Grid - Responsive Grid Layout */}
       <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto px-4 mt-10 md:mt-20'>
         <ItenServicio
-          img={micropigmentacion}
-          descripcion={'Micro pigmentación de labios cejas y párpados'}
+          img={imgServicio01}
+          descripcion={textServicio01}
           dataAos={'fade-up'}
         />
         <ItenServicio
-          img={extensioncejas}
-          descripcion={'Extensiones de pestañas'}
+          img={imgServicio02}
+          descripcion={textServicio02}
           dataAos={'fade-down'}
         />
         <ItenServicio
-          img={lifting}
-          descripcion={'Lifting de pestañas'}
+          img={imgServicio03}
+          descripcion={textServicio03}
           dataAos={'fade-up'}
         />
         <ItenServicio
-          img={cejas}
-          descripcion={'Diseño y depilación de cejas'}
+          img={imgServicio04}
+          descripcion={textServicio04}
           dataAos={'fade-down'}
         />
       </div>
@@ -46,4 +53,3 @@ const Body = () => {
 }
 
 export default Body
-
