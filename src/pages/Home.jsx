@@ -6,8 +6,24 @@ import Body from '../components/home/Body'
 import OurStory from '../components/home/OurStory'
 import { Navbar } from '../components/nabvar/Navbar'
 import { useEffect } from 'react'
+import { getAllContenido } from '../services/contenido'
 
-const Home = ({ contenido }) => {
+const Home = () => {
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {}, [])
+
+  const getAllContent = async () => {
+    const updatedContent = { ...content } // Copia del estado actual
+    const contenido = await getAllContenido()
+    contenido.data.forEach((item) => {
+      if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
+        updatedContent[item.llave] = item.valor
+      }
+    })
+    setContent(updatedContent)
+    setIsLoading(false)
+  }
+
   const [content, setContent] = useState({
     imgHead: '',
     textHead: '',
@@ -25,30 +41,24 @@ const Home = ({ contenido }) => {
   })
 
   useEffect(() => {
-    getContent()
+    getAllContent()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const getContent = async () => {
-    const updatedContent = { ...content } // Copia del estado actual
-
-    contenido.forEach((item) => {
-      if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
-        updatedContent[item.llave] = item.valor
-      }
-    })
-
-    setContent(updatedContent)
-  }
-
   return (
     <div className='w-full min-h-screen'>
-      <Navbar />
-      <Head content={content} />
-      <Body content={content} />
-      <OurStory content={content} />
-      <Footer />
+      {isLoading ? (
+        <div>Cargando...</div>
+      ) : (
+        <>
+          <Navbar />
+          <Head content={content} />
+          <Body content={content} />
+          <OurStory content={content} />
+          <Footer />
+        </>
+      )}
     </div>
   )
 }
