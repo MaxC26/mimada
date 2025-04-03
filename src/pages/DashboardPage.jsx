@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { NavItem } from '../components/nabvar/NavItem'
 
-export const DashboardPage = () => {
+const DashboardPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const SettingsIcon = () => (
     <svg
@@ -86,3 +86,4 @@ export const DashboardPage = () => {
   )
 }
 
+export default DashboardPage

@@ -7,7 +7,7 @@ import { Navbar } from '../components/nabvar/Navbar'
 
 const Home = () => {
   return (
-    <div>
+    <div className='w-full min-h-screen'>
       <Navbar />
       <Head />
       <Body />
@@ -18,4 +18,3 @@ const Home = () => {
 }
 
 export default Home
-
