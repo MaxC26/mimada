@@ -14,3 +14,4 @@ export const routes = Object.freeze({
   backend: routesBackend,
   files: routeFiles,
 })
+

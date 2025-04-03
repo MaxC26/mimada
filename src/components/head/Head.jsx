@@ -1,7 +1,8 @@
-import woman from '../../assets/img/woman.webp'
 import points from '../../assets/img/points.png'
 
-export const Head = () => {
+export const Head = ({ content }) => {
+  const { imgHead, textHead, textHead01 } = content
+
   return (
     <div
       className='bg-[#fcf8ef] w-full py-8 md:py-12 lg:py-16 overflow-hidden'
@@ -17,7 +18,7 @@ export const Head = () => {
           ></div>
           <div
             className='relative z-10 w-72 h-72 mx-auto rounded-full overflow-hidden bg-no-repeat bg-cover border-4 border-[#f9f3e3] shadow-lg'
-            style={{ backgroundImage: `url(${woman})` }}
+            style={{ backgroundImage: `url(${imgHead})` }}
             data-aos='fade-in'
           ></div>
         </div>
@@ -26,8 +27,7 @@ export const Head = () => {
         <div className='text-center mt-6' data-aos='fade-up'>
           <p className='font-serif text-4xl font-bold mb-2'>MIMADA</p>
           <p className='font-serif text-5xl font-semibold leading-tight mb-8'>
-            REVELA TU <br />
-            BELLEZA
+            {textHead}
           </p>
 
           <div className='mt-8'>
@@ -35,11 +35,7 @@ export const Head = () => {
               <span className='font-cursive text-3xl text-[#e08f8f]'>Nuestra</span>
               <span className='font-serif text-2xl font-bold ml-2'>Filosofía</span>
             </p>
-            <p className='text-base text-[#1b1b1b] px-4 mt-3'>
-              La belleza es autenticidad y confianza. Cuando te cuidas y te sientes bien,
-              brillas con luz propia.
-              <b> Realza tu esencia, abraza tu belleza y refleja tu mejor versión.</b> ✨
-            </p>
+            <p className='text-base text-[#1b1b1b] px-4 mt-3'>{textHead01}</p>
           </div>
         </div>
       </div>
@@ -58,8 +54,7 @@ export const Head = () => {
             className='cormorant-garamond-semibold text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight mt-4'
             data-aos='zoom-in'
           >
-            REVELA TU <br />
-            BELLEZA
+            {textHead}
           </p>
 
           <div data-aos='zoom-in' className='mt-12 lg:mt-16'>
@@ -72,9 +67,7 @@ export const Head = () => {
               </span>
             </p>
             <p className='inter-regular text-base md:text-lg lg:text-xl mt-4 pr-4 md:pr-8 lg:pr-24'>
-              La belleza es autenticidad y confianza. Cuando te cuidas y te sientes bien,
-              brillas con luz propia.
-              <b> Realza tu esencia, abraza tu belleza y refleja tu mejor versión.</b> ✨
+              {textHead01}
             </p>
           </div>
         </div>
@@ -99,7 +92,7 @@ export const Head = () => {
           <div
             className='bg-no-repeat bg-cover rounded-tl-[265px] ml-auto'
             style={{
-              backgroundImage: `url(${woman})`,
+              backgroundImage: `url(${imgHead})`,
               minWidth: '380px',
               width: '100%',
               height: '90vh',
@@ -112,4 +105,3 @@ export const Head = () => {
     </div>
   )
 }
-
