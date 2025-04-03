@@ -1,5 +1,7 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, dark;
+}
 
 :root {
   --color-lightest: #f7f4f2;
@@ -25,4 +27,3 @@ html {
 .bg-footer {
   background: var(--color-light);
 }
-
