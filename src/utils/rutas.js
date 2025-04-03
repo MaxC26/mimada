@@ -1,5 +1,9 @@
+const urlBackend = 'http://localhost:3000'
+const urlContext = '/mmd/api'
 const routesBackend = Object.freeze({
-  baseURL: `http://localhost:3000`,
+  url: `${urlBackend}${urlContext}`,
+  login: '/login',
+  contenido: '/contenido',
 })
 export const context = '/mimada'
 
@@ -14,4 +18,3 @@ export const routes = Object.freeze({
   backend: routesBackend,
   files: routeFiles,
 })
-

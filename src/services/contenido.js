@@ -5,7 +5,7 @@ import { routes } from '../utils/rutas'
 export function getAllContenido() {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${routes.backend.baseURL}/mmd/api/contenido`)
+      .get(`${routes.backend.url}${routes.backend.contenido}`)
       .then(function (response) {
         resolve(response)
       })
