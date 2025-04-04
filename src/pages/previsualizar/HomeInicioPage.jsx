@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar } from '../../components/nabvar/Navbar'
-import { HeadPrevisualizar } from './HeadPrevisualizar'
 import Footer from '../../components/Footer'
+import { Head } from '../../components/head/Head'
 
-export const HomeInicio = () => {
+export const HomeInicioPage = () => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const HomeInicio = () => {
   return (
     <div>
       <Navbar />
-      <HeadPrevisualizar content={content} />
+      <Head content={content} />
       <Footer />
     </div>
   )
