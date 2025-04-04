@@ -5,24 +5,28 @@ import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
 
 const DashboardPage = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePage, setActivePage] = useState('Inicio')
+  const [contenido, setContenido] = useState([])
 
   useEffect(() => {
     if (mobileMenuOpen) {
       setMobileMenuOpen(false)
     }
 
-    if (activePage === 'Inicio') getAllContent('Head')
-    if (activePage === 'Servicios') getAllContent('servicio')
-    if (activePage === 'Nuestra Historia') getAllContent('historia')
+    if (activePage === 'Inicio') getSectionContent('Head')
+    if (activePage === 'Servicios') getSectionContent('servicio')
+    if (activePage === 'Nuestra Historia') getSectionContent('historia')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePage])
 
-  const getAllContent = async (seccion) => {
+  const getSectionContent = async (seccion) => {
     const contenido = await getContenidoBySeccion(seccion)
-    console.log(contenido)
+
+    setContenido(contenido.data)
+    setIsLoading(false)
   }
 
   return (
@@ -40,22 +44,28 @@ const DashboardPage = () => {
               icon={<IconSmartHome stroke={2} />}
               text='Inicio'
               url='Inicio'
-              active={activePage === 'Inicio'}
+              newActive={activePage === 'Inicio'}
               setActivePage={setActivePage}
+              setIsLoading={setIsLoading}
+              activePage={activePage}
             />
             <NavItem
               icon={<IconUsers stroke={2} />}
               text='Servicios'
               url='Servicios'
-              active={activePage === 'Servicios'}
+              newActive={activePage === 'Servicios'}
               setActivePage={setActivePage}
+              setIsLoading={setIsLoading}
+              activePage={activePage}
             />
             <NavItem
               icon={<IconClock2 stroke={2} />}
               text='Nuestra Historia'
               url='NuestraHistoria'
-              active={activePage === 'Nuestra Historia'}
+              newActive={activePage === 'Nuestra Historia'}
               setActivePage={setActivePage}
+              setIsLoading={setIsLoading}
+              activePage={activePage}
             />
           </div>
         </div>
@@ -80,15 +90,18 @@ const DashboardPage = () => {
       )}
 
       {/* Contenido principal (placeholder) */}
-      <div className='flex-1 p-8'>
-        <h1 className='text-2xl font-bold mb-4'>{activePage}</h1>
-        {activePage === 'Inicio' && <Inicio />}
-        {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
-        {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
-      </div>
+      {isLoading ? (
+        <h1>Cargando... </h1>
+      ) : (
+        <div className='flex-1 p-8'>
+          <h1 className='text-2xl font-bold mb-4'>{activePage}</h1>
+          {activePage === 'Inicio' && <Inicio contenido={contenido} />}
+          {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
+          {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
+        </div>
+      )}
     </div>
   )
 }
 
 export default DashboardPage
-

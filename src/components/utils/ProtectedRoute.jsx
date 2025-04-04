@@ -6,7 +6,6 @@ const ProtectedRoute = () => {
   const navigate = useNavigate()
 
   const jwt = localStorage.getItem('jwt')
-  console.log('🚀 ~ ProtectedRoute ~ jwt:', jwt)
 
   if (jwt) {
     const decoded = jwtDecode(jwt)
@@ -25,4 +24,3 @@ const ProtectedRoute = () => {
 }
 
 export default ProtectedRoute
-

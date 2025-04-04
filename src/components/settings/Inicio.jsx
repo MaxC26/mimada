@@ -3,13 +3,14 @@ import { Formik, Form, Field } from 'formik'
 import ImageUploader from './ImageUploader'
 import { routes } from '../../utils/rutas'
 
-export const Inicio = () => {
+export const Inicio = ({ contenido }) => {
+  const title = contenido.filter((item) => item.llave === 'textHead')[0]
+  const subTitle = contenido.filter((item) => item.llave === 'textHead01')[0]
+
   const [nameFile, setNameFile] = useState('')
   const [file, setFile] = useState(null)
-  const [textHead, setTextHead] = useState('REVELA TU BELLEZA')
-  const [textHead01, setTextHead01] = useState(
-    'La belleza es autenticidad y confianza. Cuando te cuidas y te sientes bien, brillas con luz propia. Realza tu esencia, abraza tu belleza y refleja tu mejor versión.'
-  )
+  const [textHead, setTextHead] = useState(title ? title.valor : '')
+  const [textHead01, setTextHead01] = useState(subTitle ? subTitle.valor : '')
 
   // Contadores de caracteres
   const [charCountHead, setCharCountHead] = useState(textHead.length)
@@ -21,7 +22,6 @@ export const Inicio = () => {
       textHead: textHead,
       textHead01: textHead01,
     }
-    console.log('Previewing content:', content)
     localStorage.setItem('previewData', JSON.stringify(content))
     window.open(routes.previsualizarInicio, '_blank')
   }
@@ -44,7 +44,7 @@ export const Inicio = () => {
           console.log(values)
         }}
       >
-        {({ setFieldValue, values }) => (
+        {({ setFieldValue }) => (
           <Form className='space-y-6'>
             {/* Campo para el título principal - limitado a 30 caracteres */}
             <div className='form-control w-full'>
@@ -144,4 +144,3 @@ export const Inicio = () => {
     </div>
   )
 }
-
