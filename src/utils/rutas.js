@@ -7,7 +7,10 @@ const routesBackend = Object.freeze({
     register: '/user/register',
     logout: '/user/logout',
   },
-  contenido: '/contenido',
+  contenido: {
+    getAllContenido: '/contenido',
+    getContenidoBySeccion: '/contenido/contenidoBySeccion?seccion=:seccion',
+  },
 })
 export const context = '/mimada'
 
