@@ -2,7 +2,11 @@ const urlBackend = 'http://localhost:3000'
 const urlContext = '/mmd/api'
 const routesBackend = Object.freeze({
   url: `${urlBackend}${urlContext}`,
-  login: '/login',
+  user: {
+    login: '/user/login',
+    register: '/user/register',
+    logout: '/user/logout',
+  },
   contenido: '/contenido',
 })
 export const context = '/mimada'

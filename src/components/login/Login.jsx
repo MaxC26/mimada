@@ -1,26 +1,36 @@
-import { IconKey, IconMail, IconPassword } from '@tabler/icons-react'
+import { IconEye, IconEyeOff, IconLockPassword, IconMail } from '@tabler/icons-react'
+import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
+import bcrypt from 'bcryptjs'
+import { login } from '../../services/login'
+import { validarLogin } from '../../utils/formValidation'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false,
-  })
+  const [errorLogin, setErrorLogin] = useState(null)
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
+  const onSubmitLogin = async (values) => {
+    try {
+      // const hashedPass = await bcrypt.hash(values.password, 10)
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Login attempt with:', formData)
-    // Add your authentication logic here
+      const response = await login(values)
+      if (response.status === 200) {
+        const { data } = response
+        sessionStorage.setItem('jwt', data.token)
+        // Redirige a la ruta guardada (o a la página principal por defecto)
+        const redirectTo = location.state?.from || '/'
+        navigate(redirectTo, { replace: true })
+      }
+    } catch (error) {
+      console.error(error)
+      if (error.response) {
+        console.error('Error response:', error.response.data)
+        setErrorLogin(error.response.data.message)
+      }
+    }
   }
 
   return (
@@ -29,79 +39,87 @@ const Login = () => {
         <div className='card w-full max-w-md bg-base-100 shadow-xl'>
           <div className='card-body'>
             <h2 className='card-title text-2xl font-bold text-center'>Login</h2>
-            <p className='text-center text-base-content/70 mb-6'>
-              Welcome back! Please enter your details
+            <p className='text-center text-base-content/70 mb-5'>
+              Bienvenido! Por favor ingresa tus credenciales.
             </p>
 
-            <form onSubmit={handleSubmit}>
-              <div className='form-control w-full mb-4'>
-                <label className='input validator w-full'>
-                  <IconMail stroke={1} className='opacity-50' />
-                  <input
-                    className='w-full'
-                    type='email'
-                    placeholder='mail@site.com'
-                    required
-                  />
-                </label>
-                <div className='validator-hint hidden'>Enter valid email address</div>
-              </div>
+            <Formik
+              initialValues={{
+                email: '',
+                password: '',
+                rememberMe: false,
+              }}
+              validateOnChange={false}
+              validateOnBlur={false}
+              onSubmit={onSubmitLogin}
+              validationSchema={validarLogin}
+            >
+              {({ handleSubmit, errors }) => (
+                <Form onSubmit={handleSubmit}>
+                  <div className='mb-4'>
+                    <label className={`input w-full ${errors.email && 'input-error'}`}>
+                      <IconMail stroke={1} className='opacity-50' />
+                      <Field
+                        className={`w-full `}
+                        type='text'
+                        name='email'
+                        placeholder='mail@site.com'
+                      />
+                    </label>
+                    {errors.email && (
+                      <div className='text-red-400 mt-1'>{'*' + errors.email}</div>
+                    )}
+                  </div>
 
-              <div className='form-control w-full mb-2'>
-                <label className='input validator w-full'>
-                  <IconPassword stroke={1} className='opacity-50' />
+                  <div className='mb-4'>
+                    <label className={`input w-full ${errors.password && 'input-error'}`}>
+                      <IconLockPassword stroke={1} className='opacity-50' />
+                      <Field
+                        className={errors.password && 'input-error'}
+                        type={showPassword ? 'text' : 'password'}
+                        name='password'
+                        placeholder='*********'
+                      />
+                      <button
+                        type='button'
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? (
+                          <IconEyeOff stroke={1} className='opacity-50' />
+                        ) : (
+                          <IconEye stroke={1} className='opacity-50' />
+                        )}
+                      </button>
+                    </label>
+                    {errors.password && (
+                      <div className='text-red-400 mt-1'>{'*' + errors.password}</div>
+                    )}
+                  </div>
 
-                  <input
-                    type='password'
-                    required
-                    placeholder='Password'
-                    minLength='8'
-                    pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
-                    title='Must be more than 8 characters, including number, lowercase letter, uppercase letter'
-                  />
-                  <button>
-                    <IconKey
-                      stroke={1}
-                      // className='absolute right-2 top-1/2 transform -translate-y-1/2'
-                      onClick={() => setShowPassword(!showPassword)}
-                    />
+                  {errorLogin && (
+                    <div className='text-red-400 mt-1 mb-3'>
+                      *Usuario o contraseña incorrectos
+                    </div>
+                  )}
+
+                  <button type='submit' className='btn btn-primary w-full'>
+                    Sign in
                   </button>
-                </label>
-              </div>
+                </Form>
+              )}
+            </Formik>
 
-              <div className='flex items-center justify-between mb-6'>
-                <div className='form-control'>
-                  <label className='label cursor-pointer gap-2'>
-                    <input
-                      type='checkbox'
-                      name='rememberMe'
-                      checked={formData.rememberMe}
-                      onChange={handleChange}
-                      className='checkbox checkbox-sm'
-                    />
-                    <span className='label-text'>Remember me</span>
-                  </label>
-                </div>
-                <a href='#' className='text-sm text-primary hover:underline'>
-                  Forgot password?
-                </a>
-              </div>
+            {/* <div className='divider my-6'>OR</div>
 
-              <button type='submit' className='btn btn-primary w-full'>
-                Sign in
-              </button>
-            </form>
+            <button className='btn btn-outline w-full mb-4'>Continue with Google</button> */}
 
-            <div className='divider my-6'>OR</div>
-
-            <button className='btn btn-outline w-full mb-4'>Continue with Google</button>
-
-            <p className='text-center mt-4'>
+            {/* <p className='text-center mt-4'>
               Dont have an account?{' '}
-              <a href='#' className='text-primary hover:underline'>
+              <Link href='#' className='text-primary hover:underline'>
                 Sign up
-              </a>
-            </p>
+              </Link>
+            </p> */}
           </div>
         </div>
       </div>

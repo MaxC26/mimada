@@ -10,7 +10,6 @@ import { getAllContenido } from '../services/contenido'
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
-  useEffect(() => {}, [])
 
   const getAllContent = async () => {
     const updatedContent = { ...content } // Copia del estado actual
