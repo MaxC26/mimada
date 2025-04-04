@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import ImageUploader from './ImageUploader'
 import { routes } from '../../utils/rutas'
+import { updateSection } from '../../services/contenido'
 
-export const Inicio = ({ contenido }) => {
+export const Inicio = ({ contenido, setIsLoading }) => {
   const title = contenido.filter((item) => item.llave === 'textHead')[0]
   const subTitle = contenido.filter((item) => item.llave === 'textHead01')[0]
 
@@ -26,6 +27,20 @@ export const Inicio = ({ contenido }) => {
     window.open(routes.previsualizarInicio, '_blank')
   }
 
+  const onSubmitSection = async (values) => {
+    try {
+      const response = await updateSection(values)
+      console.log('🚀 ~ onSubmitSection ~ response:', response)
+      if (response.status === 200) {
+        if (response.data.code === 1) console.log('Sección actualizada correctamente')
+        if (response.data.code === 2) console.log('Sección actualizada parcialmente')
+        setIsLoading(true)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className='w-full max-w-4xl mx-auto px-4'>
       <div role='alert' className='alert alert-warning alert-outline mb-6'>
@@ -40,9 +55,7 @@ export const Inicio = ({ contenido }) => {
           textHead: textHead,
           textHead01: textHead01,
         }}
-        onSubmit={(values) => {
-          console.log(values)
-        }}
+        onSubmit={onSubmitSection}
       >
         {({ setFieldValue }) => (
           <Form className='space-y-6'>

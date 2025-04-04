@@ -15,14 +15,17 @@ const DashboardPage = () => {
       setMobileMenuOpen(false)
     }
 
-    if (activePage === 'Inicio') getSectionContent('Head')
+    if (activePage === 'Inicio') {
+      getSectionContent('Head')
+    }
     if (activePage === 'Servicios') getSectionContent('servicio')
     if (activePage === 'Nuestra Historia') getSectionContent('historia')
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activePage])
+  }, [activePage, isLoading])
 
   const getSectionContent = async (seccion) => {
+    console.log('enrta')
     const contenido = await getContenidoBySeccion(seccion)
 
     setContenido(contenido.data)
@@ -95,7 +98,9 @@ const DashboardPage = () => {
       ) : (
         <div className='flex-1 p-8'>
           <h1 className='text-2xl font-bold mb-4'>{activePage}</h1>
-          {activePage === 'Inicio' && <Inicio contenido={contenido} />}
+          {activePage === 'Inicio' && (
+            <Inicio contenido={contenido} setIsLoading={setIsLoading} />
+          )}
           {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
           {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
         </div>

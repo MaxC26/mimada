@@ -10,6 +10,7 @@ const routesBackend = Object.freeze({
   contenido: {
     getAllContenido: '/contenido',
     getContenidoBySeccion: '/contenido/contenidoBySeccion?seccion=:seccion',
+    updateSection: '/contenido/updateSeccion',
   },
 })
 export const context = '/mimada'
