@@ -5,14 +5,14 @@ import { jwtDecode } from 'jwt-decode'
 const ProtectedRoute = () => {
   const navigate = useNavigate()
 
-  const jwt = sessionStorage.getItem('jwt')
+  const jwt = localStorage.getItem('jwt')
   console.log('🚀 ~ ProtectedRoute ~ jwt:', jwt)
 
   if (jwt) {
     const decoded = jwtDecode(jwt)
     const isExpired = decoded.exp < Date.now() / 1000
     if (isExpired) {
-      sessionStorage.removeItem('jwt')
+      localStorage.removeItem('jwt')
       navigate(routes.login)
     }
   }
@@ -25,3 +25,4 @@ const ProtectedRoute = () => {
 }
 
 export default ProtectedRoute
+

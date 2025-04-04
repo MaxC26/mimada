@@ -19,7 +19,7 @@ const Login = () => {
       const response = await login(values)
       if (response.status === 200) {
         const { data } = response
-        sessionStorage.setItem('jwt', data.token)
+        localStorage.setItem('jwt', data.token)
         // Redirige a la ruta guardada (o a la página principal por defecto)
         const redirectTo = location.state?.from || '/'
         navigate(redirectTo, { replace: true })
@@ -128,3 +128,4 @@ const Login = () => {
 }
 
 export default Login
+

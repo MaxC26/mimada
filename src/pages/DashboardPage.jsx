@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { NavItem } from '../components/nabvar/NavItem'
 import { IconClock2, IconMenu3, IconSmartHome, IconUsers } from '@tabler/icons-react'
 import { getContenidoBySeccion } from '../services/contenido'
+import { Inicio } from '../components/settings/Inicio'
 
 const DashboardPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -81,14 +82,13 @@ const DashboardPage = () => {
       {/* Contenido principal (placeholder) */}
       <div className='flex-1 p-8'>
         <h1 className='text-2xl font-bold mb-4'>{activePage}</h1>
-        <p className='text-gray-600'>
-          {activePage === 'Inicio' && 'Contenido de la página de inicio'}
-          {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
-          {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
-        </p>
+        {activePage === 'Inicio' && <Inicio />}
+        {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
+        {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
       </div>
     </div>
   )
 }
 
 export default DashboardPage
+

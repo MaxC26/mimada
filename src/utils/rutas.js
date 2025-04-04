@@ -22,6 +22,7 @@ export const routes = Object.freeze({
   home: context,
   login: context + '/login',
   settings: context + '/settings',
+  previsualizarInicio: context + '/previsualizar/inicio',
   backend: routesBackend,
   files: routeFiles,
 })

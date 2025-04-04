@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage'
 import { routes } from './utils/rutas'
 import ProtectedRoute from './components/utils/ProtectedRoute'
 import { jwtDecode } from 'jwt-decode'
+import { HomeInicio } from './pages/previsualizar/HomeInicio'
 
 function App() {
   const navigate = useNavigate()
@@ -37,8 +38,8 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path={routes.settings} element={<DashboardPage />} />
+          <Route path={routes.previsualizarInicio} element={<HomeInicio />} />
         </Route>
-
         <Route path='*' element={<h1>Not Found</h1>} />
       </Routes>
     </>
@@ -46,3 +47,4 @@ function App() {
 }
 
 export default App
+
