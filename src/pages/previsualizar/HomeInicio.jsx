@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar } from '../../components/nabvar/Navbar'
 import { HeadPrevisualizar } from './HeadPrevisualizar'
+import Footer from '../../components/Footer'
 
 export const HomeInicio = () => {
   const [data, setData] = useState(null)
@@ -17,6 +18,7 @@ export const HomeInicio = () => {
     <div>
       <Navbar />
       <HeadPrevisualizar content={content} />
+      <Footer />
     </div>
   )
 }
