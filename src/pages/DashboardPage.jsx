@@ -3,6 +3,8 @@ import { NavItem } from '../components/nabvar/NavItem'
 import { IconClock2, IconMenu3, IconSmartHome, IconUsers } from '@tabler/icons-react'
 import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
+import { Servicios } from '../components/settings/Servicios'
+import { Historia } from '../components/settings/Historia'
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,7 +27,6 @@ const DashboardPage = () => {
   }, [activePage, isLoading])
 
   const getSectionContent = async (seccion) => {
-    console.log('enrta')
     const contenido = await getContenidoBySeccion(seccion)
 
     setContenido(contenido.data)
@@ -101,8 +102,8 @@ const DashboardPage = () => {
           {activePage === 'Inicio' && (
             <Inicio contenido={contenido} setIsLoading={setIsLoading} />
           )}
-          {activePage === 'Servicios' && 'Información sobre nuestros servicios'}
-          {activePage === 'Nuestra Historia' && 'La historia de nuestra empresa'}
+          {activePage === 'Servicios' && <Servicios />}
+          {activePage === 'Nuestra Historia' && <Historia />}
         </div>
       )}
     </div>
