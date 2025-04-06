@@ -36,6 +36,7 @@ export function getContenidoBySeccion(seccion) {
 
 // Obtiene la información del contenido por sección
 export function updateSection(data) {
+  console.log('🚀 ~ updateSection ~ data:', data)
   const formData = new FormData()
   formData.append('file', data.file)
   Object.keys(data).forEach((key) => {
@@ -59,3 +60,4 @@ export function updateSection(data) {
       })
   })
 }
+

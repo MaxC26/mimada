@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { IconPhoto, IconUpload, IconX, IconAlertTriangle } from '@tabler/icons-react'
 
-const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile }) => {
+const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile, valueName }) => {
   const [fileValid, setFileValid] = useState(true)
   const [previewUrl, setPreviewUrl] = useState(null)
   const maxSize = 5 * 1024 * 1024 // 5 MB
@@ -28,13 +28,13 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile }) => {
       const allowedFormats = validExtensions.join(', ')
       setNameFile(`Solo se aceptan: ${allowedFormats} (máx. 5MB)`)
       setFileValid(false)
-      setFieldValue('archivo', null)
+      setFieldValue(valueName, null)
       setPreviewUrl(null)
     },
   })
 
   const handleAcceptedFile = (file) => {
-    setFieldValue('archivo', file)
+    setFieldValue(valueName, file)
     handleFileUpload(file)
     setNameFile(file.name)
     setFileValid(true)
@@ -65,7 +65,7 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile }) => {
       if (file.size > maxSize) {
         setNameFile(`El tamaño máximo permitido es 5MB.`)
         setFileValid(false)
-        setFieldValue('archivo', null)
+        setFieldValue(valueName, null)
         setFile(null)
         setPreviewUrl(null)
       }
@@ -77,7 +77,7 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile }) => {
         const allowedFormats = validExtensions.join(', ')
         setNameFile(`Solo se aceptan: ${allowedFormats}`)
         setFileValid(false)
-        setFieldValue('archivo', null)
+        setFieldValue(valueName, null)
         setFile(null)
         setPreviewUrl(null)
       }
@@ -90,7 +90,7 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile }) => {
 
   // Eliminar archivo
   const handleRemoveFile = () => {
-    setFieldValue('archivo', null)
+    setFieldValue(valueName, null)
     setFile(null)
     setNameFile('')
     setFileValid(true)

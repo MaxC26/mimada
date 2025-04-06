@@ -3,8 +3,8 @@ import { NavItem } from '../components/nabvar/NavItem'
 import { IconClock2, IconMenu3, IconSmartHome, IconUsers } from '@tabler/icons-react'
 import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
-import { Servicios } from '../components/settings/Servicios'
-import { Historia } from '../components/settings/Historia'
+import Historia from '../components/settings/Historia'
+import Servicios from '../components/settings/Servicios'
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -111,3 +111,4 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
+
