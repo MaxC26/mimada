@@ -102,8 +102,12 @@ const DashboardPage = () => {
           {activePage === 'Inicio' && (
             <Inicio contenido={contenido} setIsLoading={setIsLoading} />
           )}
-          {activePage === 'Servicios' && <Servicios />}
-          {activePage === 'Nuestra Historia' && <Historia />}
+          {activePage === 'Servicios' && (
+            <Servicios contenido={contenido} setIsLoading={setIsLoading} />
+          )}
+          {activePage === 'Nuestra Historia' && (
+            <Historia contenido={contenido} setIsLoading={setIsLoading} />
+          )}
         </div>
       )}
     </div>

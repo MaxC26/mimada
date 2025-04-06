@@ -5,7 +5,6 @@ import { routes } from '../../utils/rutas'
 import { updateSection } from '../../services/contenido'
 
 export const Inicio = ({ contenido, setIsLoading }) => {
-  console.log('🚀 ~ Inicio ~ contenido:', contenido)
   const title = contenido.filter((item) => item.llave === 'textHead')[0]
   const subTitle = contenido.filter((item) => item.llave === 'textHead01')[0]
   const imagen = contenido.filter((item) => item.llave === 'imgHead')[0]
@@ -13,7 +12,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
   let ruta = ''
   let imagenPublica = ''
   if (imagen) {
-    ruta = imagen.ruta1
+    ruta = imagen.ruta
     imagenPublica = imagen.valor
   }
 
@@ -39,10 +38,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
   const onSubmitSection = async (values) => {
     try {
       const response = await updateSection(values)
-      console.log('🚀 ~ onSubmitSection ~ response:', response)
       if (response.status === 200) {
-        if (response.data.code === 1) console.log('Sección actualizada correctamente')
-        if (response.data.code === 2) console.log('Sección actualizada parcialmente')
         setIsLoading(true)
       }
     } catch (error) {
@@ -61,7 +57,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
       <Formik
         initialValues={{
           file: null,
-          ruta1: ruta,
+          ruta: ruta,
           textHead: textHead,
           textHead01: textHead01,
         }}

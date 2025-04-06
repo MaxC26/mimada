@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { IconPhoto, IconUpload, IconX, IconAlertTriangle } from '@tabler/icons-react'
 
 const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile, valueName }) => {
+  const inputRef = useRef(null)
   const [fileValid, setFileValid] = useState(true)
   const [previewUrl, setPreviewUrl] = useState(null)
   const maxSize = 5 * 1024 * 1024 // 5 MB
@@ -113,7 +114,7 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile, valueNam
           cursor-pointer p-4 text-center
         `}
       >
-        <input {...getInputProps({ onChange: handleInputChange })} />
+        <input {...getInputProps({ onChange: handleInputChange, ref: inputRef })} />
 
         <div className='flex flex-col items-center justify-center gap-2 py-4'>
           {isDragActive ? (
@@ -139,7 +140,7 @@ const ImageUploader = ({ setFieldValue, nameFile, setNameFile, setFile, valueNam
                 type='button'
                 onClick={(e) => {
                   e.stopPropagation()
-                  document.querySelector('input[type="file"]').click()
+                  inputRef.current?.click()
                 }}
                 className='btn btn-neutral btn-sm mt-2'
               >

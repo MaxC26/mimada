@@ -10,6 +10,8 @@ import { routes } from './utils/rutas'
 import ProtectedRoute from './components/utils/ProtectedRoute'
 import { jwtDecode } from 'jwt-decode'
 import { HomeInicioPage } from './pages/previsualizar/HomeInicioPage'
+import HomeHistoriaPage from './pages/previsualizar/HomeHistoriaPage'
+import HomeServicioPage from './pages/previsualizar/HomeServicioPage'
 
 function App() {
   const navigate = useNavigate()
@@ -39,6 +41,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path={routes.settings} element={<DashboardPage />} />
           <Route path={routes.previsualizarInicio} element={<HomeInicioPage />} />
+          <Route path={routes.previsualizarHistoria} element={<HomeHistoriaPage />} />
+          <Route path={routes.previsualizarServicio} element={<HomeServicioPage />} />
         </Route>
         <Route path='*' element={<h1>Not Found</h1>} />
       </Routes>

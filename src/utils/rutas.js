@@ -11,6 +11,7 @@ const routesBackend = Object.freeze({
     getAllContenido: '/contenido',
     getContenidoBySeccion: '/contenido/contenidoBySeccion?seccion=:seccion',
     updateSection: '/contenido/updateSeccion',
+    updateSectionServicios: '/contenido/updateSeccionService',
   },
 })
 export const context = '/mimada'
@@ -24,6 +25,9 @@ export const routes = Object.freeze({
   login: context + '/login',
   settings: context + '/settings',
   previsualizarInicio: context + '/previsualizar/inicio',
+  previsualizarHistoria: context + '/previsualizar/historia',
+  previsualizarServicio: context + '/previsualizar/servicio',
   backend: routesBackend,
   files: routeFiles,
 })
+
