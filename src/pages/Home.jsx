@@ -7,6 +7,7 @@ import OurStory from '../components/home/OurStory'
 import { Navbar } from '../components/nabvar/Navbar'
 import { useEffect } from 'react'
 import { getAllContenido } from '../services/contenido'
+import LoadingSpinner from '../components/utils/LoadingSpinner'
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -46,17 +47,19 @@ const Home = () => {
   }, [])
 
   return (
-    <div className='w-full min-h-screen'>
+    <div className='flex min-h-screen'>
       {isLoading ? (
-        <div>Cargando...</div>
+        <div className='flex justify-center items-center w-full'>
+          <LoadingSpinner />
+        </div>
       ) : (
-        <>
+        <div className='flex flex-col w-full'>
           <Navbar />
           <Head content={content} />
           <Body content={content} />
           <OurStory content={content} />
           <Footer />
-        </>
+        </div>
       )}
     </div>
   )

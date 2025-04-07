@@ -3,17 +3,22 @@ import ImageUploader from './ImageUploader'
 import { useState } from 'react'
 import { routes } from '../../utils/rutas'
 import { updateSectionMultiFile } from '../../services/contenido'
+import { toast } from 'sonner'
 
 const Servicios = ({ contenido, setIsLoading }) => {
-  const texto01 = contenido.filter((item) => item.llave === 'textServicio01')[0]
-  const texto02 = contenido.filter((item) => item.llave === 'textServicio02')[0]
-  const texto03 = contenido.filter((item) => item.llave === 'textServicio03')[0]
-  const texto04 = contenido.filter((item) => item.llave === 'textServicio04')[0]
+  const Loading = (text) => toast.loading(text)
+  const SuccessMessage = (text) => toast.success(text)
+  const ErrorMessage = (text) => toast.error(text)
 
-  const imagen01 = contenido.filter((item) => item.llave === 'imgServicio01')[0]
-  const imagen02 = contenido.filter((item) => item.llave === 'imgServicio02')[0]
-  const imagen03 = contenido.filter((item) => item.llave === 'imgServicio03')[0]
-  const imagen04 = contenido.filter((item) => item.llave === 'imgServicio04')[0]
+  const texto01 = contenido.find((item) => item.llave === 'textServicio01')
+  const texto02 = contenido.find((item) => item.llave === 'textServicio02')
+  const texto03 = contenido.find((item) => item.llave === 'textServicio03')
+  const texto04 = contenido.find((item) => item.llave === 'textServicio04')
+
+  const imagen01 = contenido.find((item) => item.llave === 'imgServicio01')
+  const imagen02 = contenido.find((item) => item.llave === 'imgServicio02')
+  const imagen03 = contenido.find((item) => item.llave === 'imgServicio03')
+  const imagen04 = contenido.find((item) => item.llave === 'imgServicio04')
 
   let ruta01 = ''
   let ruta02 = ''
@@ -79,13 +84,17 @@ const Servicios = ({ contenido, setIsLoading }) => {
   }
 
   const onSubmitSection = async (values) => {
+    const toastId = Loading('Esperando respuesta...')
     try {
       const response = await updateSectionMultiFile(values)
+      toast.dismiss(toastId)
       if (response.status === 200) {
+        SuccessMessage('Información actualizada correctamente')
         setIsLoading(true)
       }
     } catch (error) {
       console.error(error)
+      ErrorMessage('Error al actualizar información')
     }
   }
 
@@ -114,7 +123,7 @@ const Servicios = ({ contenido, setIsLoading }) => {
         }}
         onSubmit={onSubmitSection}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form className='space-y-6'>
             {/* Campo para el título servicio 1 - limitado a 45 caracteres */}
             <div className='form-control w-full'>
@@ -297,7 +306,8 @@ const Servicios = ({ contenido, setIsLoading }) => {
                   charCountTexto01 > 46 ||
                   charCountTexto02 > 46 ||
                   charCountTexto03 > 46 ||
-                  charCountTexto04 > 46
+                  charCountTexto04 > 46 ||
+                  isSubmitting
                 }
               >
                 Enviar
@@ -312,7 +322,8 @@ const Servicios = ({ contenido, setIsLoading }) => {
                   charCountTexto01 > 46 ||
                   charCountTexto02 > 46 ||
                   charCountTexto03 > 46 ||
-                  charCountTexto04 > 46
+                  charCountTexto04 > 46 ||
+                  isSubmitting
                 }
               >
                 Previsualizar
@@ -326,4 +337,3 @@ const Servicios = ({ contenido, setIsLoading }) => {
 }
 
 export default Servicios
-

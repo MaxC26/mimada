@@ -5,6 +5,7 @@ import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
 import Historia from '../components/settings/Historia'
 import Servicios from '../components/settings/Servicios'
+import LoadingSpinner from '../components/utils/LoadingSpinner'
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -16,7 +17,6 @@ const DashboardPage = () => {
     if (mobileMenuOpen) {
       setMobileMenuOpen(false)
     }
-
     if (activePage === 'Inicio') {
       getSectionContent('Head')
     }
@@ -52,6 +52,7 @@ const DashboardPage = () => {
               setActivePage={setActivePage}
               setIsLoading={setIsLoading}
               activePage={activePage}
+              disabled={isLoading}
             />
             <NavItem
               icon={<IconUsers stroke={2} />}
@@ -61,6 +62,7 @@ const DashboardPage = () => {
               setActivePage={setActivePage}
               setIsLoading={setIsLoading}
               activePage={activePage}
+              disabled={isLoading}
             />
             <NavItem
               icon={<IconClock2 stroke={2} />}
@@ -70,6 +72,7 @@ const DashboardPage = () => {
               setActivePage={setActivePage}
               setIsLoading={setIsLoading}
               activePage={activePage}
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -95,7 +98,9 @@ const DashboardPage = () => {
 
       {/* Contenido principal (placeholder) */}
       {isLoading ? (
-        <h1>Cargando... </h1>
+        <div className='flex justify-center items-center w-full'>
+          <LoadingSpinner />
+        </div>
       ) : (
         <div className='flex-1 p-8'>
           <h1 className='text-2xl font-bold mb-4'>{activePage}</h1>
@@ -115,4 +120,3 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
-

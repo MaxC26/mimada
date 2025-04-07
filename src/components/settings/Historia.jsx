@@ -3,10 +3,15 @@ import { useState } from 'react'
 import ImageUploader from './ImageUploader'
 import { routes } from '../../utils/rutas'
 import { updateSection } from '../../services/contenido'
+import { toast } from 'sonner'
 
 const Historia = ({ contenido, setIsLoading }) => {
-  const title = contenido.filter((item) => item.llave === 'textHistoria')[0]
-  const imagen = contenido.filter((item) => item.llave === 'imgHistoria')[0]
+  const Loading = (text) => toast.loading(text)
+  const SuccessMessage = (text) => toast.success(text)
+  const ErrorMessage = (text) => toast.error(text)
+
+  const title = contenido.find((item) => item.llave === 'textHistoria')
+  const imagen = contenido.find((item) => item.llave === 'imgHistoria')
 
   let ruta = ''
   let imagenPublica = ''
@@ -32,13 +37,17 @@ const Historia = ({ contenido, setIsLoading }) => {
   }
 
   const onSubmitSection = async (values) => {
+    const toastId = Loading('Esperando respuesta...')
     try {
       const response = await updateSection(values)
+      toast.dismiss(toastId)
       if (response.status === 200) {
+        SuccessMessage('Información actualizada correctamente')
         setIsLoading(true)
       }
     } catch (error) {
       console.error(error)
+      ErrorMessage('Error al actualizar información')
     }
   }
 
@@ -58,7 +67,7 @@ const Historia = ({ contenido, setIsLoading }) => {
         }}
         onSubmit={onSubmitSection}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form className='space-y-6'>
             {/* Campo para el texto principal - limitado a 500 caracteres */}
             <div className='form-control w-full'>
@@ -109,7 +118,7 @@ const Historia = ({ contenido, setIsLoading }) => {
               <button
                 type='submit'
                 className='btn btn-neutral'
-                disabled={charCountHistori > 500}
+                disabled={charCountHistori > 500 || isSubmitting}
               >
                 Enviar
               </button>
@@ -119,7 +128,7 @@ const Historia = ({ contenido, setIsLoading }) => {
                 type='button'
                 className='btn btn-warning'
                 onClick={() => handlePreview()}
-                disabled={charCountHistori > 500}
+                disabled={charCountHistori > 500 || isSubmitting}
               >
                 Previsualizar
               </button>
@@ -132,4 +141,3 @@ const Historia = ({ contenido, setIsLoading }) => {
 }
 
 export default Historia
-

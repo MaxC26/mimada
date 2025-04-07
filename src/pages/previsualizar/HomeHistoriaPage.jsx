@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/nabvar/Navbar'
 import Footer from '../../components/Footer'
 import OurStory from '../../components/home/OurStory'
+import LoadingSpinner from '../../components/utils/LoadingSpinner'
 
 const HomeHistoriaPage = () => {
   const [data, setData] = useState(null)
@@ -11,7 +12,14 @@ const HomeHistoriaPage = () => {
     if (stored) setData(JSON.parse(stored))
   }, [])
 
-  if (!data) return <p>Cargando previsualización...</p>
+  if (!data)
+    return (
+      <div className='flex min-h-screen'>
+        <div className='flex justify-center items-center w-full'>
+          <LoadingSpinner />
+        </div>
+      </div>
+    )
 
   const content = { ...data }
   return (
@@ -25,4 +33,3 @@ const HomeHistoriaPage = () => {
 }
 
 export default HomeHistoriaPage
-

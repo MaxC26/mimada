@@ -1,13 +1,18 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Formik, Form, Field } from 'formik'
 import ImageUploader from './ImageUploader'
 import { routes } from '../../utils/rutas'
 import { updateSection } from '../../services/contenido'
 
 export const Inicio = ({ contenido, setIsLoading }) => {
-  const title = contenido.filter((item) => item.llave === 'textHead')[0]
-  const subTitle = contenido.filter((item) => item.llave === 'textHead01')[0]
-  const imagen = contenido.filter((item) => item.llave === 'imgHead')[0]
+  const Loading = (text) => toast.loading(text)
+  const SuccessMessage = (text) => toast.success(text)
+  const ErrorMessage = (text) => toast.error(text)
+
+  const title = contenido.find((item) => item.llave === 'textHead')
+  const subTitle = contenido.find((item) => item.llave === 'textHead01')
+  const imagen = contenido.find((item) => item.llave === 'imgHead')
 
   let ruta = ''
   let imagenPublica = ''
@@ -36,13 +41,17 @@ export const Inicio = ({ contenido, setIsLoading }) => {
   }
 
   const onSubmitSection = async (values) => {
+    const toastId = Loading('Esperando respuesta...')
     try {
       const response = await updateSection(values)
+      toast.dismiss(toastId)
       if (response.status === 200) {
+        SuccessMessage('Información actualizada correctamente')
         setIsLoading(true)
       }
     } catch (error) {
       console.error(error)
+      ErrorMessage('Error al actualizar información')
     }
   }
 
@@ -63,7 +72,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
         }}
         onSubmit={onSubmitSection}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form className='space-y-6'>
             {/* Campo para el título principal - limitado a 30 caracteres */}
             <div className='form-control w-full'>
@@ -143,7 +152,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
               <button
                 type='submit'
                 className='btn btn-neutral'
-                disabled={charCountHead > 30 || charCountHead01 > 300}
+                disabled={charCountHead > 30 || charCountHead01 > 300 || isSubmitting}
               >
                 Enviar
               </button>
@@ -153,7 +162,7 @@ export const Inicio = ({ contenido, setIsLoading }) => {
                 type='button'
                 className='btn btn-warning'
                 onClick={() => handlePreview()}
-                disabled={charCountHead > 30 || charCountHead01 > 300}
+                disabled={charCountHead > 30 || charCountHead01 > 300 || isSubmitting}
               >
                 Previsualizar
               </button>
@@ -164,4 +173,3 @@ export const Inicio = ({ contenido, setIsLoading }) => {
     </div>
   )
 }
-

@@ -6,6 +6,7 @@ export const NavItem = ({
   setActivePage,
   setIsLoading,
   activePage,
+  disabled,
 }) => {
   return (
     <a
@@ -14,7 +15,8 @@ export const NavItem = ({
         newActive
           ? 'text-gray-700 bg-gray-100 font-semibold'
           : 'text-gray-600 hover:bg-gray-100'
-      }`}
+      } ${disabled && 'opacity-80 cursor-not-allowed pointer-events-none'}`}
+      aria-disabled={disabled}
       onClick={(e) => {
         e.preventDefault()
         setActivePage(text)

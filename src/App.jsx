@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { Toaster } from 'sonner'
 import './App.css'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -46,9 +47,10 @@ function App() {
         </Route>
         <Route path='*' element={<h1>Not Found</h1>} />
       </Routes>
+
+      <Toaster className='ps-1' position='top-right' richColors='true' />
     </>
   )
 }
 
 export default App
-
