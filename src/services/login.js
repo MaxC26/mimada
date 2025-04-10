@@ -14,3 +14,8 @@ export function login(data) {
       })
   })
 }
+
+export function logout() {
+  localStorage.removeItem('jwt')
+  window.location.href = routes.home
+}

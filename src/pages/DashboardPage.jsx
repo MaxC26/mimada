@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react'
 import { NavItem } from '../components/nabvar/NavItem'
-import { IconClock2, IconMenu3, IconSmartHome, IconUsers } from '@tabler/icons-react'
+import {
+  IconClock2,
+  IconLogout,
+  IconMenu3,
+  IconSmartHome,
+  IconUsers,
+} from '@tabler/icons-react'
 import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
 import Historia from '../components/settings/Historia'
 import Servicios from '../components/settings/Servicios'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
+import { logout } from '../services/login'
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -74,6 +81,19 @@ const DashboardPage = () => {
               activePage={activePage}
               disabled={isLoading}
             />
+
+            <button
+              className={`flex items-center p-3 rounded-lg w-full text-gray-600 hover:bg-gray-100 cursor-pointer ${
+                isLoading && 'opacity-80 cursor-not-allowed pointer-events-none'
+              }`}
+              aria-disabled={isLoading}
+              onClick={() => {
+                logout()
+              }}
+            >
+              <IconLogout stroke={2} />
+              <span className='ml-3'>{'Cerrar Sesión'}</span>
+            </button>
           </div>
         </div>
       </div>

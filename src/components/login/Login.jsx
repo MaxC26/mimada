@@ -1,7 +1,6 @@
 import { IconEye, IconEyeOff, IconLockPassword, IconMail } from '@tabler/icons-react'
 import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
-import bcrypt from 'bcryptjs'
 import { login } from '../../services/login'
 import { validarLogin } from '../../utils/formValidation'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -28,7 +27,7 @@ const Login = () => {
       console.error(error)
       if (error.response) {
         console.error('Error response:', error.response.data)
-        setErrorLogin(error.response.data.message)
+        setErrorLogin(error.response.data.mensaje)
       }
     }
   }
@@ -54,7 +53,7 @@ const Login = () => {
               onSubmit={onSubmitLogin}
               validationSchema={validarLogin}
             >
-              {({ handleSubmit, errors }) => (
+              {({ handleSubmit, errors, isSubmitting }) => (
                 <Form onSubmit={handleSubmit}>
                   <div className='mb-4'>
                     <label className={`input w-full ${errors.email && 'input-error'}`}>
@@ -103,8 +102,16 @@ const Login = () => {
                     </div>
                   )}
 
-                  <button type='submit' className='btn btn-primary w-full'>
-                    Sign in
+                  <button
+                    type='submit'
+                    className='btn btn-primary w-full'
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <span className='loading loading-spinner loading-sm'></span>
+                    ) : (
+                      'Iniciar sesión'
+                    )}
                   </button>
                 </Form>
               )}
@@ -128,4 +135,3 @@ const Login = () => {
 }
 
 export default Login
-
