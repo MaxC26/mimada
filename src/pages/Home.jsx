@@ -47,7 +47,7 @@ const Home = () => {
   }, [])
 
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex min-h-screen bg-white'>
       {isLoading ? (
         <div className='flex justify-center items-center w-full'>
           <LoadingSpinner />
@@ -66,3 +66,4 @@ const Home = () => {
 }
 
 export default Home
+

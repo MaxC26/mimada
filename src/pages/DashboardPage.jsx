@@ -13,8 +13,11 @@ import Historia from '../components/settings/Historia'
 import Servicios from '../components/settings/Servicios'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
 import { logout } from '../services/login'
+import { useNavigate } from 'react-router-dom'
 
 const DashboardPage = () => {
+  const navigate = useNavigate()
+
   const [isLoading, setIsLoading] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePage, setActivePage] = useState('Inicio')
@@ -38,6 +41,10 @@ const DashboardPage = () => {
 
     setContenido(contenido.data)
     setIsLoading(false)
+  }
+
+  const handleLogout = () => {
+    logout(navigate)
   }
 
   return (
@@ -88,7 +95,7 @@ const DashboardPage = () => {
               }`}
               aria-disabled={isLoading}
               onClick={() => {
-                logout()
+                handleLogout()
               }}
             >
               <IconLogout stroke={2} />
@@ -140,3 +147,4 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
+

@@ -1,42 +1,27 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
 import './App.css'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import Home from './pages/Home'
+import Explore from './pages/Explore'
+import { BottomNav } from './components/nabvar/BottomNav'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import { routes } from './utils/rutas'
 import ProtectedRoute from './components/utils/ProtectedRoute'
-import { jwtDecode } from 'jwt-decode'
 import { HomeInicioPage } from './pages/previsualizar/HomeInicioPage'
 import HomeHistoriaPage from './pages/previsualizar/HomeHistoriaPage'
 import HomeServicioPage from './pages/previsualizar/HomeServicioPage'
+import NotFoundPage from './pages/NotFoundPage'
+import { jwtDecode } from 'jwt-decode'
 
 function App() {
-  const navigate = useNavigate()
-
-  const token = localStorage.getItem('token')
-  if (token) {
-    const decoded = jwtDecode(token)
-    const isExpired = decoded.exp < Date.now() / 1000
-    if (isExpired) {
-      localStorage.removeItem('token')
-      navigate(routes.login)
-    }
-  }
-
-  useEffect(() => {
-    AOS.init({
-      once: true,
-    })
-  }, [])
-
   return (
     <>
       <Routes>
+        <Route path={routes.inicio} element={<Home />} />
         <Route path={routes.home} element={<Home />} />
+        <Route path={routes.explorar} element={<Explore />} />
         <Route path={routes.login} element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
@@ -45,12 +30,14 @@ function App() {
           <Route path={routes.previsualizarHistoria} element={<HomeHistoriaPage />} />
           <Route path={routes.previsualizarServicio} element={<HomeServicioPage />} />
         </Route>
-        <Route path='*' element={<h1>Not Found</h1>} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
 
       <Toaster className='ps-1' position='top-right' richColors='true' />
+      <BottomNav />
     </>
   )
 }
 
 export default App
+

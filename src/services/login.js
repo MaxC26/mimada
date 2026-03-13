@@ -15,7 +15,12 @@ export function login(data) {
   })
 }
 
-export function logout() {
+export function logout(navigate) {
   localStorage.removeItem('jwt')
-  window.location.href = routes.home
+  if (navigate) {
+    navigate(routes.home)
+  } else {
+    window.location.href = routes.home
+  }
 }
+

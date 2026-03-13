@@ -1,78 +1,99 @@
-import { IconBrandInstagram, IconBrandWhatsapp } from '@tabler/icons-react'
+import { IconBrandInstagram, IconBrandWhatsapp, IconMapPinFilled } from '@tabler/icons-react'
 
 const Footer = () => {
   return (
-    <div className='bg-footer contenedor-footer' data-aos='zoom-in'>
-      <div>
-        <p className='prata-regular text-[40px] text-white footer-mimada'>MIMADA</p>
-      </div>
-      <div className='menu-contact'>
-        <div className='h-[200px]'>
-          <p className='montserrat-semibold text-white text-[20px]'>Menú</p>
-          <ul className='montserrat-regular text-[16px] mt-[20px]'>
-            <li>
-              <a href='#inicio' className='text-white hover:text-gray-400'>
-                Inicio
-              </a>
-            </li>
-            <li>
-              <a href='#servicios' className='text-white hover:text-gray-400'>
-                Servicios
-              </a>
-            </li>
-            <li>
-              <a href='#nuestra-historia' className='text-white hover:text-gray-400'>
-                Nuestra historia
-              </a>
-            </li>
-            <li>
+    <footer className='w-full bg-gray-950 text-white border-t border-gray-900 py-12 md:py-16'>
+      <div className='max-w-7xl mx-auto px-4 lg:px-8'>
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12'>
+          
+          {/* Logo y Descripción */}
+          <div className='md:col-span-1 lg:col-span-2'>
+            <div className='text-3xl font-bold text-white flex items-center gap-2 mb-2'>
+              Mimada
+            </div>
+            <p className='text-gray-300 text-sm md:text-base leading-relaxed max-w-md mb-2'>
+              🇸🇻 ESPECIALISTAS | PESTAÑAS y CEJAS <br/>
+              🥇 Acreditaciones: 🇧🇷 🇨🇱 🇪🇨 🇬🇹 🇺🇦 🇪🇸 🇲🇽 <br/>
+              🏆 Academia
+            </p>
+          </div>
+
+          {/* Menú */}
+          <div className='md:col-span-1'>
+            <h4 className='font-bold text-white text-lg mb-4'>Explorar</h4>
+            <ul className='space-y-3'>
+              <li>
+                <a href='#inicio' className='text-gray-400 hover:text-white transition-colors text-sm'>
+                  Inicio
+                </a>
+              </li>
+              <li>
+                <a href='#servicios' className='text-gray-400 hover:text-white transition-colors text-sm'>
+                  Servicios Populares
+                </a>
+              </li>
+              <li>
+                <a href='#nuestra-historia' className='text-gray-400 hover:text-white transition-colors text-sm'>
+                  Nuestra Historia
+                </a>
+              </li>
+              <li>
+                <a
+                  href='https://wa.me/+50372755604'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2'
+                >
+                  <span className='w-2 h-2 rounded-full bg-[#4ed05b]'></span> Agendar Cita
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contacto */}
+          <div className='md:col-span-2 lg:col-span-1'>
+            <h4 className='font-bold text-white text-lg mb-4'>Ubicación</h4>
+            <p className='text-gray-400 text-sm mb-4 flex items-start gap-2'>
+              <IconMapPinFilled size={18} className='text-[#e43c8a] shrink-0 mt-0.5' />
+              <span>
+                 @lasramblassv <br/>
+                 Centro Comercial Las Ramblas,<br />
+                 Acceso al sótano, local s104 B
+              </span>
+            </p>
+            
+            <div className='flex gap-3'>
               <a
                 href='https://wa.me/+50372755604'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-white hover:text-gray-400 cursor-pointer'
+                className='bg-gray-800 hover:bg-[#e43c8a] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
+                aria-label="WhatsApp"
               >
-                Hacer cita
+                <IconBrandWhatsapp stroke={1.5} className='w-5 h-5' />
               </a>
-            </li>
-          </ul>
+              <a
+                href='https://www.instagram.com/mimada.pmu?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
+                target='_blank'
+                rel='noopener noreferrer'
+                className='bg-gray-800 hover:bg-[#e43c8a] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
+                aria-label="Instagram"
+              >
+                <IconBrandInstagram stroke={1.5} className='w-5 h-5' />
+              </a>
+            </div>
+          </div>
+
         </div>
-        <div className='h-[200px] contact'>
-          <p className='montserrat-semibold text-white text-[20px]'>Contacto</p>
-          <p className='montserrat-regular text-[16px] text-white mt-[20px]'>
-            72755606 <br /> Centro comercial las Ramblas, <br />
-            acceso al sótano <br /> local s104 B
+        
+        {/* Copyright */}
+        <div className='mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-center gap-4'>
+           <p className='text-gray-500 text-sm text-center'>
+            © {new Date().getFullYear()} Mimadas. Todos los derechos reservados.
           </p>
         </div>
       </div>
-      <div className='content-social'>
-        <p className='montserrat-semibold text-white text-[20px] footer-social'>
-          Redes sociales
-        </p>
-        <div className='icon-social flex gap-[5px]'>
-          <a
-            href='https://wa.me/+50372755604'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='cursor-pointer'
-          >
-            <button className='bg-[#ffffff] w-[40px] h-[40px] rounded-full flex items-center justify-center cursor-pointer'>
-              <IconBrandWhatsapp stroke={2} color='#d1c1b2' className='w-6' />
-            </button>
-          </a>
-          <a
-            href='https://www.instagram.com/mimada.pmu?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
-            target='_blank'
-            rel='noopener noreferrer'
-            className='cursor-pointer'
-          >
-            <button className='bg-[#ffffff] w-[40px] h-[40px] rounded-full flex items-center justify-center cursor-pointer'>
-              <IconBrandInstagram stroke={2} color='#d1c1b2' className='w-6' />
-            </button>
-          </a>
-        </div>
-      </div>
-    </div>
+    </footer>
   )
 }
 

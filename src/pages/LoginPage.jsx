@@ -5,9 +5,9 @@ const LoginPage = () => {
   return (
     <div className='w-full min-h-screen'>
       <Login />
-      <SignUp />
     </div>
   )
 }
 
 export default LoginPage
+
