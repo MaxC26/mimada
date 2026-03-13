@@ -13,15 +13,22 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const getAllContent = async () => {
-    const updatedContent = { ...content } // Copia del estado actual
-    const contenido = await getAllContenido()
-    contenido.data.forEach((item) => {
-      if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
-        updatedContent[item.llave] = item.valor
-      }
-    })
-    setContent(updatedContent)
-    setIsLoading(false)
+    try {
+      const updatedContent = { ...content } // Copia del estado actual
+
+      const contenido = await getAllContenido()
+
+      contenido?.data.forEach((item) => {
+        if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
+          updatedContent[item.llave] = item.valor
+        }
+      })
+      setContent(updatedContent)
+    } catch (error) {
+      console.error('Error fetching content:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const [content, setContent] = useState({
