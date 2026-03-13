@@ -14,7 +14,7 @@ const routesBackend = Object.freeze({
     updateSectionServicios: '/contenido/updateSeccionService',
   },
 })
-export const context = '/mimada'
+export const context = '/'
 
 const routeFiles = Object.freeze({
   delivery: context + '/external/desa/data/mimada',
@@ -30,4 +30,3 @@ export const routes = Object.freeze({
   backend: routesBackend,
   files: routeFiles,
 })
-
