@@ -1,5 +1,10 @@
-const urlBackend = 'https://0so7jd0wwl.execute-api.us-east-1.amazonaws.com'
-const urlContext = '/prd/mmd/api'
+// # Para produccion
+//const urlBackend = 'https://0so7jd0wwl.execute-api.us-east-1.amazonaws.com'
+// const urlContext = '/prd/mmd/api'
+
+// # Para desarrollo
+const urlBackend = 'http://localhost:3000'
+const urlContext = '/mmd/api'
 
 const routesBackend = Object.freeze({
   url: `${urlBackend}${urlContext}`,
@@ -33,4 +38,3 @@ export const routes = Object.freeze({
   backend: routesBackend,
   files: routeFiles,
 })
-
