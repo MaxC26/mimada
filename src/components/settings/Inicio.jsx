@@ -5,168 +5,157 @@ import ImageUploader from './ImageUploader'
 import { routes } from '../../utils/rutas'
 import { updateSection } from '../../services/contenido'
 
-export const Inicio = ({ contenido, setIsLoading }) => {
-  const Loading = (text) => toast.loading(text)
-  const SuccessMessage = (text) => toast.success(text)
-  const ErrorMessage = (text) => toast.error(text)
+/* ── Componente de campo reutilizable ── */
+const FormField = ({ label, name, type = 'text', placeholder, maxLength, charCount, maxChars, onChange, as }) => (
+  <div>
+    <div className='flex items-center justify-between mb-1.5'>
+      <label className='text-xs font-bold text-gray-500 uppercase tracking-widest'>{label}</label>
+      {maxChars && (
+        <span className={`text-xs font-semibold ${charCount > maxChars ? 'text-red-500' : 'text-gray-400'}`}>
+          {charCount}/{maxChars}
+        </span>
+      )}
+    </div>
+    <Field
+      as={as}
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      maxLength={maxLength}
+      onChange={onChange}
+      className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all resize-none focus:border-[#e43c8a] focus:ring-2 focus:ring-[#fce7f3] ${charCount > maxChars ? 'border-red-400' : 'border-gray-200'} ${as === 'textarea' ? 'h-32' : ''}`}
+    />
+  </div>
+)
 
-  const title = contenido.find((item) => item.llave === 'textHead')
+export const Inicio = ({ contenido, setIsLoading }) => {
+  const title    = contenido.find((item) => item.llave === 'textHead')
   const subTitle = contenido.find((item) => item.llave === 'textHead01')
-  const imagen = contenido.find((item) => item.llave === 'imgHead')
+  const imagen   = contenido.find((item) => item.llave === 'imgHead')
 
   let ruta = ''
   let imagenPublica = ''
-  if (imagen) {
-    ruta = imagen.ruta
-    imagenPublica = imagen.valor
-  }
+  if (imagen) { ruta = imagen.ruta; imagenPublica = imagen.valor }
 
-  const [nameFile, setNameFile] = useState('')
-  const [file, setFile] = useState(null)
-  const [textHead, setTextHead] = useState(title ? title.valor : '')
+  const [nameFile, setNameFile]     = useState('')
+  const [file, setFile]             = useState(null)
+  const [textHead, setTextHead]     = useState(title ? title.valor : '')
   const [textHead01, setTextHead01] = useState(subTitle ? subTitle.valor : '')
 
-  // Contadores de caracteres
-  const [charCountHead, setCharCountHead] = useState(textHead.length)
+  const [charCountHead, setCharCountHead]     = useState(textHead.length)
   const [charCountHead01, setCharCountHead01] = useState(textHead01.length)
 
   const handlePreview = () => {
-    const content = {
-      imgHead: file ? file : imagenPublica,
-      textHead: textHead,
-      textHead01: textHead01,
-    }
+    const content = { imgHead: file ?? imagenPublica, textHead, textHead01 }
     localStorage.setItem('previewData', JSON.stringify(content))
     window.open(routes.previsualizarInicio, '_blank')
   }
 
   const onSubmitSection = async (values) => {
-    const toastId = Loading('Esperando respuesta...')
+    const toastId = toast.loading('Guardando cambios...')
     try {
       const response = await updateSection(values)
       toast.dismiss(toastId)
       if (response.status === 200) {
-        SuccessMessage('Información actualizada correctamente')
+        toast.success('Sección actualizada correctamente')
         setIsLoading(true)
       }
-    } catch (error) {
-      console.error(error)
-      ErrorMessage('Error al actualizar información')
+    } catch {
+      toast.dismiss(toastId)
+      toast.error('Error al actualizar la sección')
     }
   }
 
+  const hasError = charCountHead > 30 || charCountHead01 > 300
+
   return (
-    <div className='w-full max-w-4xl mx-auto px-4'>
-      <div role='alert' className='alert alert-warning alert-outline mb-6'>
-        <span>
-          Ten en cuenta que actualizar esta sección, se eliminará por completo el
-          contenido que actualmente se muestra en la web.
-        </span>
+    <div className='w-full max-w-4xl mx-auto space-y-6'>
+
+      {/* Aviso */}
+      <div className='flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 text-sm text-amber-800'>
+        <span className='text-xl leading-none'>⚠️</span>
+        <p>Al guardar esta sección se reemplazará por completo el contenido actual que se muestra en la web.</p>
       </div>
+
       <Formik
-        initialValues={{
-          file: null,
-          ruta: ruta,
-          textHead: textHead,
-          textHead01: textHead01,
-        }}
+        initialValues={{ file: null, ruta, textHead, textHead01 }}
         onSubmit={onSubmitSection}
       >
         {({ setFieldValue, isSubmitting }) => (
-          <Form className='space-y-6'>
-            {/* Campo para el título principal - limitado a 30 caracteres */}
-            <div className='form-control w-full'>
-              <label className='label'>
-                <span className='label-text font-medium'>Título Principal</span>
-                <span
-                  className={`label-text-alt ${
-                    charCountHead > 30 ? 'text-error' : 'text-success'
-                  }`}
-                >
-                  {charCountHead}/30 caracteres
-                </span>
-              </label>
-              <Field
-                type='text'
-                name='textHead'
-                className={`input input-bordered w-full ${
-                  charCountHead > 30 ? 'input-error' : ''
-                }`}
-                placeholder='Ingresa el título principal'
-                maxLength={30}
-                onChange={(e) => {
-                  const value = e.target.value
-                  setFieldValue('textHead', value)
-                  setTextHead(value)
-                  setCharCountHead(value.length)
-                }}
-              />
+          <Form className='space-y-5'>
+
+            {/* Card principal */}
+            <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
+              <div className='flex items-center gap-2 mb-5'>
+                <div className='w-1 h-6 bg-[#e43c8a] rounded-full' />
+                <h3 className='font-bold text-gray-900 text-lg'>Contenido de la Sección</h3>
+              </div>
+              <div className='space-y-5'>
+                <FormField
+                  label='Título Principal'
+                  name='textHead'
+                  placeholder='Ingresa el título principal'
+                  maxLength={30}
+                  charCount={charCountHead}
+                  maxChars={30}
+                  onChange={(e) => {
+                    setFieldValue('textHead', e.target.value)
+                    setTextHead(e.target.value)
+                    setCharCountHead(e.target.value.length)
+                  }}
+                />
+                <FormField
+                  label='Texto Secundario'
+                  name='textHead01'
+                  as='textarea'
+                  placeholder='Ingresa el texto secundario'
+                  maxLength={300}
+                  charCount={charCountHead01}
+                  maxChars={300}
+                  onChange={(e) => {
+                    setFieldValue('textHead01', e.target.value)
+                    setTextHead01(e.target.value)
+                    setCharCountHead01(e.target.value.length)
+                  }}
+                />
+              </div>
             </div>
 
-            {/* Campo para el subtítulo o texto secundario - limitado a 300 caracteres */}
-            <div className='form-control w-full'>
-              <label className='label'>
-                <span className='label-text font-medium'>Texto Secundario</span>
-                <span
-                  className={`label-text-alt ${
-                    charCountHead01 > 300 ? 'text-error' : 'text-success'
-                  }`}
-                >
-                  {charCountHead01}/300 caracteres
-                </span>
-              </label>
-              <Field
-                as='textarea'
-                name='textHead01'
-                className={`textarea textarea-bordered w-full h-32 ${
-                  charCountHead01 > 300 ? 'textarea-error' : ''
-                }`}
-                placeholder='Ingresa el texto secundario'
-                maxLength={300}
-                onChange={(e) => {
-                  const value = e.target.value
-                  setFieldValue('textHead01', value)
-                  setTextHead01(value)
-                  setCharCountHead01(value.length)
-                }}
-              />
-            </div>
-
-            {/* Subida de imagen */}
-            <div className='form-control w-full'>
-              <label className='label'>
-                <span className='label-text font-medium'>Imagen de Cabecera</span>
-              </label>
+            {/* Card imagen */}
+            <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
+              <div className='flex items-center gap-2 mb-5'>
+                <div className='w-1 h-6 bg-[#e43c8a] rounded-full' />
+                <h3 className='font-bold text-gray-900 text-lg'>Imagen de Cabecera</h3>
+              </div>
               <ImageUploader
                 setFieldValue={setFieldValue}
                 nameFile={nameFile}
                 setNameFile={setNameFile}
                 setFile={setFile}
-                valueName={'file'}
+                valueName='file'
               />
             </div>
 
-            {/* Botones de acción */}
-            <div className='flex flex-wrap gap-4 mt-6'>
-              {/* Botón para enviar informacion al backend */}
+            {/* Botones */}
+            <div className='flex flex-wrap gap-3'>
               <button
                 type='submit'
-                className='btn btn-neutral'
-                disabled={charCountHead > 30 || charCountHead01 > 300 || isSubmitting}
+                disabled={hasError || isSubmitting}
+                className='px-8 py-2.5 rounded-full bg-[#e43c8a] text-white font-bold text-sm shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2'
               >
-                Enviar
+                {isSubmitting && <span className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />}
+                Guardar Cambios
               </button>
-
-              {/* Botón para previsualizar el contenido cargado */}
               <button
                 type='button'
-                className='btn btn-warning'
-                onClick={() => handlePreview()}
-                disabled={charCountHead > 30 || charCountHead01 > 300 || isSubmitting}
+                disabled={hasError || isSubmitting}
+                onClick={handlePreview}
+                className='px-8 py-2.5 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:pointer-events-none'
               >
                 Previsualizar
               </button>
             </div>
+
           </Form>
         )}
       </Formik>

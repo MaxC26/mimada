@@ -4,7 +4,7 @@ import './App.css'
 import Home from './pages/Home'
 import Explore from './pages/Explore'
 import { BottomNav } from './components/nabvar/BottomNav'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import { routes } from './utils/rutas'
@@ -16,6 +16,11 @@ import NotFoundPage from './pages/NotFoundPage'
 import { jwtDecode } from 'jwt-decode'
 
 function App() {
+  const location = useLocation()
+  const hideBottomNav = [routes.login, routes.settings].some(r =>
+    location.pathname.startsWith(r)
+  )
+
   return (
     <>
       <Routes>
@@ -34,7 +39,7 @@ function App() {
       </Routes>
 
       <Toaster className='ps-1' position='top-right' richColors='true' />
-      <BottomNav />
+      {!hideBottomNav && <BottomNav />}
     </>
   )
 }

@@ -1,8 +1,11 @@
 import { IconShoppingCart, IconStarFilled } from '@tabler/icons-react'
 
-export const CourseCard = ({ title, author, rating, reviews, hours, price, image, category }) => {
+export const CourseCard = ({ title, author, rating, reviews, hours, price, image, category, onClick }) => {
   return (
-    <div className='bg-white rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group'>
+    <div
+      className='bg-white rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group cursor-pointer'
+      onClick={onClick}
+    >
       {/* Contenedor Superior: Imagen y Badge */}
       <div className='relative h-48 sm:h-56 w-full overflow-hidden'>
         <div 

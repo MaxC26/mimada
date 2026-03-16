@@ -1,21 +1,32 @@
 import Footer from '../components/Footer'
 import { Navbar } from '../components/nabvar/Navbar'
 import { CourseCard } from '../components/utils/CourseCard'
+import CursoDetalle from '../components/settings/CursoDetalle'
 import { useEffect, useState } from 'react'
 import { IconSearch, IconClockHour4, IconCertificate, IconUsersGroup } from '@tabler/icons-react'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
 
 const Explore = () => {
   const [isLoading, setIsLoading] = useState(true)
+  const [cursoPag, setCursoPag] = useState('lista')
+  const [cursoSeleccionado, setCursoSeleccionado] = useState(null)
+
+  const handleVerDetalle = (course) => {
+    setCursoSeleccionado(course)
+    setCursoPag('detalle')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleVolver = () => {
+    setCursoPag('lista')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    
-    // Simular carga de los cursos (API Fetch ficticio)
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 1200)
-
     return () => clearTimeout(timer)
   }, [])
 
@@ -75,18 +86,28 @@ const Explore = () => {
       
       {/* Contenido principal */}
       <main className='flex-grow w-full pt-20 md:pt-28 pb-16'>
-        
-        {/* Barra de Búsqueda Móvil */}
-        <div className='md:hidden w-full px-4 mb-6 relative'>
-          <div className='absolute inset-y-0 left-4 pl-3 flex items-center pointer-events-none'>
-            <IconSearch size={18} className='text-gray-400' />
+
+        {/* ── Vista Detalle de Curso ── */}
+        {cursoPag === 'detalle' && (
+          <div className='max-w-6xl mx-auto px-4 lg:px-8'>
+            <CursoDetalle curso={cursoSeleccionado} onBack={handleVolver} />
           </div>
-          <input
-            type='text'
-            placeholder='¿Qué quieres aprender hoy?'
-            className='w-full pl-10 pr-4 py-3 border border-gray-100 shadow-sm bg-white rounded-xl text-sm outline-none focus:border-[#e43c8a] transition-all'
-          />
-        </div>
+        )}
+
+        {/* ── Vista Lista / Explorar ── */}
+        {cursoPag === 'lista' && (
+          <>
+            {/* Barra de Búsqueda Móvil */}
+            <div className='md:hidden w-full px-4 mb-6 relative'>
+              <div className='absolute inset-y-0 left-4 pl-3 flex items-center pointer-events-none'>
+                <IconSearch size={18} className='text-gray-400' />
+              </div>
+              <input
+                type='text'
+                placeholder='¿Qué quieres aprender hoy?'
+                className='w-full pl-10 pr-4 py-3 border border-gray-100 shadow-sm bg-white rounded-xl text-sm outline-none focus:border-[#e43c8a] transition-all'
+              />
+            </div>
 
         <div className='max-w-7xl mx-auto px-4 lg:px-8'>
           
@@ -144,7 +165,11 @@ const Explore = () => {
               {/* Grid de Cursos */}
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16'>
                 {mockCourses.map((course) => (
-                  <CourseCard key={course.id} {...course} />
+                  <CourseCard
+                    key={course.id}
+                    {...course}
+                    onClick={() => handleVerDetalle(course)}
+                  />
                 ))}
               </div>
               
@@ -182,8 +207,10 @@ const Explore = () => {
               </div>
             </div>
           )}
-
         </div>
+          </>
+        )}
+
       </main>
 
       <Footer />

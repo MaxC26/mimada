@@ -1,12 +1,16 @@
 import { IconBrandWhatsapp, IconSearch, IconShoppingCart } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
 import { jwtDecode } from 'jwt-decode'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
 
 export const Navbar = ({ isExplore = false }) => {
   const [login, setLogin] = useState(false)
+  const location = useLocation()
+
+  const homeRoutes = [routes.inicio, routes.home, routes.home + '/']
+  const isHomeActive = homeRoutes.includes(location.pathname)
 
   const jwt = localStorage.getItem('jwt')
   useEffect(() => {
@@ -56,7 +60,7 @@ export const Navbar = ({ isExplore = false }) => {
             {!isExplore ? (
               <ul className='flex space-x-8 items-center justify-end'>
                 <li>
-                  <a href='#inicio' className='text-gray-800 text-base font-medium hover:text-[#e43c8a] transition-colors'>Inicio</a>
+                  <Link to={routes.inicio} className={`text-base font-medium transition-colors ${isHomeActive ? 'text-[#e43c8a] font-semibold' : 'text-gray-800 hover:text-[#e43c8a]'}`}>Inicio</Link>
                 </li>
                 <li>
                   <Link to={routes.explorar} className='text-gray-800 text-base font-medium hover:text-[#e43c8a] transition-colors'>Explorar</Link>
