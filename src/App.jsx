@@ -3,7 +3,7 @@ import './App.css'
 import Home from './pages/Home'
 import Explore from './pages/Explore'
 import { BottomNav } from './components/nabvar/BottomNav'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import { routes } from './utils/rutas'
@@ -13,11 +13,19 @@ import HomeHistoriaPage from './pages/previsualizar/HomeHistoriaPage'
 import HomeServicioPage from './pages/previsualizar/HomeServicioPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
-import { ROLES } from './utils/constantes'
+import { ROLES, SECCIONES_DASHBOARD } from './utils/constantes'
 import { decodeToken } from './utils/utils'
+import SubirVideoSection from './pages/dashboard/SubirVideoSection'
+import ContenidoSection from './pages/dashboard/ContenidoSection'
+import Cursos from './components/settings/Cursos'
+import { Inicio } from './components/settings/Inicio'
+import Servicios from './components/settings/Servicios'
+import Historia from './components/settings/Historia'
+import Categorias from './components/settings/Categorias'
 
 function App() {
   const location = useLocation()
+  const navigate = useNavigate()
 
   const jwt = localStorage.getItem('jwt')
   const rol = (decodeToken(jwt)?.rol || '').toLowerCase()
@@ -35,10 +43,64 @@ function App() {
         <Route path={routes.login} element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route
-            path={routes.settings}
-            element={rol === ROLES.ADMINISTRADOR ? <DashboardPage /> : <NotAllowedPage />}
-          />
+          {/* Dashboard con rutas anidadas */}
+          {rol === ROLES.ADMINISTRADOR ? (
+            <Route path={routes.settings} element={<DashboardPage />}>
+              <Route index element={<Navigate to={routes.dashboard.inicio} replace />} />
+              <Route
+                path={routes.dashboard.inicio}
+                element={
+                  <ContenidoSection seccion={SECCIONES_DASHBOARD.INICIO}>
+                    {(contenido, setIsLoading) => (
+                      <Inicio contenido={contenido} setIsLoading={setIsLoading} />
+                    )}
+                  </ContenidoSection>
+                }
+              />
+              <Route
+                path={routes.dashboard.servicios}
+                element={
+                  <ContenidoSection seccion={SECCIONES_DASHBOARD.SERVICIOS}>
+                    {(contenido, setIsLoading) => (
+                      <Servicios contenido={contenido} setIsLoading={setIsLoading} />
+                    )}
+                  </ContenidoSection>
+                }
+              />
+              <Route
+                path={routes.dashboard.historia}
+                element={
+                  <ContenidoSection seccion={SECCIONES_DASHBOARD.HISTORIA}>
+                    {(contenido, setIsLoading) => (
+                      <Historia contenido={contenido} setIsLoading={setIsLoading} />
+                    )}
+                  </ContenidoSection>
+                }
+              />
+              <Route
+                path={routes.dashboard.cursos}
+                element={
+                  <Cursos
+                    onNuevoCurso={() => navigate(routes.dashboard.subirCurso)}
+                    onEditCurso={(curso) =>
+                      navigate(routes.dashboard.editarCurso.replace(':id', curso.id), {
+                        state: { curso },
+                      })
+                    }
+                  />
+                }
+              />
+              <Route path={routes.dashboard.subirCurso} element={<SubirVideoSection />} />
+              <Route
+                path={routes.dashboard.editarCurso}
+                element={<SubirVideoSection />}
+              />
+              <Route path={routes.dashboard.categorias} element={<Categorias />} />
+            </Route>
+          ) : (
+            <Route path={routes.settings + '/*'} element={<NotAllowedPage />} />
+          )}
+
           <Route path={routes.previsualizarInicio} element={<HomeInicioPage />} />
           <Route path={routes.previsualizarHistoria} element={<HomeHistoriaPage />} />
           <Route path={routes.previsualizarServicio} element={<HomeServicioPage />} />

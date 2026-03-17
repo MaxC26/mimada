@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import {
   IconSmartHome,
   IconUsers,
@@ -11,77 +10,67 @@ import {
   IconExternalLink,
   IconLayoutGrid,
 } from '@tabler/icons-react'
-import { getContenidoBySeccion } from '../services/contenido'
-import { Inicio } from '../components/settings/Inicio'
-import Historia from '../components/settings/Historia'
-import Servicios from '../components/settings/Servicios'
-import SubirVideo from '../components/settings/SubirVideo'
-import Cursos from '../components/settings/Cursos'
-import Categorias from '../components/settings/Categorias'
-import LoadingSpinner from '../components/utils/LoadingSpinner'
+import { useState } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../services/login'
-import { useNavigate } from 'react-router-dom'
 import logoMimada from '../assets/img/logo/logo-mimada.png'
 import { routes } from '../utils/rutas'
 import { decodeToken } from '../utils/utils'
+import { SECCIONES_DASHBOARD } from '../utils/constantes'
 
 const navItems = [
-  { id: 'Inicio', label: 'Inicio', icon: IconSmartHome, section: 'Head' },
-  { id: 'Servicios', label: 'Servicios', icon: IconUsers, section: 'servicio' },
   {
-    id: 'Nuestra Historia',
+    id: SECCIONES_DASHBOARD.INICIO,
+    label: 'Inicio',
+    icon: IconSmartHome,
+    path: routes.dashboard.inicio,
+  },
+  {
+    id: SECCIONES_DASHBOARD.SERVICIOS,
+    label: 'Servicios',
+    icon: IconUsers,
+    path: routes.dashboard.servicios,
+  },
+  {
+    id: SECCIONES_DASHBOARD.HISTORIA,
     label: 'Nuestra Historia',
     icon: IconClock2,
-    section: 'historia',
+    path: routes.dashboard.historia,
   },
-  { id: 'Cursos', label: 'Cursos', icon: IconVideo, section: null },
-  { id: 'Categorias', label: 'Categorías', icon: IconLayoutGrid, section: null },
+  {
+    id: SECCIONES_DASHBOARD.CURSOS,
+    label: 'Cursos',
+    icon: IconVideo,
+    path: routes.dashboard.cursos,
+  },
+  {
+    id: SECCIONES_DASHBOARD.CATEGORIAS,
+    label: 'Categorías',
+    icon: IconLayoutGrid,
+    path: routes.dashboard.categorias,
+  },
 ]
 
 const DashboardPage = () => {
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(true)
+  const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activePage, setActivePage] = useState('Inicio')
-  const [contenido, setContenido] = useState([])
-  // Subvistas de la sección Cursos: 'lista' | 'detalle' | 'subir'
-  const [cursoPag, setCursoPag] = useState('lista')
-  const [cursoSeleccionado, setCursoSeleccionado] = useState(null)
 
   const rol = (decodeToken(localStorage.getItem('jwt'))?.rol || '').toUpperCase()
 
-  useEffect(() => {
-    setSidebarOpen(false)
-    const item = navItems.find((n) => n.id === activePage)
-    if (item?.section) {
-      getSectionContent(item.section)
-    } else {
-      // Secciones sin fetch (ej: SubirVideo)
-      setIsLoading(false)
-    }
-  }, [activePage])
-
-  const getSectionContent = async (seccion) => {
-    setIsLoading(true)
-    try {
-      const res = await getContenidoBySeccion(seccion)
-      setContenido(res.data)
-    } catch (e) {
-      console.error(e)
-    }
-    setIsLoading(false)
-  }
-
   const handleLogout = () => logout(navigate)
 
-  const handleNav = (id) => {
-    if (id !== activePage) {
-      setActivePage(id)
-      // Al cambiar de sección, resetear subvista de cursos
-      if (id === 'Cursos') setCursoPag('lista')
-    }
+  const handleNav = (path) => {
+    navigate(path)
     setSidebarOpen(false)
   }
+
+  // Determina el item activo comparando la ruta actual
+  const activeItem =
+    navItems
+      .slice()
+      .reverse()
+      .find((item) => location.pathname.startsWith(item.path)) || navItems[0]
 
   return (
     <div className='flex min-h-screen bg-gray-50 font-sans'>
@@ -117,12 +106,12 @@ const DashboardPage = () => {
 
         {/* Navegación */}
         <nav className='flex-1 px-3 py-5 space-y-1 overflow-y-auto'>
-          {navItems.map(({ id, label, icon: Icon }) => {
-            const active = activePage === id
+          {navItems.map(({ id, label, icon: Icon, path }) => {
+            const active = activeItem.id === id
             return (
               <button
                 key={id}
-                onClick={() => handleNav(id)}
+                onClick={() => handleNav(path)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${active ? 'bg-[#faf7f5] text-[#c2a381]' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
               >
                 <Icon size={20} stroke={active ? 2.5 : 1.5} />
@@ -182,7 +171,7 @@ const DashboardPage = () => {
 
           <div>
             <h1 className='text-lg font-black text-gray-900 capitalize'>
-              {navItems.find((n) => n.id === activePage)?.label || activePage}
+              {activeItem.label}
             </h1>
             <p className='text-xs text-gray-400 hidden md:block'>
               Gestiona el contenido de tu web desde aquí
@@ -190,50 +179,9 @@ const DashboardPage = () => {
           </div>
         </header>
 
-        {/* Body */}
+        {/* Contenido de la sección activa */}
         <main className='flex-1 p-4 md:p-8'>
-          {isLoading ? (
-            <div className='flex justify-center items-center min-h-[50vh]'>
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <>
-              {activePage === 'Inicio' && (
-                <Inicio contenido={contenido} setIsLoading={setIsLoading} />
-              )}
-              {activePage === 'Servicios' && (
-                <Servicios contenido={contenido} setIsLoading={setIsLoading} />
-              )}
-              {activePage === 'Nuestra Historia' && (
-                <Historia contenido={contenido} setIsLoading={setIsLoading} />
-              )}
-              {activePage === 'Cursos' && (
-                <>
-                  {cursoPag === 'lista' && (
-                    <Cursos
-                      onEditCurso={(curso) => {
-                        setCursoSeleccionado(curso)
-                        setCursoPag('subir')
-                      }}
-                      onNuevoCurso={() => {
-                        setCursoSeleccionado(null)
-                        setCursoPag('subir')
-                      }}
-                    />
-                  )}
-                  {cursoPag === 'subir' && (
-                    <SubirVideo
-                      curso={cursoSeleccionado}
-                      onBack={() => setCursoPag('lista')}
-                    />
-                  )}
-                </>
-              )}
-              {activePage === 'Categorias' && (
-                <Categorias contenido={contenido} setIsLoading={setIsLoading} />
-              )}
-            </>
-          )}
+          <Outlet />
         </main>
       </div>
     </div>
@@ -241,3 +189,4 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
+
