@@ -19,6 +19,14 @@ const routesBackend = Object.freeze({
     updateSection: '/contenido/updateSeccion',
     updateSectionServicios: '/contenido/updateSeccionService',
   },
+  cursos: {
+    getCursos: '/cursos',
+    getCursoById: '/cursos/:id',
+    updateCurso: '/cursos/:id',
+    deleteCurso: '/cursos/:id',
+    createCurso: '/cursos',
+    getCategorias: '/cursos/categorias',
+  },
 })
 export const context = '/mimada'
 

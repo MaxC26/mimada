@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
-import { jwtDecode } from 'jwt-decode'
 import { useEffect } from 'react'
+import { isTokenExpired } from '../../utils/utils'
 import { logout } from '../../services/login'
 
 const ProtectedRoute = () => {
@@ -11,8 +11,7 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     if (jwt) {
-      const decoded = jwtDecode(jwt)
-      const isExpired = decoded.exp < Date.now() / 1000
+      const isExpired = isTokenExpired(jwt)
       if (isExpired) {
         logout()
       }
@@ -27,4 +26,3 @@ const ProtectedRoute = () => {
 }
 
 export default ProtectedRoute
-

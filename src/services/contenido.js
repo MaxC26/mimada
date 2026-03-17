@@ -22,8 +22,8 @@ export function getContenidoBySeccion(seccion) {
       .get(
         `${routes.backend.url}${routes.backend.contenido.getContenidoBySeccion.replace(
           ':seccion',
-          seccion
-        )}`
+          seccion,
+        )}`,
       )
       .then(function (response) {
         resolve(response)
@@ -84,7 +84,7 @@ export function updateSectionMultiFile(data) {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        }
+        },
       )
       .then(function (response) {
         resolve(response)
@@ -94,4 +94,3 @@ export function updateSectionMultiFile(data) {
       })
   })
 }
-

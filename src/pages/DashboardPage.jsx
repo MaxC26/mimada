@@ -23,13 +23,19 @@ import { logout } from '../services/login'
 import { useNavigate } from 'react-router-dom'
 import logoMimada from '../assets/img/logo/logo-mimada.png'
 import { routes } from '../utils/rutas'
+import { decodeToken } from '../utils/utils'
 
 const navItems = [
-  { id: 'Inicio',           label: 'Inicio',           icon: IconSmartHome,   section: 'Head' },
-  { id: 'Servicios',        label: 'Servicios',        icon: IconUsers,       section: 'servicio' },
-  { id: 'Nuestra Historia', label: 'Nuestra Historia', icon: IconClock2,      section: 'historia' },
-  { id: 'Cursos',           label: 'Cursos',           icon: IconVideo,       section: null },
-  { id: 'Categorias',       label: 'Categorías',       icon: IconLayoutGrid,  section: null },
+  { id: 'Inicio', label: 'Inicio', icon: IconSmartHome, section: 'Head' },
+  { id: 'Servicios', label: 'Servicios', icon: IconUsers, section: 'servicio' },
+  {
+    id: 'Nuestra Historia',
+    label: 'Nuestra Historia',
+    icon: IconClock2,
+    section: 'historia',
+  },
+  { id: 'Cursos', label: 'Cursos', icon: IconVideo, section: null },
+  { id: 'Categorias', label: 'Categorías', icon: IconLayoutGrid, section: null },
 ]
 
 const DashboardPage = () => {
@@ -42,16 +48,17 @@ const DashboardPage = () => {
   const [cursoPag, setCursoPag] = useState('lista')
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null)
 
+  const rol = (decodeToken(localStorage.getItem('jwt'))?.rol || '').toUpperCase()
+
   useEffect(() => {
     setSidebarOpen(false)
-    const item = navItems.find(n => n.id === activePage)
+    const item = navItems.find((n) => n.id === activePage)
     if (item?.section) {
       getSectionContent(item.section)
     } else {
       // Secciones sin fetch (ej: SubirVideo)
       setIsLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePage])
 
   const getSectionContent = async (seccion) => {
@@ -78,7 +85,6 @@ const DashboardPage = () => {
 
   return (
     <div className='flex min-h-screen bg-gray-50 font-sans'>
-
       {/* ── Overlay móvil ── */}
       {sidebarOpen && (
         <div
@@ -88,17 +94,23 @@ const DashboardPage = () => {
       )}
 
       {/* ── Sidebar ── */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl flex flex-col transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl flex flex-col transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+      >
         {/* Logo */}
         <div className='flex items-center gap-3 px-6 py-5 border-b border-gray-100'>
           <img src={logoMimada} alt='Logo' className='h-10 w-auto object-contain' />
           <div>
             <p className='font-black text-gray-900 text-base leading-tight'>Mimadas</p>
-            <span className='text-xs font-semibold text-[#c2a381] bg-[#faf7f5] px-2 py-0.5 rounded-full'>INSTRUCTORA</span>
+            <span className='text-xs font-semibold text-[#c2a381] bg-[#faf7f5] px-2 py-0.5 rounded-full'>
+              {rol}
+            </span>
           </div>
           {/* Botón cerrar sidebar en móvil */}
-          <button className='ml-auto md:hidden text-gray-400 hover:text-gray-600' onClick={() => setSidebarOpen(false)}>
+          <button
+            className='ml-auto md:hidden text-gray-400 hover:text-gray-600'
+            onClick={() => setSidebarOpen(false)}
+          >
             <IconX size={20} />
           </button>
         </div>
@@ -125,7 +137,11 @@ const DashboardPage = () => {
         <div className='p-4 border-t border-gray-100 space-y-2'>
           <div className='flex items-center gap-3 px-2 py-2'>
             <div className='w-9 h-9 rounded-full bg-[#f3ece5] flex items-center justify-center overflow-hidden shrink-0'>
-              <img src='https://i.pravatar.cc/150?img=47' alt='Avatar' className='w-full h-full object-cover' />
+              <img
+                src='https://i.pravatar.cc/150?img=47'
+                alt='Avatar'
+                className='w-full h-full object-cover'
+              />
             </div>
             <div className='flex-1 min-w-0'>
               <p className='text-sm font-bold text-gray-900 truncate'>Lucía Méndez</p>
@@ -154,7 +170,6 @@ const DashboardPage = () => {
 
       {/* ── Contenido principal ── */}
       <div className='flex-1 flex flex-col min-w-0'>
-
         {/* Header top bar */}
         <header className='bg-white border-b border-gray-100 px-4 md:px-8 py-4 flex items-center gap-4 sticky top-0 z-30'>
           {/* Hamburger móvil */}
@@ -167,7 +182,7 @@ const DashboardPage = () => {
 
           <div>
             <h1 className='text-lg font-black text-gray-900 capitalize'>
-              {navItems.find(n => n.id === activePage)?.label || activePage}
+              {navItems.find((n) => n.id === activePage)?.label || activePage}
             </h1>
             <p className='text-xs text-gray-400 hidden md:block'>
               Gestiona el contenido de tu web desde aquí
@@ -196,16 +211,25 @@ const DashboardPage = () => {
                 <>
                   {cursoPag === 'lista' && (
                     <Cursos
-                      onEditCurso={(curso) => { setCursoSeleccionado(curso); setCursoPag('subir') }}
-                      onNuevoCurso={() => { setCursoSeleccionado(null); setCursoPag('subir') }}
+                      onEditCurso={(curso) => {
+                        setCursoSeleccionado(curso)
+                        setCursoPag('subir')
+                      }}
+                      onNuevoCurso={() => {
+                        setCursoSeleccionado(null)
+                        setCursoPag('subir')
+                      }}
                     />
                   )}
                   {cursoPag === 'subir' && (
-                    <SubirVideo curso={cursoSeleccionado} onBack={() => setCursoPag('lista')} />
+                    <SubirVideo
+                      curso={cursoSeleccionado}
+                      onBack={() => setCursoPag('lista')}
+                    />
                   )}
                 </>
-                )}
-                {activePage === 'Categorias' && (
+              )}
+              {activePage === 'Categorias' && (
                 <Categorias contenido={contenido} setIsLoading={setIsLoading} />
               )}
             </>

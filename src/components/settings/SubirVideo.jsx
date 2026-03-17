@@ -1,14 +1,14 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   IconUpload,
   IconVideo,
   IconPhoto,
-  IconTrash,
   IconPlus,
   IconGripVertical,
   IconX,
   IconCheck,
 } from '@tabler/icons-react'
+import { getCategorias } from '../../services/cursos'
 
 const SubirVideo = ({ curso = null, onBack }) => {
   const esEdicion = !!curso
@@ -20,6 +20,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
   const [isUploading, setIsUploading] = useState(false)
   const [thumbnail, setThumbnail] = useState(curso?.thumbnail || null)
   const [autoSaved, setAutoSaved] = useState('14:24')
+  const [categorias, setCategorias] = useState([])
   const [lecciones, setLecciones] = useState([
     { id: 1, titulo: 'Introducción y Materiales', duracion: '08:24', estado: 'listo' },
     { id: 2, titulo: 'Preparación de la cutícula', duracion: '15:40', estado: 'listo' },
@@ -32,10 +33,21 @@ const SubirVideo = ({ curso = null, onBack }) => {
     precio: curso?.precio?.toString() || '49.99',
   })
 
-  const categorias = ['Manicura', 'Maquillaje', 'Skincare', 'Uñas', 'Cabello', 'Tratamientos Faciales']
+  useEffect(() => {
+    getCategorias()
+      .then((res) => {
+        setCategorias(res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }, [])
 
   /* ── Drag & Drop handlers ── */
-  const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true) }
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
   const handleDragLeave = () => setIsDragging(false)
   const handleDrop = (e) => {
     e.preventDefault()
@@ -61,9 +73,14 @@ const SubirVideo = ({ curso = null, onBack }) => {
         progress = 100
         clearInterval(interval)
         setIsUploading(false)
-        setLecciones(prev => [
+        setLecciones((prev) => [
           ...prev,
-          { id: Date.now(), titulo: file.name.replace(/\.[^/.]+$/, ''), duracion: '--:--', estado: 'procesando' }
+          {
+            id: Date.now(),
+            titulo: file.name.replace(/\.[^/.]+$/, ''),
+            duracion: '--:--',
+            estado: 'procesando',
+          },
         ])
       }
       setUploadProgress(progress)
@@ -79,11 +96,14 @@ const SubirVideo = ({ curso = null, onBack }) => {
   }
 
   const handleAddLeccion = () => {
-    setLecciones(prev => [...prev, { id: Date.now(), titulo: 'Nueva lección', duracion: '--:--', estado: 'listo' }])
+    setLecciones((prev) => [
+      ...prev,
+      { id: Date.now(), titulo: 'Nueva lección', duracion: '--:--', estado: 'listo' },
+    ])
   }
 
   const handleDeleteLeccion = (id) => {
-    setLecciones(prev => prev.filter(l => l.id !== id))
+    setLecciones((prev) => prev.filter((l) => l.id !== id))
   }
 
   const formatBytes = (bytes) => {
@@ -114,12 +134,17 @@ const SubirVideo = ({ curso = null, onBack }) => {
             {esEdicion ? `Editando: ${curso.titulo}` : 'Subir Nuevo Curso'}
           </h2>
           <p className='text-gray-500 mt-1'>
-            {esEdicion ? 'Modifica el contenido y guarda los cambios.' : 'Crea contenido impactante y gestiona tus lecciones con facilidad.'}
+            {esEdicion
+              ? 'Modifica el contenido y guarda los cambios.'
+              : 'Crea contenido impactante y gestiona tus lecciones con facilidad.'}
           </p>
         </div>
         <div className='flex gap-3'>
           {onBack && (
-            <button onClick={onBack} className='px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-colors text-sm'>
+            <button
+              onClick={onBack}
+              className='px-5 py-2.5 rounded-full border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-colors text-sm'
+            >
               Descartar
             </button>
           )}
@@ -132,7 +157,6 @@ const SubirVideo = ({ curso = null, onBack }) => {
       <div className='flex flex-col lg:flex-row gap-6'>
         {/* ── Columna principal ── */}
         <div className='flex-1 space-y-6'>
-
           {/* Zona de drag-and-drop */}
           <div
             className={`w-full border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${isDragging ? 'border-[#c2a381] bg-[#faf7f5]' : 'border-gray-200 bg-white hover:border-[#c2a381]/50 hover:bg-[#faf7f5]/50'}`}
@@ -145,17 +169,30 @@ const SubirVideo = ({ curso = null, onBack }) => {
               <IconUpload size={28} stroke={1.5} />
             </div>
             <div className='text-center'>
-              <p className='font-bold text-gray-800 text-lg'>Arrastra y suelta tu video aquí</p>
-              <p className='text-gray-500 text-sm mt-1'>MP4, MOV o AVI. Tamaño máximo recomendado 2GB.</p>
+              <p className='font-bold text-gray-800 text-lg'>
+                Arrastra y suelta tu video aquí
+              </p>
+              <p className='text-gray-500 text-sm mt-1'>
+                MP4, MOV o AVI. Tamaño máximo recomendado 2GB.
+              </p>
             </div>
             <button
               type='button'
               className='mt-2 px-6 py-2.5 bg-[#c2a381] text-white font-bold rounded-full text-sm hover:bg-[#a58b6c] transition-colors shadow-md'
-              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click() }}
+              onClick={(e) => {
+                e.stopPropagation()
+                fileInputRef.current?.click()
+              }}
             >
               Seleccionar Archivo
             </button>
-            <input ref={fileInputRef} type='file' accept='video/*' className='hidden' onChange={handleFileSelect} />
+            <input
+              ref={fileInputRef}
+              type='file'
+              accept='video/*'
+              className='hidden'
+              onChange={handleFileSelect}
+            />
           </div>
 
           {/* Barra de progreso */}
@@ -206,7 +243,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                 <input
                   type='text'
                   value={form.titulo}
-                  onChange={e => setForm(f => ({ ...f, titulo: e.target.value }))}
+                  onChange={(e) => setForm((f) => ({ ...f, titulo: e.target.value }))}
                   placeholder='Ej: Masterclass de Uñas Acrílicas'
                   className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all'
                 />
@@ -218,7 +255,9 @@ const SubirVideo = ({ curso = null, onBack }) => {
                 </label>
                 <textarea
                   value={form.descripcion}
-                  onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, descripcion: e.target.value }))
+                  }
                   rows={4}
                   placeholder='Describe lo que aprenderán tus alumnas...'
                   className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all resize-none'
@@ -232,10 +271,20 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   </label>
                   <select
                     value={form.categoria}
-                    onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, categoria: e.target.value }))
+                    }
                     className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all bg-white'
                   >
-                    {categorias.map(c => <option key={c}>{c}</option>)}
+                    <option value=''>Selecciona una categoría</option>
+                    {categorias.map((cat) => (
+                      <option
+                        key={cat.mmdcategoriacursoid}
+                        value={cat.mmdcategoriacursoid}
+                      >
+                        {cat.nombre}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -248,7 +297,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                       type='number'
                       min={0}
                       value={form.precio}
-                      onChange={e => setForm(f => ({ ...f, precio: e.target.value }))}
+                      onChange={(e) => setForm((f) => ({ ...f, precio: e.target.value }))}
                       className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
                     />
                   </div>
@@ -267,14 +316,10 @@ const SubirVideo = ({ curso = null, onBack }) => {
             <div className='flex items-center justify-between mb-5'>
               <div className='flex items-center gap-2'>
                 <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
-                <h3 className='font-bold text-gray-900 text-lg'>Lecciones ({lecciones.length})</h3>
+                <h3 className='font-bold text-gray-900 text-lg'>
+                  Lecciones ({lecciones.length})
+                </h3>
               </div>
-              <button
-                onClick={handleAddLeccion}
-                className='flex items-center gap-1.5 text-sm font-bold text-[#c2a381] hover:underline'
-              >
-                <IconPlus size={16} /> Añadir lección
-              </button>
             </div>
 
             <div className='space-y-2'>
@@ -283,16 +328,25 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   key={leccion.id}
                   className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${leccion.estado === 'procesando' ? 'border-[#f3ece5] bg-[#faf7f5]' : 'border-gray-100 bg-gray-50 hover:bg-white'}`}
                 >
-                  <IconGripVertical size={16} className='text-gray-300 cursor-grab shrink-0' />
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#c2a381] text-white' : 'bg-gray-200 text-gray-600'}`}>
+                  <IconGripVertical
+                    size={16}
+                    className='text-gray-300 cursor-grab shrink-0'
+                  />
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#c2a381] text-white' : 'bg-gray-200 text-gray-600'}`}
+                  >
                     {leccion.estado === 'procesando' ? '⏳' : `V${idx + 1}`}
                   </div>
                   <div className='flex-1 min-w-0'>
-                    <p className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#c2a381]' : 'text-gray-800'}`}>
+                    <p
+                      className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#c2a381]' : 'text-gray-800'}`}
+                    >
                       {leccion.titulo}
                     </p>
                     <p className='text-xs text-gray-400'>
-                      {leccion.estado === 'procesando' ? 'PROCESANDO...' : `Video · ${leccion.duracion}`}
+                      {leccion.estado === 'procesando'
+                        ? 'PROCESANDO...'
+                        : `Video · ${leccion.duracion}`}
                     </p>
                   </div>
                   {leccion.estado !== 'procesando' && (
@@ -307,12 +361,10 @@ const SubirVideo = ({ curso = null, onBack }) => {
               ))}
             </div>
           </div>
-
         </div>
 
         {/* ── Columna lateral ── */}
         <div className='w-full lg:w-72 space-y-5'>
-
           {/* Miniatura */}
           <div className='bg-white rounded-2xl p-5 border border-gray-100 shadow-sm'>
             <h4 className='font-bold text-gray-900 mb-4'>Miniatura del Curso</h4>
@@ -321,11 +373,19 @@ const SubirVideo = ({ curso = null, onBack }) => {
               onClick={() => thumbnailRef.current?.click()}
             >
               {thumbnail ? (
-                <img src={thumbnail} alt='Miniatura' className='w-full h-full object-cover' />
+                <img
+                  src={thumbnail}
+                  alt='Miniatura'
+                  className='w-full h-full object-cover'
+                />
               ) : (
                 <div className='flex flex-col items-center gap-1 text-gray-400'>
                   <IconPhoto size={28} stroke={1} />
-                  <p className='text-xs font-medium'>SUBE UNA IMAGEN<br />1280×720</p>
+                  <p className='text-xs font-medium'>
+                    SUBE UNA IMAGEN
+                    <br />
+                    1280×720
+                  </p>
                 </div>
               )}
             </div>
@@ -335,7 +395,23 @@ const SubirVideo = ({ curso = null, onBack }) => {
             >
               {thumbnail ? 'Cambiar imagen' : 'Seleccionar imagen'}
             </button>
-            <input ref={thumbnailRef} type='file' accept='image/*' className='hidden' onChange={handleThumbnail} />
+            <input
+              ref={thumbnailRef}
+              type='file'
+              accept='image/*'
+              className='hidden'
+              onChange={handleThumbnail}
+            />
+          </div>
+
+          {/* Botón guardar */}
+          <div className='hidden lg:block'>
+            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all'>
+              Guardar Cambios
+            </button>
+            <button className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700'>
+              Descartar borradores
+            </button>
           </div>
 
           {/* Botón guardar solo visible en mobile (fuera del header) */}
@@ -347,7 +423,6 @@ const SubirVideo = ({ curso = null, onBack }) => {
               Descartar borradores
             </button>
           </div>
-
         </div>
       </div>
     </div>

@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
 import './App.css'
 import Home from './pages/Home'
 import Explore from './pages/Explore'
 import { BottomNav } from './components/nabvar/BottomNav'
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import { routes } from './utils/rutas'
@@ -13,12 +12,18 @@ import { HomeInicioPage } from './pages/previsualizar/HomeInicioPage'
 import HomeHistoriaPage from './pages/previsualizar/HomeHistoriaPage'
 import HomeServicioPage from './pages/previsualizar/HomeServicioPage'
 import NotFoundPage from './pages/NotFoundPage'
-import { jwtDecode } from 'jwt-decode'
+import NotAllowedPage from './pages/NotAllowedPage'
+import { ROLES } from './utils/constantes'
+import { decodeToken } from './utils/utils'
 
 function App() {
   const location = useLocation()
-  const hideBottomNav = [routes.login, routes.settings].some(r =>
-    location.pathname.startsWith(r)
+
+  const jwt = localStorage.getItem('jwt')
+  const rol = (decodeToken(jwt)?.rol || '').toLowerCase()
+
+  const hideBottomNav = [routes.login, routes.settings].some((r) =>
+    location.pathname.startsWith(r),
   )
 
   return (
@@ -30,7 +35,10 @@ function App() {
         <Route path={routes.login} element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path={routes.settings} element={<DashboardPage />} />
+          <Route
+            path={routes.settings}
+            element={rol === ROLES.ADMINISTRADOR ? <DashboardPage /> : <NotAllowedPage />}
+          />
           <Route path={routes.previsualizarInicio} element={<HomeInicioPage />} />
           <Route path={routes.previsualizarHistoria} element={<HomeHistoriaPage />} />
           <Route path={routes.previsualizarServicio} element={<HomeServicioPage />} />
@@ -45,4 +53,3 @@ function App() {
 }
 
 export default App
-
