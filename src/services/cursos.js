@@ -15,6 +15,20 @@ export function getCategorias() {
   })
 }
 
+// Obtiene los estados de cursos
+export function getEstados() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${routes.backend.url}${routes.backend.cursos.getEstados}`)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Crea un nuevo curso (acepta FormData para incluir archivos)
 export function createCurso(data) {
   return new Promise((resolve, reject) => {

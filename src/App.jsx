@@ -70,7 +70,7 @@ function App() {
               <Route
                 path={routes.dashboard.historia}
                 element={
-                  <ContenidoSection seccion={SECCIONES_DASHBOARD.HISTORIA}>
+                  <ContenidoSection seccion='historia'>
                     {(contenido, setIsLoading) => (
                       <Historia contenido={contenido} setIsLoading={setIsLoading} />
                     )}
@@ -81,7 +81,7 @@ function App() {
                 path={routes.dashboard.cursos}
                 element={
                   <Cursos
-                    onNuevoCurso={() => navigate(routes.dashboard.subirCurso)}
+                    onNuevoCurso={() => navigate(routes.dashboard.nuevoCurso)}
                     onEditCurso={(curso) =>
                       navigate(routes.dashboard.editarCurso.replace(':id', curso.id), {
                         state: { curso },
@@ -90,7 +90,7 @@ function App() {
                   />
                 }
               />
-              <Route path={routes.dashboard.subirCurso} element={<SubirVideoSection />} />
+              <Route path={routes.dashboard.nuevoCurso} element={<SubirVideoSection />} />
               <Route
                 path={routes.dashboard.editarCurso}
                 element={<SubirVideoSection />}

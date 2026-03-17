@@ -15,12 +15,8 @@ const SubirVideoSection = () => {
 
   const curso = state?.curso || null
 
-  return (
-    <SubirVideo
-      curso={curso}
-      onBack={() => navigate(routes.dashboard.cursos)}
-    />
-  )
+  return <SubirVideo curso={curso} onBack={() => navigate(routes.dashboard.cursos)} />
 }
 
 export default SubirVideoSection
+

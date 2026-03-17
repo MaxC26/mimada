@@ -26,6 +26,7 @@ const routesBackend = Object.freeze({
     deleteCurso: '/cursos/:id',
     createCurso: '/cursos',
     getCategorias: '/cursos/categorias',
+    getEstados: '/cursos/estados',
   },
 })
 export const context = '/mimada'
@@ -41,13 +42,13 @@ export const routes = Object.freeze({
   login: context + '/login',
   settings: context + '/settings',
   dashboard: {
-    base:       context + '/settings',
-    inicio:     context + '/settings/inicio',
-    servicios:  context + '/settings/servicios',
-    historia:   context + '/settings/historia',
-    cursos:     context + '/settings/cursos',
-    subirCurso: context + '/settings/cursos/subir',
-    editarCurso:context + '/settings/cursos/editar/:id',
+    base: context + '/settings',
+    inicio: context + '/settings/inicio',
+    servicios: context + '/settings/servicios',
+    historia: context + '/settings/historia',
+    cursos: context + '/settings/cursos',
+    nuevoCurso: context + '/settings/cursos/nuevo',
+    editarCurso: context + '/settings/cursos/editar/:id',
     categorias: context + '/settings/categorias',
   },
   previsualizarInicio: context + '/previsualizar/inicio',
