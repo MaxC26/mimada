@@ -10,7 +10,7 @@ export const Head = ({ content }) => {
       id='inicio'
     >
       {/* Fondo sutil */}
-      <div className='absolute inset-0 bg-gradient-to-b from-[#fdf2f8]/50 to-white -z-10'></div>
+      <div className='absolute inset-0 bg-gradient-to-b from-[#faf7f5]/50 to-white -z-10'></div>
       
       <div className='container mx-auto px-4 lg:px-8'>
         <div className='flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 mt-10'>
@@ -20,7 +20,7 @@ export const Head = ({ content }) => {
             
             <h1 className='text-5xl md:text-6xl lg:text-[72px] font-extrabold text-gray-900 leading-[1.05] tracking-tight mb-6'>
               Realza tu <br/>
-              <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#e43c8a] to-[#ff8fab]'>
+              <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#c2a381] to-[#e3d5c8]'>
                 Belleza Natural
               </span>
             </h1>
@@ -32,7 +32,7 @@ export const Head = ({ content }) => {
             <div className='flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4'>
               <a
                 href='#servicios'
-                className='w-full sm:w-auto inline-flex items-center justify-center bg-[#e43c8a] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg shadow-[#e43c8a]/30 hover:bg-[#d02875] transform hover:-translate-y-0.5 transition-all duration-300'
+                className='w-full sm:w-auto inline-flex items-center justify-center bg-[#c2a381] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg shadow-[#c2a381]/30 hover:bg-[#d02875] transform hover:-translate-y-0.5 transition-all duration-300'
               >
                 Explorar Servicios
                 <IconArrowRight className='ml-2' stroke={2} size={20} />
@@ -62,8 +62,8 @@ export const Head = ({ content }) => {
           {/* Imagen (estilo limpio) */}
           <div className='w-full lg:w-1/2 relative flex justify-center lg:justify-end'>
             {/* Elementos decorativos */}
-            <div className='absolute -top-10 -right-10 w-40 h-40 bg-[#fce7f3] rounded-full blur-3xl opacity-60 -z-10'></div>
-            <div className='absolute -bottom-10 -left-10 w-40 h-40 bg-[#e43c8a] rounded-full blur-3xl opacity-20 -z-10'></div>
+            <div className='absolute -top-10 -right-10 w-40 h-40 bg-[#f3ece5] rounded-full blur-3xl opacity-60 -z-10'></div>
+            <div className='absolute -bottom-10 -left-10 w-40 h-40 bg-[#c2a381] rounded-full blur-3xl opacity-20 -z-10'></div>
             
             <div className='relative w-full max-w-[500px] lg:max-w-none aspect-[4/5] lg:aspect-auto lg:h-[650px] rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5'>
               <div

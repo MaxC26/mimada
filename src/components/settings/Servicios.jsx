@@ -24,7 +24,7 @@ const ServicioBlock = ({ index, name, imageName, charCount, maxChars, setFieldVa
         placeholder={`Ej: Pestañas Volumen ${index}`}
         maxLength={maxChars}
         onChange={onChange}
-        className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all focus:border-[#e43c8a] focus:ring-2 focus:ring-[#fce7f3] ${charCount > maxChars ? 'border-red-400' : 'border-gray-200'}`}
+        className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] ${charCount > maxChars ? 'border-red-400' : 'border-gray-200'}`}
       />
     </div>
 
@@ -131,7 +131,7 @@ const Servicios = ({ contenido, setIsLoading }) => {
             {/* Card servicios */}
             <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
               <div className='flex items-center gap-2 mb-6'>
-                <div className='w-1 h-6 bg-[#e43c8a] rounded-full' />
+                <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
                 <h3 className='font-bold text-gray-900 text-lg'>Servicios (4)</h3>
               </div>
 
@@ -176,7 +176,7 @@ const Servicios = ({ contenido, setIsLoading }) => {
               <button
                 type='submit'
                 disabled={hasError || isSubmitting}
-                className='px-8 py-2.5 rounded-full bg-[#e43c8a] text-white font-bold text-sm shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2'
+                className='px-8 py-2.5 rounded-full bg-[#c2a381] text-white font-bold text-sm shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2'
               >
                 {isSubmitting && <span className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'/>}
                 Guardar Cambios

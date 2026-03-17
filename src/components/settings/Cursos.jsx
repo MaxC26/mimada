@@ -63,9 +63,9 @@ const CURSOS = [
 ]
 
 const STATS = [
-  { label: 'TOTAL ESTUDIANTES', valor: '4,208', cambio: '+14% desde el mes pasado', icon: IconUsers,         color: 'text-[#e43c8a]', bg: 'bg-[#fdf2f8]' },
-  { label: 'GANANCIAS TOTALES', valor: '€56,770',cambio: '+8% desde el mes pasado',  icon: IconCurrencyEuro, color: 'text-[#e43c8a]', bg: 'bg-[#fdf2f8]' },
-  { label: 'CALIFICACIÓN PROMEDIO', valor: '4.8 / 5.0', cambio: 'Basado en 250 reseñas', icon: IconStar, color: 'text-[#e43c8a]', bg: 'bg-[#fdf2f8]' },
+  { label: 'TOTAL ESTUDIANTES', valor: '4,208', cambio: '+14% desde el mes pasado', icon: IconUsers,         color: 'text-[#c2a381]', bg: 'bg-[#faf7f5]' },
+  { label: 'GANANCIAS TOTALES', valor: '€56,770',cambio: '+8% desde el mes pasado',  icon: IconCurrencyEuro, color: 'text-[#c2a381]', bg: 'bg-[#faf7f5]' },
+  { label: 'CALIFICACIÓN PROMEDIO', valor: '4.8 / 5.0', cambio: 'Basado en 250 reseñas', icon: IconStar, color: 'text-[#c2a381]', bg: 'bg-[#faf7f5]' },
 ]
 
 const TABS = ['Todos los cursos', 'Publicados', 'Borradores', 'Archivados']
@@ -105,7 +105,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
       <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4'>
         <div>
           {/* Solo móvil: saludo */}
-          <p className='text-xs font-black text-[#e43c8a] uppercase tracking-widest mb-1 md:hidden'>
+          <p className='text-xs font-black text-[#c2a381] uppercase tracking-widest mb-1 md:hidden'>
             Panel de Instructor
           </p>
           <h2 className='text-2xl md:text-3xl font-black text-gray-900'>Mis Cursos</h2>
@@ -118,7 +118,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
         </div>
         <button
           onClick={onNuevoCurso}
-          className='flex items-center justify-center gap-2 px-5 py-3 md:py-2.5 rounded-full bg-[#e43c8a] text-white font-bold text-sm shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] hover:-translate-y-0.5 transition-all duration-300 self-start sm:self-auto w-full sm:w-auto'
+          className='flex items-center justify-center gap-2 px-5 py-3 md:py-2.5 rounded-full bg-[#c2a381] text-white font-bold text-sm shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:-translate-y-0.5 transition-all duration-300 self-start sm:self-auto w-full sm:w-auto'
         >
           <IconPlus size={16} />
           Nuevo Curso
@@ -132,7 +132,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
           <button
             key={tab}
             onClick={() => setTabActivo(tab)}
-            className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all whitespace-nowrap ${tabActivo === tab ? 'border-[#e43c8a] text-[#e43c8a]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all whitespace-nowrap ${tabActivo === tab ? 'border-[#c2a381] text-[#c2a381]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
           >
             {tab}{conteo[tab] > 0 ? ` (${conteo[tab]})` : ''}
           </button>
@@ -145,7 +145,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
           <button
             key={tab}
             onClick={() => setTabActivo(tab)}
-            className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-bold transition-all ${tabActivo === tab ? 'bg-[#e43c8a] text-white' : 'bg-white border border-gray-200 text-gray-600'}`}
+            className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-bold transition-all ${tabActivo === tab ? 'bg-[#c2a381] text-white' : 'bg-white border border-gray-200 text-gray-600'}`}
           >
             {tab === 'Todos los cursos' ? `Todos (${conteo['Todos los cursos']})` : `${tab} (${conteo[tab]})`}
           </button>
@@ -194,7 +194,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
               <div>
                 <button
                   onClick={() => onEditCurso(curso)}
-                  className='text-sm font-bold text-[#e43c8a] hover:underline'
+                  className='text-sm font-bold text-[#c2a381] hover:underline'
                 >
                   {curso.estado === 'borrador' ? 'Continuar' : 'Editar'}
                 </button>
@@ -227,7 +227,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
               <div className='flex-1 min-w-0'>
                 <p className='font-bold text-gray-900 text-sm leading-snug'>{curso.titulo}</p>
                 {curso.estudiantes && (
-                  <p className='text-xs text-[#e43c8a] font-semibold mt-1 flex items-center gap-1'>
+                  <p className='text-xs text-[#c2a381] font-semibold mt-1 flex items-center gap-1'>
                     <IconUsers size={12} /> {curso.estudiantes.toLocaleString()} estudiantes
                   </p>
                 )}
@@ -244,7 +244,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
             <div className='grid grid-cols-2 gap-2'>
               <button
                 onClick={() => onEditCurso(curso)}
-                className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#e43c8a] text-[#e43c8a] text-sm font-bold hover:bg-[#fdf2f8] transition-colors'
+                className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#c2a381] text-[#c2a381] text-sm font-bold hover:bg-[#faf7f5] transition-colors'
               >
                 <IconEdit size={14} />
                 {curso.estado === 'borrador' ? 'Continuar' : 'Editar'}

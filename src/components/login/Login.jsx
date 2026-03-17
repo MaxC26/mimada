@@ -47,7 +47,7 @@ const Login = () => {
         <div className='absolute bottom-10 left-10 right-10 text-white'>
           <h2 className='text-4xl font-black leading-tight mb-3'>
             Eleva tu<br />
-            <span className='text-[#ffc2dc]'>Belleza Natural</span>
+            <span className='text-[#e3d5c8]'>Belleza Natural</span>
           </h2>
           <p className='text-white/80 leading-relaxed'>
             Únete a nuestra comunidad de expertas y accede a tratamientos exclusivos y cursos premium.
@@ -72,7 +72,7 @@ const Login = () => {
 
             <div className='flex items-center gap-3 mb-5'>
               <img src={logoMimada} alt='Logo Mimada' className='h-14 w-auto object-contain' />
-              <span className='text-3xl font-black text-[#e43c8a]'>Mimada</span>
+              <span className='text-3xl font-black text-[#c2a381]'>Mimada</span>
             </div>
 
             <h1 className='text-3xl font-black text-gray-900 mb-1'>¡Bienvenido de nuevo!</h1>
@@ -95,7 +95,7 @@ const Login = () => {
                   <label className='block text-sm font-semibold text-gray-700 mb-1.5'>
                     Correo electrónico
                   </label>
-                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.email ? 'border-red-400' : 'border-gray-200 focus-within:border-[#e43c8a] focus-within:ring-2 focus-within:ring-[#fce7f3]'}`}>
+                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.email ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}>
                     <IconMail size={18} className='text-gray-400 shrink-0' stroke={1.5} />
                     <Field
                       type='email'
@@ -113,11 +113,11 @@ const Login = () => {
                 <div>
                   <div className='flex items-center justify-between mb-1.5'>
                     <label className='text-sm font-semibold text-gray-700'>Contraseña</label>
-                    <button type='button' className='text-xs font-semibold text-[#e43c8a] hover:underline'>
+                    <button type='button' className='text-xs font-semibold text-[#c2a381] hover:underline'>
                       ¿Olvidaste tu contraseña?
                     </button>
                   </div>
-                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.password ? 'border-red-400' : 'border-gray-200 focus-within:border-[#e43c8a] focus-within:ring-2 focus-within:ring-[#fce7f3]'}`}>
+                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.password ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}>
                     <IconLock size={18} className='text-gray-400 shrink-0' stroke={1.5} />
                     <Field
                       type={showPassword ? 'text' : 'password'}
@@ -153,7 +153,7 @@ const Login = () => {
                 <button
                   type='submit'
                   disabled={isSubmitting}
-                  className='w-full mt-1 bg-[#e43c8a] text-white font-bold py-3.5 rounded-full hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-md shadow-[#e43c8a]/30 flex items-center justify-center gap-2'
+                  className='w-full mt-1 bg-[#c2a381] text-white font-bold py-3.5 rounded-full hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-md shadow-[#c2a381]/30 flex items-center justify-center gap-2'
                 >
                   {isSubmitting ? (
                     <span className='inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin' />
@@ -197,7 +197,7 @@ const Login = () => {
           {/* Registro */}
           <p className='text-center text-sm text-gray-500 mt-6'>
             ¿No tienes cuenta?{' '}
-            <button className='text-[#e43c8a] font-bold hover:underline'>
+            <button className='text-[#c2a381] font-bold hover:underline'>
               Crear cuenta
             </button>
           </p>

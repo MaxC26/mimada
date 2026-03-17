@@ -16,7 +16,7 @@ export const ItenServicio = ({ img, descripcion, delay = '0' }) => {
           style={{ backgroundImage: `url(${img})` }}
         ></div>
         {/* Etiqueta flotante */}
-        <div className='absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-sm text-[10px] font-bold tracking-wider text-[#e43c8a] shadow-sm'>
+        <div className='absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-sm text-[10px] font-bold tracking-wider text-[#c2a381] shadow-sm'>
           {category}
         </div>
       </div>
@@ -44,7 +44,7 @@ export const ItenServicio = ({ img, descripcion, delay = '0' }) => {
             href='https://wa.me/+50372755604'
             target='_blank'
             rel='noopener noreferrer'
-            className='bg-[#fce7f3] text-[#e43c8a] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#e43c8a] hover:text-white transition-colors duration-300'
+            className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300'
           >
              <IconCalendarEvent size={20} stroke={2} />
           </a>

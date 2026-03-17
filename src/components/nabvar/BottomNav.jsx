@@ -23,10 +23,10 @@ export const BottomNav = () => {
           <Link
             key={index}
             to={item.path}
-            className={`flex flex-col items-center justify-center w-full py-1 ${isActive ? 'text-[#e43c8a]' : 'text-gray-400 hover:text-gray-600'}`}
+            className={`flex flex-col items-center justify-center w-full py-1 ${isActive ? 'text-[#c2a381]' : 'text-gray-400 hover:text-gray-600'}`}
           >
             <Icon size={24} stroke={isActive ? 2.5 : 2} className='mb-1' />
-            <span className={`text-[10px] font-medium leading-none ${isActive ? 'text-[#e43c8a]' : 'text-gray-500'}`}>
+            <span className={`text-[10px] font-medium leading-none ${isActive ? 'text-[#c2a381]' : 'text-gray-500'}`}>
               {item.label}
             </span>
           </Link>

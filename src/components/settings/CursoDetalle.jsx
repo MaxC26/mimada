@@ -71,7 +71,7 @@ const Stars = ({ rating, size = 16 }) => (
       <IconStar
         key={i}
         size={size}
-        className={i <= Math.round(rating) ? 'fill-[#e43c8a] text-[#e43c8a]' : 'text-gray-300'}
+        className={i <= Math.round(rating) ? 'fill-[#c2a381] text-[#c2a381]' : 'text-gray-300'}
         stroke={0}
       />
     ))}
@@ -82,19 +82,19 @@ const Stars = ({ rating, size = 16 }) => (
 const AccordionItem = ({ index, titulo, lecciones }) => {
   const [open, setOpen] = useState(false)
   return (
-    <div className={`border border-gray-100 rounded-xl overflow-hidden transition-all ${open ? 'bg-[#fdf2f8]' : 'bg-white hover:bg-gray-50'}`}>
+    <div className={`border border-gray-100 rounded-xl overflow-hidden transition-all ${open ? 'bg-[#faf7f5]' : 'bg-white hover:bg-gray-50'}`}>
       <button
         className='w-full flex items-center justify-between px-5 py-4 text-left'
         onClick={() => setOpen(!open)}
       >
         <div className='flex items-center gap-3'>
-          <span className='w-7 h-7 rounded-lg bg-[#e43c8a] text-white text-xs font-black flex items-center justify-center shrink-0'>
+          <span className='w-7 h-7 rounded-lg bg-[#c2a381] text-white text-xs font-black flex items-center justify-center shrink-0'>
             {String(index).padStart(2, '0')}
           </span>
           <span className='font-semibold text-gray-800 text-sm'>{titulo}</span>
         </div>
         {open
-          ? <IconChevronDown size={18} className='text-[#e43c8a] shrink-0' />
+          ? <IconChevronDown size={18} className='text-[#c2a381] shrink-0' />
           : <IconChevronRight size={18} className='text-gray-400 shrink-0' />
         }
       </button>
@@ -119,7 +119,7 @@ const CursoDetalle = ({ onBack }) => {
       {/* Breadcrumb + back */}
       <button
         onClick={onBack}
-        className='flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#e43c8a] transition-colors mb-6 group'
+        className='flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#c2a381] transition-colors mb-6 group'
       >
         <IconArrowLeft size={16} className='group-hover:-translate-x-0.5 transition-transform' />
         Volver a Cursos
@@ -130,7 +130,7 @@ const CursoDetalle = ({ onBack }) => {
         {c.breadcrumb.map((b, i) => (
           <span key={b}>
             {i > 0 && <span className='mx-1'>›</span>}
-            <span className={i === c.breadcrumb.length - 1 ? 'text-[#e43c8a] font-semibold' : ''}>{b}</span>
+            <span className={i === c.breadcrumb.length - 1 ? 'text-[#c2a381] font-semibold' : ''}>{b}</span>
           </span>
         ))}
       </p>
@@ -152,7 +152,7 @@ const CursoDetalle = ({ onBack }) => {
               className='absolute inset-0 flex items-center justify-center group'
               onClick={() => setPlaying(true)}
             >
-              <div className='w-16 h-16 rounded-full bg-[#e43c8a] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300'>
+              <div className='w-16 h-16 rounded-full bg-[#c2a381] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300'>
                 <IconPlayerPlay size={28} fill='white' className='text-white ml-1' />
               </div>
             </button>
@@ -160,7 +160,7 @@ const CursoDetalle = ({ onBack }) => {
             <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2 flex items-center gap-3'>
               <span className='text-white text-xs font-mono'>00:45</span>
               <div className='flex-1 h-1 bg-white/30 rounded-full'>
-                <div className='h-full w-[6%] bg-[#e43c8a] rounded-full' />
+                <div className='h-full w-[6%] bg-[#c2a381] rounded-full' />
               </div>
               <span className='text-white text-xs font-mono'>{c.duracion}</span>
             </div>
@@ -176,7 +176,7 @@ const CursoDetalle = ({ onBack }) => {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all ${tab === t.id ? 'border-[#e43c8a] text-[#e43c8a]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all ${tab === t.id ? 'border-[#c2a381] text-[#c2a381]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
               >
                 {t.label}
               </button>
@@ -193,7 +193,7 @@ const CursoDetalle = ({ onBack }) => {
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
                 {c.beneficios.map(b => (
                   <div key={b} className='flex items-center gap-2 text-sm text-gray-700'>
-                    <IconCheck size={16} className='text-[#e43c8a] shrink-0' stroke={2.5} />
+                    <IconCheck size={16} className='text-[#c2a381] shrink-0' stroke={2.5} />
                     {b}
                   </div>
                 ))}
@@ -205,13 +205,13 @@ const CursoDetalle = ({ onBack }) => {
           {tab === 'instructor' && (
             <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6'>
               <div className='flex items-start gap-4'>
-                <img src={c.instructor.avatar} alt={c.instructor.nombre} className='w-16 h-16 rounded-full object-cover border-2 border-[#fce7f3] shrink-0' />
+                <img src={c.instructor.avatar} alt={c.instructor.nombre} className='w-16 h-16 rounded-full object-cover border-2 border-[#f3ece5] shrink-0' />
                 <div>
                   <h4 className='font-black text-gray-900 text-lg'>{c.instructor.nombre}</h4>
-                  <p className='text-[#e43c8a] text-sm font-semibold mb-2'>{c.instructor.titulo}</p>
+                  <p className='text-[#c2a381] text-sm font-semibold mb-2'>{c.instructor.titulo}</p>
                   <div className='flex flex-wrap gap-2 mb-3'>
                     {c.instructor.tags.map(t => (
-                      <span key={t} className='text-xs font-bold bg-[#fdf2f8] text-[#e43c8a] px-3 py-1 rounded-full'>{t}</span>
+                      <span key={t} className='text-xs font-bold bg-[#faf7f5] text-[#c2a381] px-3 py-1 rounded-full'>{t}</span>
                     ))}
                   </div>
                   <p className='text-gray-600 text-sm leading-relaxed'>{c.instructor.bio}</p>
@@ -235,8 +235,8 @@ const CursoDetalle = ({ onBack }) => {
             <h3 className='font-black text-gray-900 text-xl mb-6'>Lo que dicen nuestros estudiantes</h3>
             <div className='flex flex-col sm:flex-row gap-6 mb-6'>
               {/* Rating global */}
-              <div className='flex flex-col items-center justify-center bg-[#fdf2f8] rounded-2xl px-8 py-6 shrink-0'>
-                <p className='text-6xl font-black text-[#e43c8a]'>{c.rating}</p>
+              <div className='flex flex-col items-center justify-center bg-[#faf7f5] rounded-2xl px-8 py-6 shrink-0'>
+                <p className='text-6xl font-black text-[#c2a381]'>{c.rating}</p>
                 <Stars rating={c.rating} size={20} />
                 <p className='text-xs text-gray-500 mt-1'>Promedio de {c.totalReviews.toLocaleString()} reseñas</p>
               </div>
@@ -246,7 +246,7 @@ const CursoDetalle = ({ onBack }) => {
                   <div key={r.estrellas} className='flex items-center gap-3'>
                     <span className='text-xs text-gray-500 w-8 shrink-0'>{r.estrellas} ★</span>
                     <div className='flex-1 h-2 bg-gray-100 rounded-full overflow-hidden'>
-                      <div className='h-full bg-[#e43c8a] rounded-full' style={{ width: `${r.pct}%` }} />
+                      <div className='h-full bg-[#c2a381] rounded-full' style={{ width: `${r.pct}%` }} />
                     </div>
                     <span className='text-xs text-gray-400 w-8 text-right'>{r.pct}%</span>
                   </div>
@@ -268,7 +268,7 @@ const CursoDetalle = ({ onBack }) => {
                 </div>
               ))}
             </div>
-            <button className='mt-4 text-sm font-bold text-[#e43c8a] hover:underline flex items-center gap-1'>
+            <button className='mt-4 text-sm font-bold text-[#c2a381] hover:underline flex items-center gap-1'>
               Ver los {c.totalReviews.toLocaleString()} comentarios <IconChevronDown size={16} />
             </button>
           </div>
@@ -288,10 +288,10 @@ const CursoDetalle = ({ onBack }) => {
             </div>
 
             {/* Botones */}
-            <button className='w-full py-3.5 rounded-full bg-[#e43c8a] text-white font-black shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
+            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
               Comprar curso ahora
             </button>
-            <button className='w-full py-3 rounded-full border-2 border-[#e43c8a] text-[#e43c8a] font-bold text-sm hover:bg-[#fdf2f8] transition-colors flex items-center justify-center gap-2'>
+            <button className='w-full py-3 rounded-full border-2 border-[#c2a381] text-[#c2a381] font-bold text-sm hover:bg-[#faf7f5] transition-colors flex items-center justify-center gap-2'>
               <IconShoppingCart size={16} />
               Añadir al carrito
             </button>
@@ -302,7 +302,7 @@ const CursoDetalle = ({ onBack }) => {
               <ul className='space-y-2'>
                 {c.incluye.map(({ icon: Icon, texto }) => (
                   <li key={texto} className='flex items-center gap-2 text-xs text-gray-600'>
-                    <Icon size={15} className='text-[#e43c8a] shrink-0' stroke={1.5} />
+                    <Icon size={15} className='text-[#c2a381] shrink-0' stroke={1.5} />
                     {texto}
                   </li>
                 ))}
