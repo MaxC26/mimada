@@ -8,7 +8,7 @@ import {
   IconX,
   IconCheck,
 } from '@tabler/icons-react'
-import { getCategorias } from '../../services/cursos'
+import { getCategorias, createCurso, updateCurso } from '../../services/cursos'
 
 const SubirVideo = ({ curso = null, onBack }) => {
   const esEdicion = !!curso
@@ -29,9 +29,13 @@ const SubirVideo = ({ curso = null, onBack }) => {
   const [form, setForm] = useState({
     titulo: curso?.titulo || '',
     descripcion: '',
-    categoria: curso?.categoria || 'Manicura',
+    categoria: curso?.categoria || '',
     precio: curso?.precio?.toString() || '49.99',
   })
+
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
 
   useEffect(() => {
     getCategorias()
@@ -115,6 +119,58 @@ const SubirVideo = ({ curso = null, onBack }) => {
   const ganancias = parseFloat(form.precio || 0)
   const tuParte = (ganancias * 0.8).toFixed(2)
   const plataforma = (ganancias * 0.2).toFixed(2)
+
+  /* ── Guardar / Publicar ── */
+  const handleGuardar = async () => {
+    setSaveError(null)
+    setSaveSuccess(false)
+    setIsSaving(true)
+    try {
+      const formData = new FormData()
+      formData.append('titulo', form.titulo)
+      formData.append('descripcion', form.descripcion)
+      formData.append('categoria', form.categoria)
+      formData.append('precio', form.precio)
+      if (uploadedFile) formData.append('video', uploadedFile)
+      if (thumbnail && thumbnail.startsWith('data:')) {
+        // Convierte el data URL de la miniatura a Blob
+        const res = await fetch(thumbnail)
+        const blob = await res.blob()
+        formData.append('thumbnail', blob, 'thumbnail.jpg')
+      }
+
+      if (esEdicion) {
+        await updateCurso(curso.id, formData)
+      } else {
+        await createCurso(formData)
+      }
+
+      setSaveSuccess(true)
+      const now = new Date()
+      setAutoSaved(`${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`)
+    } catch (err) {
+      console.error(err)
+      setSaveError(
+        err?.response?.data?.message || 'Ocurrió un error al guardar. Intenta de nuevo.',
+      )
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleDescartar = () => {
+    setForm({
+      titulo: curso?.titulo || '',
+      descripcion: '',
+      categoria: curso?.categoria || '',
+      precio: curso?.precio?.toString() || '49.99',
+    })
+    setThumbnail(curso?.thumbnail || null)
+    setUploadedFile(null)
+    setUploadProgress(0)
+    setSaveError(null)
+    setSaveSuccess(false)
+  }
 
   return (
     <div className='w-full'>
@@ -305,8 +361,18 @@ const SubirVideo = ({ curso = null, onBack }) => {
               </div>
 
               <div className='flex items-center gap-1.5 mt-1'>
-                <span className='w-2 h-2 rounded-full bg-green-400' />
-                <p className='text-xs text-gray-400'>Auto-guardado a las {autoSaved}</p>
+                <span
+                  className={`w-2 h-2 rounded-full ${saveError ? 'bg-red-400' : 'bg-green-400'}`}
+                />
+                {saveError ? (
+                  <p className='text-xs text-red-500'>{saveError}</p>
+                ) : saveSuccess ? (
+                  <p className='text-xs text-green-600 font-semibold'>
+                    ¡Guardado correctamente!
+                  </p>
+                ) : (
+                  <p className='text-xs text-gray-400'>Auto-guardado a las {autoSaved}</p>
+                )}
               </div>
             </div>
           </div>
@@ -404,22 +470,38 @@ const SubirVideo = ({ curso = null, onBack }) => {
             />
           </div>
 
-          {/* Botón guardar */}
+          {/* Botón guardar – desktop */}
           <div className='hidden lg:block'>
-            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all'>
-              Guardar Cambios
+            <button
+              onClick={handleGuardar}
+              disabled={isSaving}
+              className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+            >
+              {isSaving ? 'Guardando...' : 'Guardar Cambios'}
             </button>
-            <button className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700'>
+            <button
+              onClick={handleDescartar}
+              disabled={isSaving}
+              className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50'
+            >
               Descartar borradores
             </button>
           </div>
 
-          {/* Botón guardar solo visible en mobile (fuera del header) */}
+          {/* Botón guardar – mobile */}
           <div className='lg:hidden'>
-            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all'>
-              Guardar Cambios
+            <button
+              onClick={handleGuardar}
+              disabled={isSaving}
+              className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+            >
+              {isSaving ? 'Guardando...' : 'Guardar Cambios'}
             </button>
-            <button className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700'>
+            <button
+              onClick={handleDescartar}
+              disabled={isSaving}
+              className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50'
+            >
               Descartar borradores
             </button>
           </div>
