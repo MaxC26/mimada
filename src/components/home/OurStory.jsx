@@ -26,7 +26,7 @@ const OurStory = ({ content }) => {
           {/* Contenedor de texto - a la derecha */}
           <div className='w-full md:w-1/2 text-center md:text-left'>
             <h2 className='font-bold text-4xl lg:text-5xl xl:text-6xl text-gray-900 mb-6 tracking-tight'>
-              Nuestra <span className='text-[#e43c8a] block mt-2'>Historia</span>
+              Nuestra <span className='text-[#c2a381] block mt-2'>Historia</span>
             </h2>
             <div className='text-gray-600 text-lg leading-relaxed mx-auto md:mx-0 max-w-2xl'>
               <p>
@@ -38,7 +38,7 @@ const OurStory = ({ content }) => {
                   href='https://wa.me/+50372755604'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='inline-flex items-center text-[#e43c8a] font-semibold hover:underline bg-[#fdf2f8] px-6 py-3 rounded-full hover:bg-[#fce7f3] transition-colors'
+                  className='inline-flex items-center text-[#c2a381] font-semibold hover:underline bg-[#faf7f5] px-6 py-3 rounded-full hover:bg-[#f3ece5] transition-colors'
                 >
                   Contáctanos <span className='ml-2 text-xl'>→</span>
               </a>
@@ -50,7 +50,7 @@ const OurStory = ({ content }) => {
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 border-t border-gray-100 pt-16'>
           {/* Beneficio 1 */}
           <div className='flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors'>
-            <div className='bg-[#fdf2f8] text-[#e43c8a] p-3 rounded-2xl shrink-0 border border-[#fce7f3] shadow-sm'>
+            <div className='bg-[#faf7f5] text-[#c2a381] p-3 rounded-2xl shrink-0 border border-[#f3ece5] shadow-sm'>
               <IconBook2 size={28} stroke={1.5} />
             </div>
             <div>
@@ -61,7 +61,7 @@ const OurStory = ({ content }) => {
           
           {/* Beneficio 2 */}
           <div className='flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors'>
-            <div className='bg-[#fdf2f8] text-[#e43c8a] p-3 rounded-2xl shrink-0 border border-[#fce7f3] shadow-sm'>
+            <div className='bg-[#faf7f5] text-[#c2a381] p-3 rounded-2xl shrink-0 border border-[#f3ece5] shadow-sm'>
               <IconCertificate size={28} stroke={1.5} />
             </div>
             <div>
@@ -72,7 +72,7 @@ const OurStory = ({ content }) => {
 
           {/* Beneficio 3 */}
           <div className='flex items-start gap-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors'>
-            <div className='bg-[#fdf2f8] text-[#e43c8a] p-3 rounded-2xl shrink-0 border border-[#fce7f3] shadow-sm'>
+            <div className='bg-[#faf7f5] text-[#c2a381] p-3 rounded-2xl shrink-0 border border-[#f3ece5] shadow-sm'>
               <IconUsersGroup size={28} stroke={1.5} />
             </div>
             <div>

@@ -9,6 +9,7 @@ import {
   IconMenu2,
   IconX,
   IconExternalLink,
+  IconLayoutGrid,
 } from '@tabler/icons-react'
 import { getContenidoBySeccion } from '../services/contenido'
 import { Inicio } from '../components/settings/Inicio'
@@ -16,7 +17,7 @@ import Historia from '../components/settings/Historia'
 import Servicios from '../components/settings/Servicios'
 import SubirVideo from '../components/settings/SubirVideo'
 import Cursos from '../components/settings/Cursos'
-import CursoDetalle from '../components/settings/CursoDetalle'
+import Categorias from '../components/settings/Categorias'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
 import { logout } from '../services/login'
 import { useNavigate } from 'react-router-dom'
@@ -24,10 +25,11 @@ import logoMimada from '../assets/img/logo/logo-mimada.png'
 import { routes } from '../utils/rutas'
 
 const navItems = [
-  { id: 'Inicio',           label: 'Inicio',           icon: IconSmartHome,  section: 'Head' },
-  { id: 'Servicios',        label: 'Servicios',        icon: IconUsers,      section: 'servicio' },
-  { id: 'Nuestra Historia', label: 'Nuestra Historia', icon: IconClock2,     section: 'historia' },
-  { id: 'Cursos',           label: 'Cursos',           icon: IconVideo,      section: null },
+  { id: 'Inicio',           label: 'Inicio',           icon: IconSmartHome,   section: 'Head' },
+  { id: 'Servicios',        label: 'Servicios',        icon: IconUsers,       section: 'servicio' },
+  { id: 'Nuestra Historia', label: 'Nuestra Historia', icon: IconClock2,      section: 'historia' },
+  { id: 'Cursos',           label: 'Cursos',           icon: IconVideo,       section: null },
+  { id: 'Categorias',       label: 'Categorías',       icon: IconLayoutGrid,  section: null },
 ]
 
 const DashboardPage = () => {
@@ -93,7 +95,7 @@ const DashboardPage = () => {
           <img src={logoMimada} alt='Logo' className='h-10 w-auto object-contain' />
           <div>
             <p className='font-black text-gray-900 text-base leading-tight'>Mimadas</p>
-            <span className='text-xs font-semibold text-[#e43c8a] bg-[#fdf2f8] px-2 py-0.5 rounded-full'>INSTRUCTORA</span>
+            <span className='text-xs font-semibold text-[#c2a381] bg-[#faf7f5] px-2 py-0.5 rounded-full'>INSTRUCTORA</span>
           </div>
           {/* Botón cerrar sidebar en móvil */}
           <button className='ml-auto md:hidden text-gray-400 hover:text-gray-600' onClick={() => setSidebarOpen(false)}>
@@ -109,11 +111,11 @@ const DashboardPage = () => {
               <button
                 key={id}
                 onClick={() => handleNav(id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${active ? 'bg-[#fdf2f8] text-[#e43c8a]' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${active ? 'bg-[#faf7f5] text-[#c2a381]' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
               >
                 <Icon size={20} stroke={active ? 2.5 : 1.5} />
                 <span className='flex-1 text-left'>{label}</span>
-                {active && <IconChevronRight size={16} className='text-[#e43c8a]' />}
+                {active && <IconChevronRight size={16} className='text-[#c2a381]' />}
               </button>
             )
           })}
@@ -122,7 +124,7 @@ const DashboardPage = () => {
         {/* Usuario & Logout */}
         <div className='p-4 border-t border-gray-100 space-y-2'>
           <div className='flex items-center gap-3 px-2 py-2'>
-            <div className='w-9 h-9 rounded-full bg-[#fce7f3] flex items-center justify-center overflow-hidden shrink-0'>
+            <div className='w-9 h-9 rounded-full bg-[#f3ece5] flex items-center justify-center overflow-hidden shrink-0'>
               <img src='https://i.pravatar.cc/150?img=47' alt='Avatar' className='w-full h-full object-cover' />
             </div>
             <div className='flex-1 min-w-0'>
@@ -135,7 +137,7 @@ const DashboardPage = () => {
             href={routes.inicio}
             target='_blank'
             rel='noopener noreferrer'
-            className='w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#e43c8a] bg-[#fdf2f8] hover:bg-[#fce7f3] transition-colors'
+            className='w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-[#c2a381] bg-[#faf7f5] hover:bg-[#f3ece5] transition-colors'
           >
             <IconExternalLink size={18} stroke={1.5} />
             Ver Web
@@ -202,6 +204,9 @@ const DashboardPage = () => {
                     <SubirVideo curso={cursoSeleccionado} onBack={() => setCursoPag('lista')} />
                   )}
                 </>
+                )}
+                {activePage === 'Categorias' && (
+                <Categorias contenido={contenido} setIsLoading={setIsLoading} />
               )}
             </>
           )}

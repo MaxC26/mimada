@@ -104,7 +104,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
           {onBack && (
             <button
               onClick={onBack}
-              className='flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#e43c8a] transition-colors mb-2 group'
+              className='flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#c2a381] transition-colors mb-2 group'
             >
               <span className='group-hover:-translate-x-0.5 transition-transform'>←</span>
               Volver a Mis Cursos
@@ -123,7 +123,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
               Descartar
             </button>
           )}
-          <button className='px-5 py-2.5 rounded-full bg-[#e43c8a] text-white font-bold shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
+          <button className='px-5 py-2.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
             {esEdicion ? 'Guardar Cambios' : 'Publicar Curso'}
           </button>
         </div>
@@ -135,13 +135,13 @@ const SubirVideo = ({ curso = null, onBack }) => {
 
           {/* Zona de drag-and-drop */}
           <div
-            className={`w-full border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${isDragging ? 'border-[#e43c8a] bg-[#fdf2f8]' : 'border-gray-200 bg-white hover:border-[#e43c8a]/50 hover:bg-[#fdf2f8]/50'}`}
+            className={`w-full border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer ${isDragging ? 'border-[#c2a381] bg-[#faf7f5]' : 'border-gray-200 bg-white hover:border-[#c2a381]/50 hover:bg-[#faf7f5]/50'}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <div className='w-16 h-16 bg-[#fdf2f8] rounded-full flex items-center justify-center text-[#e43c8a]'>
+            <div className='w-16 h-16 bg-[#faf7f5] rounded-full flex items-center justify-center text-[#c2a381]'>
               <IconUpload size={28} stroke={1.5} />
             </div>
             <div className='text-center'>
@@ -150,7 +150,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
             </div>
             <button
               type='button'
-              className='mt-2 px-6 py-2.5 bg-[#e43c8a] text-white font-bold rounded-full text-sm hover:bg-[#c9246d] transition-colors shadow-md'
+              className='mt-2 px-6 py-2.5 bg-[#c2a381] text-white font-bold rounded-full text-sm hover:bg-[#a58b6c] transition-colors shadow-md'
               onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click() }}
             >
               Seleccionar Archivo
@@ -163,13 +163,13 @@ const SubirVideo = ({ curso = null, onBack }) => {
             <div className='bg-white rounded-2xl p-5 border border-gray-100 shadow-sm'>
               <div className='flex items-center justify-between mb-2'>
                 <div className='flex items-center gap-2'>
-                  <IconVideo size={20} className='text-[#e43c8a]' stroke={1.5} />
+                  <IconVideo size={20} className='text-[#c2a381]' stroke={1.5} />
                   <p className='text-sm font-semibold text-gray-800 truncate max-w-[200px] md:max-w-xs'>
                     {uploadedFile.name}
                   </p>
                 </div>
                 {isUploading ? (
-                  <span className='text-xs font-bold text-[#e43c8a] bg-[#fdf2f8] px-3 py-1 rounded-full'>
+                  <span className='text-xs font-bold text-[#c2a381] bg-[#faf7f5] px-3 py-1 rounded-full'>
                     {uploadProgress}% COMPLETADO
                   </span>
                 ) : (
@@ -180,7 +180,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
               </div>
               <div className='w-full h-2 bg-gray-100 rounded-full overflow-hidden'>
                 <div
-                  className='h-full bg-gradient-to-r from-[#e43c8a] to-[#ff8fab] rounded-full transition-all duration-300'
+                  className='h-full bg-gradient-to-r from-[#c2a381] to-[#e3d5c8] rounded-full transition-all duration-300'
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
@@ -194,7 +194,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
           {/* Información General */}
           <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
             <div className='flex items-center gap-2 mb-5'>
-              <div className='w-1 h-6 bg-[#e43c8a] rounded-full' />
+              <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
               <h3 className='font-bold text-gray-900 text-lg'>Información General</h3>
             </div>
 
@@ -208,7 +208,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   value={form.titulo}
                   onChange={e => setForm(f => ({ ...f, titulo: e.target.value }))}
                   placeholder='Ej: Masterclass de Uñas Acrílicas'
-                  className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#e43c8a] focus:ring-2 focus:ring-[#fce7f3] transition-all'
+                  className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all'
                 />
               </div>
 
@@ -221,7 +221,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))}
                   rows={4}
                   placeholder='Describe lo que aprenderán tus alumnas...'
-                  className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#e43c8a] focus:ring-2 focus:ring-[#fce7f3] transition-all resize-none'
+                  className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all resize-none'
                 />
               </div>
 
@@ -233,7 +233,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   <select
                     value={form.categoria}
                     onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))}
-                    className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#e43c8a] focus:ring-2 focus:ring-[#fce7f3] transition-all bg-white'
+                    className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all bg-white'
                   >
                     {categorias.map(c => <option key={c}>{c}</option>)}
                   </select>
@@ -242,7 +242,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
                   <label className='block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5'>
                     Precio (USD)
                   </label>
-                  <div className='flex items-center border border-gray-200 rounded-xl px-4 py-3 focus-within:border-[#e43c8a] focus-within:ring-2 focus-within:ring-[#fce7f3] transition-all'>
+                  <div className='flex items-center border border-gray-200 rounded-xl px-4 py-3 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5] transition-all'>
                     <span className='text-gray-400 text-sm mr-2'>$</span>
                     <input
                       type='number'
@@ -266,12 +266,12 @@ const SubirVideo = ({ curso = null, onBack }) => {
           <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
             <div className='flex items-center justify-between mb-5'>
               <div className='flex items-center gap-2'>
-                <div className='w-1 h-6 bg-[#e43c8a] rounded-full' />
+                <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
                 <h3 className='font-bold text-gray-900 text-lg'>Lecciones ({lecciones.length})</h3>
               </div>
               <button
                 onClick={handleAddLeccion}
-                className='flex items-center gap-1.5 text-sm font-bold text-[#e43c8a] hover:underline'
+                className='flex items-center gap-1.5 text-sm font-bold text-[#c2a381] hover:underline'
               >
                 <IconPlus size={16} /> Añadir lección
               </button>
@@ -281,14 +281,14 @@ const SubirVideo = ({ curso = null, onBack }) => {
               {lecciones.map((leccion, idx) => (
                 <div
                   key={leccion.id}
-                  className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${leccion.estado === 'procesando' ? 'border-[#fce7f3] bg-[#fdf2f8]' : 'border-gray-100 bg-gray-50 hover:bg-white'}`}
+                  className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${leccion.estado === 'procesando' ? 'border-[#f3ece5] bg-[#faf7f5]' : 'border-gray-100 bg-gray-50 hover:bg-white'}`}
                 >
                   <IconGripVertical size={16} className='text-gray-300 cursor-grab shrink-0' />
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#e43c8a] text-white' : 'bg-gray-200 text-gray-600'}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#c2a381] text-white' : 'bg-gray-200 text-gray-600'}`}>
                     {leccion.estado === 'procesando' ? '⏳' : `V${idx + 1}`}
                   </div>
                   <div className='flex-1 min-w-0'>
-                    <p className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#e43c8a]' : 'text-gray-800'}`}>
+                    <p className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#c2a381]' : 'text-gray-800'}`}>
                       {leccion.titulo}
                     </p>
                     <p className='text-xs text-gray-400'>
@@ -317,7 +317,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
           <div className='bg-white rounded-2xl p-5 border border-gray-100 shadow-sm'>
             <h4 className='font-bold text-gray-900 mb-4'>Miniatura del Curso</h4>
             <div
-              className='w-full aspect-video rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center mb-3 cursor-pointer border-2 border-dashed border-gray-200 hover:border-[#e43c8a]/50 transition-colors'
+              className='w-full aspect-video rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center mb-3 cursor-pointer border-2 border-dashed border-gray-200 hover:border-[#c2a381]/50 transition-colors'
               onClick={() => thumbnailRef.current?.click()}
             >
               {thumbnail ? (
@@ -331,7 +331,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
             </div>
             <button
               onClick={() => thumbnailRef.current?.click()}
-              className='w-full text-sm font-bold text-[#e43c8a] border border-[#e43c8a] py-2 rounded-xl hover:bg-[#fdf2f8] transition-colors'
+              className='w-full text-sm font-bold text-[#c2a381] border border-[#c2a381] py-2 rounded-xl hover:bg-[#faf7f5] transition-colors'
             >
               {thumbnail ? 'Cambiar imagen' : 'Seleccionar imagen'}
             </button>
@@ -340,7 +340,7 @@ const SubirVideo = ({ curso = null, onBack }) => {
 
           {/* Botón guardar solo visible en mobile (fuera del header) */}
           <div className='lg:hidden'>
-            <button className='w-full py-3.5 rounded-full bg-[#e43c8a] text-white font-bold shadow-md shadow-[#e43c8a]/30 hover:bg-[#c9246d] transition-all'>
+            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all'>
               Guardar Cambios
             </button>
             <button className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700'>

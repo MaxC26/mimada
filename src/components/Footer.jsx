@@ -54,7 +54,7 @@ const Footer = () => {
           <div className='md:col-span-2 lg:col-span-1'>
             <h4 className='font-bold text-white text-lg mb-4'>Ubicación</h4>
             <p className='text-gray-400 text-sm mb-4 flex items-start gap-2'>
-              <IconMapPinFilled size={18} className='text-[#e43c8a] shrink-0 mt-0.5' />
+              <IconMapPinFilled size={18} className='text-[#c2a381] shrink-0 mt-0.5' />
               <span>
                  @lasramblassv <br/>
                  Centro Comercial Las Ramblas,<br />
@@ -67,7 +67,7 @@ const Footer = () => {
                 href='https://wa.me/+50372755604'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='bg-gray-800 hover:bg-[#e43c8a] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
+                className='bg-gray-800 hover:bg-[#c2a381] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
                 aria-label="WhatsApp"
               >
                 <IconBrandWhatsapp stroke={1.5} className='w-5 h-5' />
@@ -76,7 +76,7 @@ const Footer = () => {
                 href='https://www.instagram.com/mimada.pmu?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
                 target='_blank'
                 rel='noopener noreferrer'
-                className='bg-gray-800 hover:bg-[#e43c8a] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
+                className='bg-gray-800 hover:bg-[#c2a381] hover:text-white text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300'
                 aria-label="Instagram"
               >
                 <IconBrandInstagram stroke={1.5} className='w-5 h-5' />

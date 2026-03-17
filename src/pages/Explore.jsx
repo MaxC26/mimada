@@ -105,7 +105,7 @@ const Explore = () => {
               <input
                 type='text'
                 placeholder='¿Qué quieres aprender hoy?'
-                className='w-full pl-10 pr-4 py-3 border border-gray-100 shadow-sm bg-white rounded-xl text-sm outline-none focus:border-[#e43c8a] transition-all'
+                className='w-full pl-10 pr-4 py-3 border border-gray-100 shadow-sm bg-white rounded-xl text-sm outline-none focus:border-[#c2a381] transition-all'
               />
             </div>
 
@@ -119,15 +119,15 @@ const Explore = () => {
           ) : (
             <div>
               {/* Hero Banner Cursos */}
-              <div className='w-full bg-[#fdf2f8] rounded-[2rem] p-8 md:p-12 mb-10 md:mb-14 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden'>
+              <div className='w-full bg-[#faf7f5] rounded-[2rem] p-8 md:p-12 mb-10 md:mb-14 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden'>
                 <div className='w-full md:w-1/2 z-10'>
                   <h1 className='text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-4 tracking-tight'>
-                    Domina el arte de <br className='hidden md:block'/>la <span className='text-[#e43c8a]'>belleza</span>
+                    Domina el arte de <br className='hidden md:block'/>la <span className='text-[#c2a381]'>belleza</span>
                   </h1>
                   <p className='text-gray-600 text-lg md:text-xl mb-8 max-w-md'>
                     Aprende con las mejores expertas de la industria desde la comodidad de tu casa.
                   </p>
-                  <button className='bg-[#e43c8a] text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-[#c9246d] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 w-full md:w-auto shadow-md'>
+                  <button className='bg-[#c2a381] text-white px-8 py-3.5 rounded-full font-bold text-lg hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 w-full md:w-auto shadow-md'>
                     Empieza Ahora
                   </button>
                 </div>
@@ -144,7 +144,7 @@ const Explore = () => {
                 {categories.map((cat, index) => (
                   <button 
                     key={index} 
-                    className={`whitespace-nowrap px-6 py-2.5 rounded-full text-base font-semibold transition-colors border shadow-sm ${index === 0 ? 'bg-[#e43c8a] text-white border-[#e43c8a]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#e43c8a] hover:text-[#e43c8a]'}`}
+                    className={`whitespace-nowrap px-6 py-2.5 rounded-full text-base font-semibold transition-colors border shadow-sm ${index === 0 ? 'bg-[#c2a381] text-white border-[#c2a381]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#c2a381] hover:text-[#c2a381]'}`}
                   >
                     {cat}
                   </button>
@@ -157,7 +157,7 @@ const Explore = () => {
                   <h2 className='text-3xl font-bold text-gray-900 mb-2'>Cursos Populares</h2>
                   <p className='text-gray-500'>Nuestra selección para potenciar tu talento</p>
                 </div>
-                <a href="#" className='hidden md:flex items-center text-[#e43c8a] font-bold hover:underline mt-4 md:mt-0 transition-all text-lg'>
+                <a href="#" className='hidden md:flex items-center text-[#c2a381] font-bold hover:underline mt-4 md:mt-0 transition-all text-lg'>
                   Ver todos <span className='ml-1 text-2xl'>→</span>
                 </a>
               </div>
@@ -174,7 +174,7 @@ const Explore = () => {
               </div>
               
               <div className='md:hidden w-full flex justify-center mb-10'>
-                <a href="#" className='inline-flex items-center text-[#e43c8a] font-bold hover:underline bg-white px-8 py-3.5 rounded-full shadow-sm border border-gray-200 w-full justify-center'>
+                <a href="#" className='inline-flex items-center text-[#c2a381] font-bold hover:underline bg-white px-8 py-3.5 rounded-full shadow-sm border border-gray-200 w-full justify-center'>
                   Ver todos los cursos
                 </a>
               </div>
@@ -183,21 +183,21 @@ const Explore = () => {
               <div className='mt-12 mb-8 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm'>
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-8 text-center'>
                   <div className='flex flex-col items-center'>
-                    <div className='w-16 h-16 rounded-full bg-[#fdf2f8] flex items-center justify-center mb-4 text-[#e43c8a] shadow-inner'>
+                    <div className='w-16 h-16 rounded-full bg-[#faf7f5] flex items-center justify-center mb-4 text-[#c2a381] shadow-inner'>
                       <IconClockHour4 size={32} stroke={1.5} />
                     </div>
                     <h3 className='font-bold text-gray-900 text-lg mb-2'>Aprende a tu ritmo</h3>
                     <p className='text-gray-500 text-sm max-w-xs'>Acceso de por vida a tu contenido, sin presiones ni horarios fijos. ¡Tú decides!</p>
                   </div>
                   <div className='flex flex-col items-center'>
-                    <div className='w-16 h-16 rounded-full bg-[#fdf2f8] flex items-center justify-center mb-4 text-[#e43c8a] shadow-inner'>
+                    <div className='w-16 h-16 rounded-full bg-[#faf7f5] flex items-center justify-center mb-4 text-[#c2a381] shadow-inner'>
                       <IconCertificate size={32} stroke={1.5} />
                     </div>
                     <h3 className='font-bold text-gray-900 text-lg mb-2'>Certificación Oficial</h3>
                     <p className='text-gray-500 text-sm max-w-xs'>Mejora tu currículum obteniendo certificados avalados al terminar cada módulo.</p>
                   </div>
                   <div className='flex flex-col items-center'>
-                    <div className='w-16 h-16 rounded-full bg-[#fdf2f8] flex items-center justify-center mb-4 text-[#e43c8a] shadow-inner'>
+                    <div className='w-16 h-16 rounded-full bg-[#faf7f5] flex items-center justify-center mb-4 text-[#c2a381] shadow-inner'>
                       <IconUsersGroup size={32} stroke={1.5} />
                     </div>
                     <h3 className='font-bold text-gray-900 text-lg mb-2'>Comunidad VIP</h3>

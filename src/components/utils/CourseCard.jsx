@@ -14,7 +14,7 @@ export const CourseCard = ({ title, author, rating, reviews, hours, price, image
         ></div>
         
         {/* Badge superior izquierdo (Desktop) / Desktop & Mobile */}
-        <div className='absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-sm text-[10px] font-bold tracking-wider text-[#e43c8a] shadow-sm uppercase'>
+        <div className='absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-sm text-[10px] font-bold tracking-wider text-[#c2a381] shadow-sm uppercase'>
           {category}
         </div>
 
@@ -41,7 +41,7 @@ export const CourseCard = ({ title, author, rating, reviews, hours, price, image
 
         {/* Ratings */}
         <div className='flex items-center gap-1 mb-4 mt-auto'>
-          <IconStarFilled size={14} className='text-[#e43c8a] shrink-0' />
+          <IconStarFilled size={14} className='text-[#c2a381] shrink-0' />
           <span className='font-bold text-sm text-gray-700 ml-1'>{rating}</span>
           <div className='flex text-[#ffb800] ml-1'>
             <IconStarFilled size={12} />
@@ -58,9 +58,9 @@ export const CourseCard = ({ title, author, rating, reviews, hours, price, image
           <div className='flex flex-col md:hidden w-full'>
               {/* Layout Móvil: Precio arriba del botón */}
               <div className='flex justify-between items-center mb-3 w-full'>
-                <span className='font-bold text-2xl text-[#e43c8a] leading-none'>${price}</span>
+                <span className='font-bold text-2xl text-[#c2a381] leading-none'>${price}</span>
               </div>
-              <button className='w-full bg-[#fce7f3] text-[#e43c8a] font-bold py-3 rounded-xl hover:bg-[#e43c8a] hover:text-white transition-colors'>
+              <button className='w-full bg-[#f3ece5] text-[#c2a381] font-bold py-3 rounded-xl hover:bg-[#c2a381] hover:text-white transition-colors'>
                 Ver detalles
               </button>
           </div>
@@ -72,7 +72,7 @@ export const CourseCard = ({ title, author, rating, reviews, hours, price, image
                 <span className='font-bold text-xl text-gray-900 leading-none'>${price}</span>
               </div>
               <button
-                className='bg-[#fce7f3] text-[#e43c8a] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#e43c8a] hover:text-white transition-colors duration-300 shadow-sm'
+                className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300 shadow-sm'
               >
                 <IconShoppingCart size={20} stroke={2} />
               </button>
