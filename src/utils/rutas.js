@@ -26,7 +26,7 @@ const routesBackend = Object.freeze({
     deleteCurso: '/cursos/:id',
     createCurso: '/cursos',
     getCategorias: '/cursos/categorias',
-    getEstados: '/cursos/estados',
+    getEstados: '/cursos/estados-curso',
   },
 })
 export const context = '/mimada'

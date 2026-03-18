@@ -2,7 +2,7 @@ import axios from 'axios'
 import { routes } from '../utils/rutas'
 
 // Obtiene las categorías de cursos
-export function getCategorias() {
+export function getCategoriasCurso() {
   return new Promise((resolve, reject) => {
     axios
       .get(`${routes.backend.url}${routes.backend.cursos.getCategorias}`)
@@ -16,7 +16,7 @@ export function getCategorias() {
 }
 
 // Obtiene los estados de cursos
-export function getEstados() {
+export function getEstadosCurso() {
   return new Promise((resolve, reject) => {
     axios
       .get(`${routes.backend.url}${routes.backend.cursos.getEstados}`)
@@ -45,7 +45,10 @@ export function createCurso(data) {
 
 // Actualiza un curso existente
 export function updateCurso(id, data) {
-  const url = `${routes.backend.url}${routes.backend.cursos.updateCurso}`.replace(':id', id)
+  const url = `${routes.backend.url}${routes.backend.cursos.updateCurso}`.replace(
+    ':id',
+    id,
+  )
   return new Promise((resolve, reject) => {
     axios
       .put(url, data)
