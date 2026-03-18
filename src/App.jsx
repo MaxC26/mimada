@@ -15,7 +15,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
 import { ROLES, SECCIONES_DASHBOARD } from './utils/constantes'
 import { decodeToken } from './utils/utils'
-import SubirVideoSection from './pages/dashboard/SubirVideoSection'
+import CrearCursoSection from './pages/dashboard/CrearCursoSection'
 import ContenidoSection from './pages/dashboard/ContenidoSection'
 import Cursos from './components/settings/Cursos'
 import { Inicio } from './components/settings/Inicio'
@@ -90,10 +90,10 @@ function App() {
                   />
                 }
               />
-              <Route path={routes.dashboard.nuevoCurso} element={<SubirVideoSection />} />
+              <Route path={routes.dashboard.nuevoCurso} element={<CrearCursoSection />} />
               <Route
                 path={routes.dashboard.editarCurso}
-                element={<SubirVideoSection />}
+                element={<CrearCursoSection />}
               />
               <Route path={routes.dashboard.categorias} element={<Categorias />} />
             </Route>

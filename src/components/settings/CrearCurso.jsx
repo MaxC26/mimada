@@ -35,7 +35,7 @@ const selectClass = (hasError) =>
 
 /* ─────────────────────────────────────── */
 
-const SubirVideo = ({ curso = null, onBack }) => {
+const CrearCurso = ({ curso = null, onBack }) => {
   const Loading = (text) => toast.loading(text)
   const Success = (text) => toast.success(text)
   // const Warning = (text) => toast.warning(text)
@@ -662,5 +662,5 @@ const SubirVideo = ({ curso = null, onBack }) => {
   )
 }
 
-export default SubirVideo
+export default CrearCurso
 
