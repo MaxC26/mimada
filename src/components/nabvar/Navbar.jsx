@@ -112,22 +112,26 @@ export const Navbar = ({ isExplore = false }) => {
                     Explorar
                   </Link>
                 </li>
-                <li>
-                  <a
-                    href='#'
-                    className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
-                  >
-                    Mis Cursos
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href='#'
-                    className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
-                  >
-                    Perfil
-                  </a>
-                </li>
+                {login && (
+                  <>
+                    <li>
+                      <a
+                        href='#'
+                        className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
+                      >
+                        Mis Cursos
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href='#'
+                        className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
+                      >
+                        Perfil
+                      </a>
+                    </li>
+                  </>
+                )}
               </ul>
             )}
           </nav>
