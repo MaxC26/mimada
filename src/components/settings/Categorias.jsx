@@ -10,34 +10,12 @@ import {
 } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import LoadingSpinner from '../utils/LoadingSpinner'
-
-/* ── MOCK API SERVICES ── */
-// Simulan llamadas a la API que luego reemplazarás con axios o fetch
-
-const apiGetCategorias = async () => {
-  return new Promise(resolve => setTimeout(() => resolve([
-    { mmdcategoriacursoid: 1, codigo: 'CAT001_MAQ', nombre: 'Maquillaje', estado: 1, fecha_creacion: '2026-03-16T21:57:20.563Z' },
-    { mmdcategoriacursoid: 2, codigo: 'CAT002_SKI', nombre: 'Skincare',   estado: 1, fecha_creacion: '2026-03-16T21:57:20.563Z' },
-    { mmdcategoriacursoid: 3, codigo: 'CAT003_UNA', nombre: 'Uñas',       estado: 1, fecha_creacion: '2026-03-16T21:57:20.563Z' },
-  ]), 800))
-}
-
-const apiCrearCategoria = async (nombre) => {
-  return new Promise(resolve => setTimeout(() => resolve({
-    estado: 1,
-    fecha_creacion: new Date().toISOString(),
-    mmdcategoriacursoid: Math.floor(Math.random() * 1000) + 10,
-    nombre: nombre,
-    codigo: `CAT00${Math.floor(Math.random() * 100)}_NEW`
-  }), 800))
-}
-
-const apiActualizarEliminarCategoria = async (payload) => {
-  return new Promise(resolve => setTimeout(() => resolve({
-    message: 'Se actualizó o eliminó el dato',
-    value: true
-  }), 800))
-}
+import {
+  apiGetCategorias,
+  apiCrearCategoria,
+  apiActualizarCategoria,
+  apiEliminarCategoria
+} from '../../services/categorias'
 
 const Categorias = () => {
   const [categorias, setCategorias] = useState([])
@@ -82,11 +60,10 @@ const Categorias = () => {
     setIsProcessing(true)
     try {
       const payload = {
-        mmdcategoriacursoid: cat.mmdcategoriacursoid,
         codigo: cat.codigo,
         nombre: editNombre.trim()
       }
-      const res = await apiActualizarEliminarCategoria(payload)
+      const res = await apiActualizarCategoria(payload)
       if (res.value) {
         setCategorias(prev =>
           prev.map(c => c.mmdcategoriacursoid === cat.mmdcategoriacursoid ? { ...c, nombre: editNombre.trim() } : c)
@@ -107,13 +84,7 @@ const Categorias = () => {
   const eliminar = async (cat) => {
     setIsProcessing(true)
     try {
-      const payload = {
-        mmdcategoriacursoid: cat.mmdcategoriacursoid,
-        codigo: cat.codigo,
-        nombre: cat.nombre,
-        estado: 0 // eliminación lógica
-      }
-      const res = await apiActualizarEliminarCategoria(payload)
+      const res = await apiEliminarCategoria(cat.codigo)
       if (res.value) {
         setCategorias(prev => prev.filter(c => c.mmdcategoriacursoid !== cat.mmdcategoriacursoid))
         setConfirmEliminarId(null)

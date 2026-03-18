@@ -32,7 +32,7 @@ export const Head = ({ content }) => {
             <div className='flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4'>
               <a
                 href='#servicios'
-                className='w-full sm:w-auto inline-flex items-center justify-center bg-[#c2a381] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg shadow-[#c2a381]/30 hover:bg-[#d02875] transform hover:-translate-y-0.5 transition-all duration-300'
+                className='w-full sm:w-auto inline-flex items-center justify-center bg-[#c2a381] text-white font-bold text-lg px-8 py-4 rounded-full shadow-lg shadow-[#c2a381]/30 hover:bg-[#a58b6c] transform hover:-translate-y-0.5 transition-all duration-300'
               >
                 Explorar Servicios
                 <IconArrowRight className='ml-2' stroke={2} size={20} />

@@ -27,7 +27,14 @@ const routesBackend = Object.freeze({
     createCurso: '/cursos',
     getCategorias: '/cursos/categorias',
   },
+  categorias: {
+    getCategorias: '/cursos/categorias',
+    createCategoria: '/cursos/categoria',
+    updateCategoria: '/cursos/categoria',
+    deleteCategoria: '/cursos/categoria',
+  },
 })
+
 export const context = '/mimada'
 
 const routeFiles = Object.freeze({

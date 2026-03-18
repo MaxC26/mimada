@@ -133,7 +133,7 @@ const Explore = () => {
                 </div>
                 {/* Imagen Decorativa Hero */}
                 <div className='w-full md:w-5/12 mt-10 md:mt-0 relative z-10'>
-                   <div className='relative aspect-square w-full max-w-[400px] mx-auto overflow-hidden rounded-[2rem] shadow-2xl origin-bottom-right md:rotate-3 hover:rotate-0 transition-transform duration-500'>
+                   <div className='relative aspect-square w-full max-w-[400px] mx-auto overflow-hidden rounded-[2rem] shadow-2xl origin-bottom-right md:rotate-3'>
                      <img src='https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=2080&auto=format&fit=crop' alt='Makeup Courses' className='w-full h-full object-cover'/>
                    </div>
                 </div>
