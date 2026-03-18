@@ -5,7 +5,7 @@ import { routes } from '../utils/rutas'
 export function getCategorias() {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${routes.backend.url}${routes.backend.cursos.getCategorias}`)
+      .get(`${routes.backend.url}${routes.backend.categorias.getCategorias}`)
       .then(function (response) {
         resolve(response)
       })
