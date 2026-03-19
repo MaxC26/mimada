@@ -72,3 +72,69 @@ export function updateCurso(data) {
       })
   })
 }
+
+// Obtiene los videos de un curso
+export function getVideosCurso(cursoId) {
+  const url = `${routes.backend.url}${routes.backend.cursos.getVideosCurso}`.replace(
+    ':id',
+    cursoId,
+  )
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+// Crea un nuevo video (lección) para un curso
+export function createVideoCurso(data) {
+  const url = `${routes.backend.url}${routes.backend.cursos.createVideo}`
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, data)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+// Actualiza un video existente
+export function updateVideoCurso(data) {
+  const url = `${routes.backend.url}${routes.backend.cursos.updateVideo}`
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, data)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+// Elimina un video
+export function deleteVideoCurso(videoId) {
+  const url = `${routes.backend.url}${routes.backend.cursos.deleteVideo}`.replace(
+    ':id',
+    videoId,
+  )
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}

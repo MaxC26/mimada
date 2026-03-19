@@ -38,3 +38,12 @@ export const validarCurso = (esEdicion) =>
         return value.size <= 5 * 1024 * 1024
       }),
   })
+
+export const validarVideoCurso = Yup.object({
+  titulo: Yup.string()
+    .min(3, 'El título debe tener al menos 3 caracteres')
+    .required('El título es obligatorio'),
+  descripcion: Yup.string()
+    .min(5, 'La descripción debe tener al menos 5 caracteres')
+    .required('La descripción es obligatoria'),
+})

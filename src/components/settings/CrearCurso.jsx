@@ -7,12 +7,18 @@ import {
   IconGripVertical,
   IconX,
   IconVideo,
+  IconPencil,
+  IconTrash,
+  IconCheck,
+  IconLoader2,
 } from '@tabler/icons-react'
 import {
   createCurso,
   updateCurso,
   getCategoriasCurso,
   getEstadosCurso,
+  getVideosCurso,
+  deleteVideoCurso,
 } from '../../services/cursos'
 import UploadVideoModal from './UploadVideoModal'
 import LoadingSpinner from '../utils/LoadingSpinner'
@@ -57,6 +63,11 @@ const CrearCurso = ({ curso = null, onBack }) => {
   const [videoFile, setVideoFile] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Acciones de video
+  const [videoToEdit, setVideoToEdit] = useState(null)
+  const [confirmEliminarVideoId, setConfirmEliminarVideoId] = useState(null)
+  const [isProcessingVideo, setIsProcessingVideo] = useState(false)
+
   /* ── Carga de datos ── */
   useEffect(() => {
     fetchData()
@@ -67,22 +78,35 @@ const CrearCurso = ({ curso = null, onBack }) => {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      const [categoriasResult, estadosResult] = await Promise.allSettled([
+      const [categoriasResult, videosResult, estadosResult] = await Promise.allSettled([
         getCategoriasCurso(),
+        esEdicion && getVideosCurso(curso.cursoId),
         esEdicion && getEstadosCurso(),
       ])
 
       if (categoriasResult.status === 'fulfilled') {
         setCategorias(categoriasResult.value.data)
       } else {
-        console.error('Error cargando categorías:', categoriasResult.reason)
-        ErrorMessage('Error cargando las categorías')
+        console.error('Error al cargar las categorías:', categoriasResult.reason)
+        ErrorMessage('Error al cargar las categorías')
       }
 
       if (estadosResult.status === 'fulfilled') {
         setEstados(estadosResult.value.data)
       } else {
-        console.error('Error cargando estados:', estadosResult.reason)
+        console.error('Error al cargar los estados:', estadosResult.reason)
+        ErrorMessage('Error al cargar los estados')
+      }
+
+      if (videosResult.status === 'fulfilled') {
+        setLecciones(videosResult.value.data)
+      } else {
+        if (videosResult.reason.response.status === 404) {
+          setLecciones([])
+        } else {
+          console.error('Error al cargar los videos:', videosResult.reason)
+          ErrorMessage('Error al cargar los videos')
+        }
       }
     } catch (err) {
       console.error('Error inesperado:', err)
@@ -93,25 +117,50 @@ const CrearCurso = ({ curso = null, onBack }) => {
   }
 
   /* ── Handlers externos al form ── */
-  const handleVideoUploaded = (file) => {
-    setVideoFile(file)
-    setLecciones((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        titulo: file.name.replace(/\.[^/.]+$/, ''),
-        duracion: '--:--',
-        estado: 'procesando',
-      },
-    ])
+  const handleVideoUploaded = (videoData, isEdit) => {
+    videoData = Object.fromEntries(videoData)
+    if (isEdit) {
+      setLecciones((prev) =>
+        prev.map((leccion) =>
+          leccion.videoId === Number(videoData.videoId)
+            ? { ...leccion, ...videoData }
+            : leccion,
+        ),
+      )
+    } else {
+      setLecciones((prev) => [
+        ...prev,
+        {
+          id: videoData?.videoId || Date.now(),
+          videoId: videoData?.videoId || Date.now(),
+          titulo: videoData?.titulo || 'Nueva lección',
+          descripcion: videoData?.descripcion || '',
+          duracion: videoData?.duracion || '',
+        },
+      ])
+    }
   }
 
-  const handleDeleteLeccion = (id) => {
-    setLecciones((prev) => prev.filter((l) => l.id !== id))
+  const iniciarEdicionVideo = (leccion) => {
+    setVideoToEdit(leccion)
+    setIsVideoModalOpen(true)
   }
 
-  /* ── Valores iniciales ── */
-  // const initialValues =
+  const handleDeleteVideoConfirm = async (leccion) => {
+    setIsProcessingVideo(true)
+    try {
+      const res = await deleteVideoCurso(leccion.videoId)
+      if (res) {
+        setLecciones((prev) => prev.filter((l) => l.videoId !== leccion.videoId))
+        Success('Lección eliminada exitosamente')
+        setConfirmEliminarVideoId(null)
+      }
+    } catch (error) {
+      console.error(error)
+      ErrorMessage('Error al eliminar la lección')
+    }
+    setIsProcessingVideo(false)
+  }
 
   /* ── Submit ── */
   const handleSubmit = async (values, { setStatus }) => {
@@ -169,8 +218,13 @@ const CrearCurso = ({ curso = null, onBack }) => {
     <>
       <UploadVideoModal
         isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
+        onClose={() => {
+          setIsVideoModalOpen(false)
+          setVideoToEdit(null)
+        }}
         onVideoUploaded={handleVideoUploaded}
+        cursoId={curso?.cursoId}
+        videoToEdit={videoToEdit}
       />
 
       <div className='w-full'>
@@ -252,14 +306,14 @@ const CrearCurso = ({ curso = null, onBack }) => {
                           Descartar
                         </button>
                       )}
-                      <button
+                      {/* <button
                         type='button'
                         onClick={() => {}}
                         disabled={isSubmitting || !esEdicion}
                         className='px-5 py-2.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed'
                       >
                         {'Publicar Curso'}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
 
@@ -476,81 +530,136 @@ const CrearCurso = ({ curso = null, onBack }) => {
                       </div>
 
                       {/* Lecciones */}
-                      <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
-                        <div className='flex items-center justify-between mb-5'>
-                          <div className='flex items-center gap-2'>
-                            <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
-                            <h3 className='font-bold text-gray-900 text-lg'>
-                              Lecciones ({lecciones.length})
-                            </h3>
-                          </div>
-                          <button
-                            type='button'
-                            onClick={() => setIsVideoModalOpen(true)}
-                            className='flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#faf7f5] border border-[#e8d9cc] text-[#c2a381] font-bold text-sm hover:bg-[#f3ece5] transition-colors'
-                          >
-                            <IconPlus size={15} stroke={2.5} />
-                            Subir Video
-                          </button>
-                        </div>
-
-                        <div className='space-y-2'>
-                          {lecciones.map((leccion) => (
-                            <div
-                              key={leccion.id}
-                              className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${leccion.estado === 'procesando' ? 'border-[#f3ece5] bg-[#faf7f5]' : 'border-gray-100 bg-gray-50 hover:bg-white'}`}
+                      {esEdicion && (
+                        <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
+                          <div className='flex items-center justify-between mb-5'>
+                            <div className='flex items-center gap-2'>
+                              <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
+                              <h3 className='font-bold text-gray-900 text-lg'>
+                                Lecciones ({lecciones.length})
+                              </h3>
+                            </div>
+                            <button
+                              type='button'
+                              onClick={() => setIsVideoModalOpen(true)}
+                              className='flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#faf7f5] border border-[#e8d9cc] text-[#c2a381] font-bold text-sm hover:bg-[#f3ece5] transition-colors'
                             >
-                              <IconGripVertical
-                                size={16}
-                                className='text-gray-300 cursor-grab shrink-0'
-                              />
+                              <IconPlus size={15} stroke={2.5} />
+                              Subir Video
+                            </button>
+                          </div>
+
+                          <div className='space-y-2'>
+                            {lecciones.map((leccion) => (
                               <div
-                                className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#c2a381] text-white' : 'bg-gray-200 text-gray-600'}`}
+                                key={leccion.videoId}
+                                className={`flex items-center gap-3 p-4 rounded-xl border transition-all ${leccion.estado === 'procesando' ? 'border-[#f3ece5] bg-[#faf7f5]' : 'border-gray-100 bg-gray-50 hover:bg-white'}`}
                               >
-                                {leccion.estado === 'procesando' ? (
-                                  '⏳'
-                                ) : (
-                                  <IconVideo size={14} />
+                                <IconGripVertical
+                                  size={16}
+                                  className='text-gray-300 cursor-grab shrink-0'
+                                />
+                                <div
+                                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${leccion.estado === 'procesando' ? 'bg-[#c2a381] text-white' : 'bg-gray-200 text-gray-600'}`}
+                                >
+                                  {leccion.estado === 'procesando' ? (
+                                    '⏳'
+                                  ) : (
+                                    <IconVideo size={14} />
+                                  )}
+                                </div>
+                                <div className='flex-1 min-w-0'>
+                                  <p
+                                    className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#c2a381]' : 'text-gray-800'}`}
+                                  >
+                                    {leccion.titulo}
+                                  </p>
+                                  <p className='text-xs text-gray-400'>
+                                    {leccion.estado === 'procesando'
+                                      ? 'PROCESANDO...'
+                                      : `Video · ${leccion.duracion}`}
+                                  </p>
+                                </div>
+                                {leccion.estado !== 'procesando' && (
+                                  <div className='flex items-center justify-center gap-1 w-24 shrink-0'>
+                                    {confirmEliminarVideoId === leccion.videoId ? (
+                                      <>
+                                        <button
+                                          type='button'
+                                          onClick={() =>
+                                            handleDeleteVideoConfirm(leccion)
+                                          }
+                                          disabled={isProcessingVideo}
+                                          title='Confirmar eliminación'
+                                          className='px-2 py-1 h-8 rounded-lg bg-red-50 text-red-500 font-bold text-xs hover:bg-red-100 flex items-center justify-center gap-1 transition-colors disabled:opacity-50'
+                                        >
+                                          {isProcessingVideo ? (
+                                            <IconLoader2
+                                              size={13}
+                                              className='animate-spin'
+                                            />
+                                          ) : (
+                                            <IconCheck size={13} stroke={2.5} />
+                                          )}
+                                          <span>Sí</span>
+                                        </button>
+                                        <button
+                                          type='button'
+                                          onClick={() => setConfirmEliminarVideoId(null)}
+                                          disabled={isProcessingVideo}
+                                          className='w-8 h-8 rounded-lg bg-gray-50 text-gray-500 hover:bg-gray-100 flex items-center justify-center transition-colors disabled:opacity-50'
+                                        >
+                                          <IconX size={15} stroke={2} />
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <button
+                                          type='button'
+                                          onClick={() => iniciarEdicionVideo(leccion)}
+                                          disabled={
+                                            isProcessingVideo || confirmEliminarVideoId
+                                          }
+                                          className='w-8 h-8 rounded-lg text-gray-400 hover:bg-[#faf7f5] hover:text-[#c2a381] flex items-center justify-center transition-colors disabled:opacity-50'
+                                          title='Editar lección'
+                                        >
+                                          <IconPencil size={15} />
+                                        </button>
+                                        <button
+                                          type='button'
+                                          onClick={() =>
+                                            setConfirmEliminarVideoId(leccion.videoId)
+                                          }
+                                          disabled={
+                                            isProcessingVideo || confirmEliminarVideoId
+                                          }
+                                          className='w-8 h-8 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors disabled:opacity-50'
+                                          title='Eliminar lección'
+                                        >
+                                          <IconTrash size={15} />
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
                                 )}
                               </div>
-                              <div className='flex-1 min-w-0'>
-                                <p
-                                  className={`font-semibold text-sm truncate ${leccion.estado === 'procesando' ? 'text-[#c2a381]' : 'text-gray-800'}`}
-                                >
-                                  {leccion.titulo}
-                                </p>
-                                <p className='text-xs text-gray-400'>
-                                  {leccion.estado === 'procesando'
-                                    ? 'PROCESANDO...'
-                                    : `Video · ${leccion.duracion}`}
+                            ))}
+
+                            {lecciones.length === 0 && (
+                              <div className='text-center py-8 text-gray-400'>
+                                <IconVideo
+                                  size={32}
+                                  stroke={1}
+                                  className='mx-auto mb-2 opacity-50'
+                                />
+                                <p className='text-sm'>
+                                  Aún no hay lecciones. ¡Sube tu primer video!
                                 </p>
                               </div>
-                              {leccion.estado !== 'procesando' && (
-                                <button
-                                  type='button'
-                                  onClick={() => handleDeleteLeccion(leccion.id)}
-                                  className='text-gray-300 hover:text-red-400 transition-colors shrink-0'
-                                >
-                                  <IconX size={16} />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-
-                          {lecciones.length === 0 && (
-                            <div className='text-center py-8 text-gray-400'>
-                              <IconVideo
-                                size={32}
-                                stroke={1}
-                                className='mx-auto mb-2 opacity-50'
-                              />
-                              <p className='text-sm'>
-                                Aún no hay lecciones. ¡Sube tu primer video!
-                              </p>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
 
                     {/* ── Columna lateral ── */}
@@ -627,7 +736,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
                           disabled={isSubmitting}
                           className='w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50'
                         >
-                          Descartar borradores
+                          Descartar cambios
                         </button>
                       </div>
 
