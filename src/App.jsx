@@ -22,8 +22,10 @@ import { Inicio } from './components/settings/Inicio'
 import Servicios from './components/settings/Servicios'
 import Historia from './components/settings/Historia'
 import Categorias from './components/settings/Categorias'
+import ReactModal from 'react-modal'
 
 function App() {
+  ReactModal.setAppElement('#root')
   const location = useLocation()
   const navigate = useNavigate()
 

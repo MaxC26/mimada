@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Formik, Field, Form } from 'formik'
+import CustomModal from '../utils/CustomModal'
 import { toast } from 'sonner'
 import {
   IconPhoto,
@@ -67,6 +68,10 @@ const CrearCurso = ({ curso = null, onBack }) => {
   const [videoToEdit, setVideoToEdit] = useState(null)
   const [confirmEliminarVideoId, setConfirmEliminarVideoId] = useState(null)
   const [isProcessingVideo, setIsProcessingVideo] = useState(false)
+
+  // Acciones de estado
+  const [isConfirmadorEliminadoOpen, setIsConfirmadorEliminadoOpen] = useState(false)
+  const [pendingEstadoValue, setPendingEstadoValue] = useState(null)
 
   /* ── Carga de datos ── */
   useEffect(() => {
@@ -272,6 +277,47 @@ const CrearCurso = ({ curso = null, onBack }) => {
 
               return (
                 <Form noValidate>
+                  <CustomModal
+                    isOpen={isConfirmadorEliminadoOpen}
+                    onClose={() => setIsConfirmadorEliminadoOpen(false)}
+                    contentLabel='Confirmar Eliminado'
+                    maxWidth='400px'
+                  >
+                    <div className='p-6'>
+                      <div className='flex items-center gap-3 mb-2'>
+                        <div className='w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500'>
+                          <IconTrash size={20} />
+                        </div>
+                        <h3 className='font-bold text-gray-900 text-lg'>
+                          ¿Eliminar Curso?
+                        </h3>
+                      </div>
+                      <p className='text-sm text-gray-500 mb-6 pl-13'>
+                        Estás a punto de cambiar el estado de este curso a{' '}
+                        <strong>Eliminado</strong>. Esta acción no se puede deshacer.
+                      </p>
+                      <div className='flex justify-end gap-3'>
+                        <button
+                          type='button'
+                          onClick={() => setIsConfirmadorEliminadoOpen(false)}
+                          className='px-5 py-2 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition-colors'
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type='button'
+                          onClick={() => {
+                            setFieldValue('estado', pendingEstadoValue)
+                            setIsConfirmadorEliminadoOpen(false)
+                          }}
+                          className='px-5 py-2 rounded-full bg-red-500 text-white font-bold text-sm shadow-md shadow-red-500/30 hover:bg-red-600 transition-all'
+                        >
+                          Sí, eliminar
+                        </button>
+                      </div>
+                    </div>
+                  </CustomModal>
+
                   {/* ── Header ── */}
                   <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8'>
                     <div>
@@ -479,31 +525,54 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                   Estado
                                 </label>
                                 <Field name='estado'>
-                                  {({ field, meta }) => (
-                                    <>
-                                      <select
-                                        className={selectClass(
-                                          meta.touched && meta.error,
+                                  {({ field, meta }) => {
+                                    const handleEstadoChange = (e) => {
+                                      const selectedVal = e.target.value
+                                      const estObj = estados?.find(
+                                        (est) =>
+                                          String(est.estadoCursoId) ===
+                                          String(selectedVal),
+                                      )
+                                      if (
+                                        estObj &&
+                                        estObj.estado.toLowerCase() === 'eliminado'
+                                      ) {
+                                        setPendingEstadoValue(selectedVal)
+                                        setIsConfirmadorEliminadoOpen(true)
+                                      } else {
+                                        field.onChange(e)
+                                      }
+                                    }
+
+                                    return (
+                                      <>
+                                        <select
+                                          className={selectClass(
+                                            meta.touched && meta.error,
+                                          )}
+                                          name={field.name}
+                                          value={field.value}
+                                          onBlur={field.onBlur}
+                                          onChange={handleEstadoChange}
+                                        >
+                                          <option value=''>Selecciona un estado</option>
+                                          {estados?.map((est) => (
+                                            <option
+                                              key={est.estadoCursoId}
+                                              value={est.estadoCursoId}
+                                            >
+                                              {est.estado}
+                                            </option>
+                                          ))}
+                                        </select>
+                                        {meta.touched && meta.error && (
+                                          <p className='text-xs text-red-500 mt-1'>
+                                            {meta.error}
+                                          </p>
                                         )}
-                                        {...field}
-                                      >
-                                        <option value=''>Selecciona un estado</option>
-                                        {estados?.map((est) => (
-                                          <option
-                                            key={est.estadoCursoId}
-                                            value={est.estadoCursoId}
-                                          >
-                                            {est.estado}
-                                          </option>
-                                        ))}
-                                      </select>
-                                      {meta.touched && meta.error && (
-                                        <p className='text-xs text-red-500 mt-1'>
-                                          {meta.error}
-                                        </p>
-                                      )}
-                                    </>
-                                  )}
+                                      </>
+                                    )
+                                  }}
                                 </Field>
                               </div>
                             )}
