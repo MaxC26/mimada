@@ -73,6 +73,24 @@ export function updateCurso(data) {
   })
 }
 
+// Elimina un curso
+export function deleteCurso(cursoId) {
+  const url = `${routes.backend.url}${routes.backend.cursos.deleteCurso}`.replace(
+    ':id',
+    cursoId,
+  )
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Obtiene los videos de un curso
 export function getVideosCurso(cursoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.getVideosCurso}`.replace(

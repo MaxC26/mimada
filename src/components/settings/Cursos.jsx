@@ -48,7 +48,9 @@ const CourseImage = ({ src, alt, className, iconSize = 24 }) => {
   const [error, setError] = useState(false)
   if (!src || error) {
     return (
-      <div className={`${className} bg-gray-100 flex items-center justify-center shrink-0`}>
+      <div
+        className={`${className} bg-gray-100 flex items-center justify-center shrink-0`}
+      >
         <IconPhoto className='text-gray-400' size={iconSize} />
       </div>
     )

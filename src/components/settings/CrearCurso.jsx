@@ -16,6 +16,7 @@ import {
 import {
   createCurso,
   updateCurso,
+  deleteCurso,
   getCategoriasCurso,
   getEstadosCurso,
   getVideosCurso,
@@ -71,7 +72,6 @@ const CrearCurso = ({ curso = null, onBack }) => {
 
   // Acciones de estado
   const [isConfirmadorEliminadoOpen, setIsConfirmadorEliminadoOpen] = useState(false)
-  const [pendingEstadoValue, setPendingEstadoValue] = useState(null)
 
   /* ── Carga de datos ── */
   useEffect(() => {
@@ -165,6 +165,21 @@ const CrearCurso = ({ curso = null, onBack }) => {
       ErrorMessage('Error al eliminar la lección')
     }
     setIsProcessingVideo(false)
+  }
+
+  const handleDeleteCursoConfirm = async (cursoId) => {
+    setIsConfirmadorEliminadoOpen(false)
+    const toastId = Loading('Eliminando curso...')
+    try {
+      await deleteCurso(cursoId)
+      toast.dismiss(toastId)
+      Success('Curso eliminado exitosamente')
+      if (onBack) onBack()
+    } catch (error) {
+      toast.dismiss(toastId)
+      console.error(error)
+      ErrorMessage('Error al eliminar el curso')
+    }
   }
 
   /* ── Submit ── */
@@ -275,6 +290,10 @@ const CrearCurso = ({ curso = null, onBack }) => {
                 setVideoFile(null)
               }
 
+              const isEliminado = estados?.find(
+                (est) => String(est.estadoCursoId) === String(values.estado)
+              )?.estado.toLowerCase() === 'eliminado'
+
               return (
                 <Form noValidate>
                   <CustomModal
@@ -306,10 +325,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
                         </button>
                         <button
                           type='button'
-                          onClick={() => {
-                            setFieldValue('estado', pendingEstadoValue)
-                            setIsConfirmadorEliminadoOpen(false)
-                          }}
+                          onClick={() => handleDeleteCursoConfirm(values.cursoid)}
                           className='px-5 py-2 rounded-full bg-red-500 text-white font-bold text-sm shadow-md shadow-red-500/30 hover:bg-red-600 transition-all'
                         >
                           Sí, eliminar
@@ -526,24 +542,6 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                 </label>
                                 <Field name='estado'>
                                   {({ field, meta }) => {
-                                    const handleEstadoChange = (e) => {
-                                      const selectedVal = e.target.value
-                                      const estObj = estados?.find(
-                                        (est) =>
-                                          String(est.estadoCursoId) ===
-                                          String(selectedVal),
-                                      )
-                                      if (
-                                        estObj &&
-                                        estObj.estado.toLowerCase() === 'eliminado'
-                                      ) {
-                                        setPendingEstadoValue(selectedVal)
-                                        setIsConfirmadorEliminadoOpen(true)
-                                      } else {
-                                        field.onChange(e)
-                                      }
-                                    }
-
                                     return (
                                       <>
                                         <select
@@ -553,7 +551,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                           name={field.name}
                                           value={field.value}
                                           onBlur={field.onBlur}
-                                          onChange={handleEstadoChange}
+                                          onChange={field.onChange}
                                         >
                                           <option value=''>Selecciona un estado</option>
                                           {estados?.map((est) => (
@@ -792,13 +790,24 @@ const CrearCurso = ({ curso = null, onBack }) => {
 
                       {/* Botón guardar – desktop */}
                       <div className='hidden lg:block'>
-                        <button
-                          type='submit'
-                          disabled={isSubmitting}
-                          className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
-                        >
-                          {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
-                        </button>
+                        {isEliminado ? (
+                          <button
+                            type='button'
+                            onClick={() => setIsConfirmadorEliminadoOpen(true)}
+                            disabled={isSubmitting}
+                            className='w-full py-3.5 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                          >
+                            Eliminar
+                          </button>
+                        ) : (
+                          <button
+                            type='submit'
+                            disabled={isSubmitting}
+                            className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                          >
+                            {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+                          </button>
+                        )}
                         <button
                           type='button'
                           onClick={onDescartar}
@@ -811,13 +820,24 @@ const CrearCurso = ({ curso = null, onBack }) => {
 
                       {/* Botón guardar – mobile */}
                       <div className='lg:hidden'>
-                        <button
-                          type='submit'
-                          disabled={isSubmitting}
-                          className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
-                        >
-                          {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
-                        </button>
+                        {isEliminado ? (
+                          <button
+                            type='button'
+                            onClick={() => setIsConfirmadorEliminadoOpen(true)}
+                            disabled={isSubmitting}
+                            className='w-full py-3.5 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                          >
+                            Eliminar
+                          </button>
+                        ) : (
+                          <button
+                            type='submit'
+                            disabled={isSubmitting}
+                            className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                          >
+                            {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+                          </button>
+                        )}
                         <button
                           type='button'
                           onClick={onDescartar}
