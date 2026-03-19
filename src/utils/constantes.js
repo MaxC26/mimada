@@ -9,3 +9,9 @@ export const SECCIONES_DASHBOARD = Object.freeze({
   CURSOS: 'cursos',
   CATEGORIAS: 'categorias',
 })
+
+export const ESTADOS_CURSO = Object.freeze({
+  PUBLICADO: 'publicado',
+  BORRADOR: 'borrador',
+  ARCHIVADO: 'archivado',
+})

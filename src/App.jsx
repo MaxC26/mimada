@@ -83,9 +83,12 @@ function App() {
                   <Cursos
                     onNuevoCurso={() => navigate(routes.dashboard.nuevoCurso)}
                     onEditCurso={(curso) =>
-                      navigate(routes.dashboard.editarCurso.replace(':id', curso.id), {
-                        state: { curso },
-                      })
+                      navigate(
+                        routes.dashboard.editarCurso.replace(':id', curso.mmdcursoid),
+                        {
+                          state: { curso },
+                        },
+                      )
                     }
                   />
                 }

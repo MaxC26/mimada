@@ -76,7 +76,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
         setCategorias(categoriasResult.value.data)
       } else {
         console.error('Error cargando categorías:', categoriasResult.reason)
-        toast.error('Error cargando las categorías')
+        ErrorMessage('Error cargando las categorías')
       }
 
       if (estadosResult.status === 'fulfilled') {
@@ -86,7 +86,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
       }
     } catch (err) {
       console.error('Error inesperado:', err)
-      toast.error('Error inesperado al cargar los datos')
+      ErrorMessage('Error inesperado al cargar los datos')
     } finally {
       setIsLoading(false)
     }
@@ -122,10 +122,9 @@ const CrearCurso = ({ curso = null, onBack }) => {
       formData.append('categoriaid', values.categoria)
       formData.append('titulo', values.titulo)
       formData.append('descripcion', values.descripcion)
-      formData.append('duracion_total', values.duracion)
+      formData.append('duracion_total', values.duracion || 25)
       formData.append('precio', values.precio)
       formData.append('nivel', values.dificultad)
-      esEdicion && formData.append('estado', values.estado)
 
       if (videoFile) formData.append('video', videoFile)
 
@@ -140,9 +139,14 @@ const CrearCurso = ({ curso = null, onBack }) => {
         const blob = await res.blob()
         formData.append('imagen_portada', blob, 'thumbnail.jpg')
       }
+      console.log(values)
 
       if (esEdicion) {
-        await updateCurso(curso.id, formData)
+        formData.append('estado', values.estado)
+        formData.append('cursoId', values.cursoid)
+        const data = Object.fromEntries(formData.entries())
+        console.log(data)
+        await updateCurso(formData)
       } else {
         await createCurso(formData)
       }
@@ -180,14 +184,15 @@ const CrearCurso = ({ curso = null, onBack }) => {
         ) : (
           <Formik
             initialValues={{
+              cursoid: curso?.mmdcursoid || '',
               titulo: curso?.titulo || '',
               descripcion: curso?.descripcion || '',
-              categoria: curso?.categoria || '',
-              precio: curso?.precio?.toString() || '49.99',
-              dificultad: curso?.dificultad || '',
-              estado: curso?.estado || '',
-              duracion: curso?.duracion || '150',
-              thumbnail: curso?.thumbnail || null,
+              categoria: curso?.categoriaid || '',
+              precio: curso?.precio?.toString() || '',
+              dificultad: curso?.nivel || '',
+              estado: curso?.estadoid || '',
+              duracion: curso?.duracion || '',
+              thumbnail: curso?.imagen_portada || null,
             }}
             validationSchema={validarCurso(esEdicion)}
             onSubmit={handleSubmit}
@@ -251,15 +256,12 @@ const CrearCurso = ({ curso = null, onBack }) => {
                         </button>
                       )}
                       <button
-                        type='submit'
-                        disabled={isSubmitting}
+                        type='button'
+                        onClick={() => {}}
+                        disabled={isSubmitting || !esEdicion}
                         className='px-5 py-2.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed'
                       >
-                        {isSubmitting
-                          ? 'Guardando...'
-                          : esEdicion
-                            ? 'Guardar Cambios'
-                            : 'Publicar Curso'}
+                        {'Publicar Curso'}
                       </button>
                     </div>
                   </div>
