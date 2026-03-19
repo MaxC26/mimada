@@ -8,6 +8,7 @@ import {
   IconCurrencyEuro,
   IconEdit,
   IconChartBar,
+  IconPhoto,
 } from '@tabler/icons-react'
 import { getCursos } from '../../services/cursos'
 import { toast } from 'sonner'
@@ -43,6 +44,18 @@ const STATS = [
 
 const TABS = ['Todos los cursos', 'Publicados', 'Borradores', 'Archivados']
 
+const CourseImage = ({ src, alt, className, iconSize = 24 }) => {
+  const [error, setError] = useState(false)
+  if (!src || error) {
+    return (
+      <div className={`${className} bg-gray-100 flex items-center justify-center shrink-0`}>
+        <IconPhoto className='text-gray-400' size={iconSize} />
+      </div>
+    )
+  }
+  return <img src={src} alt={alt} className={className} onError={() => setError(true)} />
+}
+
 const EstadoBadge = ({ estado }) => (
   <span
     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
@@ -58,15 +71,13 @@ const EstadoBadge = ({ estado }) => (
 )
 
 const Cursos = ({ onEditCurso, onNuevoCurso }) => {
-  const Loading = (text) => toast.loading(text)
-  const Success = (text) => toast.success(text)
-  // const Warning = (text) => toast.warning(text)
   const ErrorMessage = (text) => toast.error(text)
 
   const [tabActivo, setTabActivo] = useState('Todos los cursos')
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const [cursos, setCursos] = useState([])
+  const [noCursos, setNoCursos] = useState(false)
 
   const cursosFiltrados = cursos.filter((c) => {
     if (tabActivo === 'Publicados')
@@ -97,14 +108,21 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
 
   const fetchData = async () => {
     setIsLoading(true)
+    setNoCursos(false)
     try {
       const [cursosResult] = await Promise.allSettled([getCursos()])
 
       if (cursosResult.status === 'fulfilled') {
         setCursos(cursosResult.value.data)
       } else {
-        console.error('Error cargando cursos:', cursosResult.reason)
-        ErrorMessage('Error al cargar los cursos')
+        const status = cursosResult.reason?.response?.status
+        if (status === 404) {
+          setNoCursos(true)
+          setCursos([])
+        } else {
+          console.error('Error cargando cursos:', cursosResult.reason)
+          ErrorMessage('Error al cargar los cursos')
+        }
       }
     } catch (err) {
       console.error('Error inesperado:', err)
@@ -114,7 +132,6 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
     }
   }
 
-  console.log(cursos)
   return (
     <div className='w-full space-y-6'>
       {isLoading ? (
@@ -184,181 +201,226 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
             <div className='overflow-x-auto'>
               <div className='min-w-[1000px]'>
                 {/* Cabecera */}
-                <div className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-3 border-b border-gray-100'>
-                  {[
-                    'Detalles del Curso',
-                    'Estado',
-                    'Precio',
-                    'Estudiantes',
-                    'Ganancias',
-                    'Acciones',
-                  ].map((h) => (
-                    <span
-                      key={h}
-                      className='text-xs font-black text-gray-400 uppercase tracking-widest'
-                    >
-                      {h}
-                    </span>
-                  ))}
-                </div>
+                {cursos.length > 0 && (
+                  <div className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-3 border-b border-gray-100'>
+                    {[
+                      'Detalles del Curso',
+                      'Estado',
+                      'Precio',
+                      'Estudiantes',
+                      'Ganancias',
+                      'Acciones',
+                    ].map((h) => (
+                      <span
+                        key={h}
+                        className='text-xs font-black text-gray-400 uppercase tracking-widest'
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Filas */}
                 <div className='divide-y divide-gray-50'>
-                  {cursosFiltrados.map((curso) => (
-                    <div
-                      key={curso.id}
-                      className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-4 items-center hover:bg-gray-50/50 transition-colors'
-                    >
-                      {/* Detalles */}
-                      <div className='flex items-center gap-3 min-w-0 pr-4'>
-                        <img
-                          src={curso.imagen_portada}
-                          alt={curso.imagen_portada}
-                          className='w-14 h-14 rounded-xl object-cover shrink-0'
-                        />
-                        <div className='min-w-0'>
-                          <p className='font-bold text-gray-900 text-sm truncate'>
-                            {curso.titulo}
-                          </p>
-                          <p className='text-xs text-gray-400 mt-0.5'>
-                            Nivel: {curso.nivel} · {curso.lecciones} Lecciones
-                          </p>
+                  {noCursos || cursosFiltrados.length === 0 ? (
+                    <div className='flex flex-col items-center justify-center py-16 gap-3 text-center'>
+                      <div className='w-14 h-14 rounded-2xl bg-[#faf7f5] flex items-center justify-center'>
+                        <IconChartBar size={28} className='text-[#c2a381]' stroke={1.5} />
+                      </div>
+                      <p className='font-bold text-gray-700 text-sm'>
+                        {noCursos
+                          ? 'No tienes cursos disponibles aún'
+                          : 'No hay cursos en esta categoría'}
+                      </p>
+                      <p className='text-xs text-gray-400 max-w-xs'>
+                        {noCursos
+                          ? 'Crea tu primer curso haciendo clic en "Nuevo Curso".'
+                          : 'Prueba seleccionando otra pestaña o crea un nuevo curso.'}
+                      </p>
+                    </div>
+                  ) : (
+                    cursosFiltrados.map((curso) => (
+                      <div
+                        key={curso.cursoId}
+                        className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-4 items-center hover:bg-gray-50/50 transition-colors'
+                      >
+                        {/* Detalles */}
+                        <div className='flex items-center gap-3 min-w-0 pr-4'>
+                          <CourseImage
+                            src={curso.imagenPortada}
+                            alt={curso.imagenPortada}
+                            className='w-14 h-14 rounded-xl object-cover shrink-0'
+                            iconSize={24}
+                          />
+                          <div className='min-w-0'>
+                            <p className='font-bold text-gray-900 text-sm truncate'>
+                              {curso.titulo}
+                            </p>
+                            <p className='text-xs text-gray-400 mt-0.5'>
+                              Nivel: {curso.nivel} · {curso.lecciones} Lecciones
+                            </p>
+                          </div>
+                        </div>
+                        {/* Estado */}
+                        <div>
+                          <EstadoBadge estado={curso.estado} />
+                        </div>
+                        {/* Precio */}
+                        <div>
+                          {curso.precio ? (
+                            <>
+                              <p className='font-bold text-gray-900 text-sm'>
+                                {curso.precio.toLocaleString()}
+                              </p>
+                              {/* NOTE: Mostrar ganancias */}
+                              <p className='text-xs text-green-600 font-semibold'>
+                                {curso.precio}
+                              </p>
+                            </>
+                          ) : (
+                            <span className='text-gray-300 text-lg'>—</span>
+                          )}
+                        </div>
+                        {/* Estudiantes */}
+                        <div>
+                          {/* NOTE: Mostrar estudiantes */}
+                          {curso.estudiantes ? (
+                            <>
+                              <p className='font-bold text-gray-900 text-sm'>
+                                {curso.estudiantes.toLocaleString()}
+                              </p>
+                              <p className='text-xs text-green-600 font-semibold'>
+                                {curso.estudiantesMes}
+                              </p>
+                            </>
+                          ) : (
+                            <span className='text-gray-300 text-lg'>—</span>
+                          )}
+                        </div>
+                        {/* Ganancias */}
+                        <div>
+                          {/* NOTE: Mostrar ganancias */}
+                          {curso.ganancias ? (
+                            <p className='font-bold text-gray-900 text-sm'>
+                              €{curso.ganancias.toLocaleString()}.00
+                            </p>
+                          ) : (
+                            <span className='text-gray-300 text-lg'>—</span>
+                          )}
+                        </div>
+                        {/* Acciones */}
+                        <div>
+                          <button
+                            onClick={() => onEditCurso(curso)}
+                            className='text-sm font-bold text-[#c2a381] hover:underline'
+                          >
+                            {curso.estado.toLowerCase() === ESTADOS_CURSO.BORRADOR
+                              ? 'Continuar'
+                              : 'Editar'}
+                          </button>
                         </div>
                       </div>
-                      {/* Estado */}
-                      <div>
-                        <EstadoBadge estado={curso.estado} />
-                      </div>
-                      {/* Precio */}
-                      <div>
-                        {curso.precio ? (
-                          <>
-                            <p className='font-bold text-gray-900 text-sm'>
-                              {curso.precio.toLocaleString()}
-                            </p>
-                            <p className='text-xs text-green-600 font-semibold'>
-                              {curso.precio}
-                            </p>
-                          </>
-                        ) : (
-                          <span className='text-gray-300 text-lg'>—</span>
-                        )}
-                      </div>
-                      {/* Estudiantes */}
-                      <div>
-                        {curso.estudiantes ? (
-                          <>
-                            <p className='font-bold text-gray-900 text-sm'>
-                              {curso.estudiantes.toLocaleString()}
-                            </p>
-                            <p className='text-xs text-green-600 font-semibold'>
-                              {curso.estudiantesMes}
-                            </p>
-                          </>
-                        ) : (
-                          <span className='text-gray-300 text-lg'>—</span>
-                        )}
-                      </div>
-                      {/* Ganancias */}
-                      <div>
-                        {curso.ganancias ? (
-                          <p className='font-bold text-gray-900 text-sm'>
-                            €{curso.ganancias.toLocaleString()}.00
-                          </p>
-                        ) : (
-                          <span className='text-gray-300 text-lg'>—</span>
-                        )}
-                      </div>
-                      {/* Acciones */}
-                      <div>
-                        <button
-                          onClick={() => onEditCurso(curso)}
-                          className='text-sm font-bold text-[#c2a381] hover:underline'
-                        >
-                          {curso.estado.toLowerCase() === ESTADOS_CURSO.BORRADOR
-                            ? 'Continuar'
-                            : 'Editar'}
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Paginación */}
-            <div className='flex items-center justify-between px-6 py-3 border-t border-gray-100'>
-              <p className='text-xs text-gray-400'>
-                Mostrando 1–{cursosFiltrados.length} de {cursos.length} cursos
-              </p>
-              <div className='flex gap-1'>
-                <button
-                  className='w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 disabled:opacity-30'
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => p - 1)}
-                >
-                  <IconChevronLeft size={16} />
-                </button>
-                <button
-                  className='w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50'
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  <IconChevronRight size={16} />
-                </button>
+            {cursos.length > 0 && (
+              <div className='flex items-center justify-between px-6 py-3 border-t border-gray-100'>
+                <p className='text-xs text-gray-400'>
+                  Mostrando 1–{cursosFiltrados.length} de {cursos.length} cursos
+                </p>
+                <div className='flex gap-1'>
+                  <button
+                    className='w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 disabled:opacity-30'
+                    disabled={page <= 1}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
+                    <IconChevronLeft size={16} />
+                  </button>
+                  <button
+                    className='w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50'
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    <IconChevronRight size={16} />
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* ── Lista Móvil ── */}
           <div className='md:hidden space-y-4'>
             <p className='font-black text-gray-900'>Cursos activos</p>
-            {cursosFiltrados.map((curso) => (
-              <div
-                key={curso.id}
-                className='bg-white rounded-2xl border border-gray-100 shadow-sm p-4'
-              >
-                <div className='flex gap-3 mb-3'>
-                  <img
-                    src={curso.thumbnail}
-                    alt={curso.titulo}
-                    className='w-20 h-20 rounded-xl object-cover shrink-0'
-                  />
-                  <div className='flex-1 min-w-0'>
-                    <p className='font-bold text-gray-900 text-sm leading-snug'>
-                      {curso.titulo}
-                    </p>
-                    {curso.estudiantes && (
-                      <p className='text-xs text-[#c2a381] font-semibold mt-1 flex items-center gap-1'>
-                        <IconUsers size={12} /> {curso.estudiantes.toLocaleString()}{' '}
-                        estudiantes
+            {noCursos || cursosFiltrados.length === 0 ? (
+              <div className='flex flex-col items-center justify-center py-12 gap-3 text-center bg-white rounded-2xl border border-gray-100 shadow-sm p-6'>
+                <div className='w-12 h-12 rounded-2xl bg-[#faf7f5] flex items-center justify-center'>
+                  <IconChartBar size={24} className='text-[#c2a381]' stroke={1.5} />
+                </div>
+                <p className='font-bold text-gray-700 text-sm'>
+                  {noCursos
+                    ? 'No tienes cursos disponibles aún'
+                    : 'No hay cursos en esta categoría'}
+                </p>
+                <p className='text-xs text-gray-400'>
+                  {noCursos
+                    ? 'Crea tu primer curso con el botón "Nuevo Curso".'
+                    : 'Prueba seleccionando otra categoría.'}
+                </p>
+              </div>
+            ) : (
+              cursosFiltrados.map((curso) => (
+                <div
+                  key={curso.cursoId}
+                  className='bg-white rounded-2xl border border-gray-100 shadow-sm p-4'
+                >
+                  <div className='flex gap-3 mb-3'>
+                    <CourseImage
+                      src={curso.thumbnail}
+                      alt={curso.titulo}
+                      className='w-20 h-20 rounded-xl object-cover shrink-0'
+                      iconSize={32}
+                    />
+                    <div className='flex-1 min-w-0'>
+                      <p className='font-bold text-gray-900 text-sm leading-snug'>
+                        {curso.titulo}
                       </p>
-                    )}
-                    {curso.rating && (
-                      <p className='text-xs text-amber-500 font-semibold mt-0.5 flex items-center gap-1'>
-                        <IconStar size={12} fill='currentColor' /> {curso.rating}{' '}
-                        valoración
-                      </p>
-                    )}
-                    <div className='mt-1'>
-                      <EstadoBadge estado={curso.estado} />
+                      {curso.estudiantes && (
+                        <p className='text-xs text-[#c2a381] font-semibold mt-1 flex items-center gap-1'>
+                          <IconUsers size={12} /> {curso.estudiantes.toLocaleString()}{' '}
+                          estudiantes
+                        </p>
+                      )}
+                      {curso.rating && (
+                        <p className='text-xs text-amber-500 font-semibold mt-0.5 flex items-center gap-1'>
+                          <IconStar size={12} fill='currentColor' /> {curso.rating}{' '}
+                          valoración
+                        </p>
+                      )}
+                      <div className='mt-1'>
+                        <EstadoBadge estado={curso.estado} />
+                      </div>
                     </div>
                   </div>
+                  <div className='grid grid-cols-2 gap-2'>
+                    <button
+                      onClick={() => onEditCurso(curso)}
+                      className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#c2a381] text-[#c2a381] text-sm font-bold hover:bg-[#faf7f5] transition-colors'
+                    >
+                      <IconEdit size={14} />
+                      {curso.estado === 'borrador' ? 'Continuar' : 'Editar'}
+                    </button>
+                    <button className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-50 transition-colors'>
+                      <IconChartBar size={14} />
+                      Métricas
+                    </button>
+                  </div>
                 </div>
-                <div className='grid grid-cols-2 gap-2'>
-                  <button
-                    onClick={() => onEditCurso(curso)}
-                    className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#c2a381] text-[#c2a381] text-sm font-bold hover:bg-[#faf7f5] transition-colors'
-                  >
-                    <IconEdit size={14} />
-                    {curso.estado === 'borrador' ? 'Continuar' : 'Editar'}
-                  </button>
-                  <button className='flex items-center justify-center gap-1.5 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-bold hover:bg-gray-50 transition-colors'>
-                    <IconChartBar size={14} />
-                    Métricas
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* ── Stats Cards ── */}

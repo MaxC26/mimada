@@ -139,13 +139,10 @@ const CrearCurso = ({ curso = null, onBack }) => {
         const blob = await res.blob()
         formData.append('imagen_portada', blob, 'thumbnail.jpg')
       }
-      console.log(values)
 
       if (esEdicion) {
         formData.append('estado', values.estado)
         formData.append('cursoId', values.cursoid)
-        const data = Object.fromEntries(formData.entries())
-        console.log(data)
         await updateCurso(formData)
       } else {
         await createCurso(formData)
