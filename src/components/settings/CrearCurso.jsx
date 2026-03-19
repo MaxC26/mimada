@@ -184,15 +184,15 @@ const CrearCurso = ({ curso = null, onBack }) => {
         ) : (
           <Formik
             initialValues={{
-              cursoid: curso?.mmdcursoid || '',
+              cursoid: curso?.cursoId || '',
               titulo: curso?.titulo || '',
               descripcion: curso?.descripcion || '',
-              categoria: curso?.categoriaid || '',
+              categoria: curso?.categoriaId || '',
               precio: curso?.precio?.toString() || '',
               dificultad: curso?.nivel || '',
-              estado: curso?.estadoid || '',
+              estado: curso?.estadoId || '',
               duracion: curso?.duracion || '',
-              thumbnail: curso?.imagen_portada || null,
+              thumbnail: curso?.imagenPortada || null,
             }}
             validationSchema={validarCurso(esEdicion)}
             onSubmit={handleSubmit}
@@ -344,8 +344,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                       <option value=''>Selecciona una categoría</option>
                                       {categorias?.map((cat) => (
                                         <option
-                                          key={cat.mmdcategoriacursoid}
-                                          value={cat.mmdcategoriacursoid}
+                                          key={cat.categoriaId}
+                                          value={cat.categoriaId}
                                         >
                                           {cat.nombre}
                                         </option>
@@ -439,8 +439,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                         <option value=''>Selecciona un estado</option>
                                         {estados?.map((est) => (
                                           <option
-                                            key={est.mmdestadocursoid}
-                                            value={est.mmdestadocursoid}
+                                            key={est.estadoCursoId}
+                                            value={est.estadoCursoId}
                                           >
                                             {est.estado}
                                           </option>
