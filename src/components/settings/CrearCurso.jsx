@@ -140,6 +140,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
           titulo: videoData?.titulo || 'Nueva lección',
           descripcion: videoData?.descripcion || '',
           duracion: videoData?.duracion || '',
+          estado: 'procesando',
         },
       ])
     }
