@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
 import { Formik, Field, Form } from 'formik'
-import CustomModal from '../utils/CustomModal'
 import { toast } from 'sonner'
 import {
   IconPhoto,
@@ -290,50 +289,13 @@ const CrearCurso = ({ curso = null, onBack }) => {
                 setVideoFile(null)
               }
 
-              const isEliminado = estados?.find(
-                (est) => String(est.estadoCursoId) === String(values.estado)
-              )?.estado.toLowerCase() === 'eliminado'
+              const isEliminado =
+                estados
+                  ?.find((est) => String(est.estadoCursoId) === String(values.estado))
+                  ?.estado.toLowerCase() === 'eliminado'
 
               return (
                 <Form noValidate>
-                  <CustomModal
-                    isOpen={isConfirmadorEliminadoOpen}
-                    onClose={() => setIsConfirmadorEliminadoOpen(false)}
-                    contentLabel='Confirmar Eliminado'
-                    maxWidth='400px'
-                  >
-                    <div className='p-6'>
-                      <div className='flex items-center gap-3 mb-2'>
-                        <div className='w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500'>
-                          <IconTrash size={20} />
-                        </div>
-                        <h3 className='font-bold text-gray-900 text-lg'>
-                          ¿Eliminar Curso?
-                        </h3>
-                      </div>
-                      <p className='text-sm text-gray-500 mb-6 pl-13'>
-                        Estás a punto de cambiar el estado de este curso a{' '}
-                        <strong>Eliminado</strong>. Esta acción no se puede deshacer.
-                      </p>
-                      <div className='flex justify-end gap-3'>
-                        <button
-                          type='button'
-                          onClick={() => setIsConfirmadorEliminadoOpen(false)}
-                          className='px-5 py-2 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-100 transition-colors'
-                        >
-                          Cancelar
-                        </button>
-                        <button
-                          type='button'
-                          onClick={() => handleDeleteCursoConfirm(values.cursoid)}
-                          className='px-5 py-2 rounded-full bg-red-500 text-white font-bold text-sm shadow-md shadow-red-500/30 hover:bg-red-600 transition-all'
-                        >
-                          Sí, eliminar
-                        </button>
-                      </div>
-                    </div>
-                  </CustomModal>
-
                   {/* ── Header ── */}
                   <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8'>
                     <div>
@@ -791,14 +753,38 @@ const CrearCurso = ({ curso = null, onBack }) => {
                       {/* Botón guardar – desktop */}
                       <div className='hidden lg:block'>
                         {isEliminado ? (
-                          <button
-                            type='button'
-                            onClick={() => setIsConfirmadorEliminadoOpen(true)}
-                            disabled={isSubmitting}
-                            className='w-full py-3.5 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed'
-                          >
-                            Eliminar
-                          </button>
+                          isConfirmadorEliminadoOpen ? (
+                            <div className='flex gap-2 w-full animate-[fadeIn_0.2s_ease-out]'>
+                              <button
+                                type='button'
+                                onClick={() => handleDeleteCursoConfirm(values.cursoid)}
+                                disabled={isSubmitting}
+                                title='Confirmar eliminación'
+                                className='flex-1 py-3.5 border border-red-500 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all flex items-center justify-center gap-2 disabled:opacity-60'
+                              >
+                                <IconCheck size={18} stroke={2.5} />
+                                <span>Sí, eliminar</span>
+                              </button>
+                              <button
+                                type='button'
+                                onClick={() => setIsConfirmadorEliminadoOpen(false)}
+                                disabled={isSubmitting}
+                                className='w-[3.25rem] h-[3.25rem] rounded-full bg-gray-50 text-gray-500 border border-gray-200 hover:bg-gray-100 flex items-center justify-center transition-all shrink-0'
+                              >
+                                <IconX size={18} stroke={2.5} />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type='button'
+                              onClick={() => setIsConfirmadorEliminadoOpen(true)}
+                              disabled={isSubmitting}
+                              className='w-full py-3.5 rounded-full bg-red-50 text-red-500 font-bold border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed'
+                            >
+                              <IconTrash size={18} />
+                              Eliminar
+                            </button>
+                          )
                         ) : (
                           <button
                             type='submit'
@@ -821,14 +807,38 @@ const CrearCurso = ({ curso = null, onBack }) => {
                       {/* Botón guardar – mobile */}
                       <div className='lg:hidden'>
                         {isEliminado ? (
-                          <button
-                            type='button'
-                            onClick={() => setIsConfirmadorEliminadoOpen(true)}
-                            disabled={isSubmitting}
-                            className='w-full py-3.5 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed'
-                          >
-                            Eliminar
-                          </button>
+                          isConfirmadorEliminadoOpen ? (
+                            <div className='flex gap-2 w-full animate-[fadeIn_0.2s_ease-out]'>
+                              <button
+                                type='button'
+                                onClick={() => handleDeleteCursoConfirm(values.cursoid)}
+                                disabled={isSubmitting}
+                                title='Confirmar eliminación'
+                                className='flex-1 py-3.5 border border-red-500 rounded-full bg-red-500 text-white font-bold shadow-md shadow-red-500/30 hover:bg-red-600 transition-all flex items-center justify-center gap-2 disabled:opacity-60'
+                              >
+                                <IconCheck size={18} stroke={2.5} />
+                                <span>Sí, eliminar</span>
+                              </button>
+                              <button
+                                type='button'
+                                onClick={() => setIsConfirmadorEliminadoOpen(false)}
+                                disabled={isSubmitting}
+                                className='w-[3.25rem] h-[3.25rem] rounded-full bg-gray-50 text-gray-500 border border-gray-200 hover:bg-gray-100 flex items-center justify-center transition-all shrink-0'
+                              >
+                                <IconX size={18} stroke={2.5} />
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type='button'
+                              onClick={() => setIsConfirmadorEliminadoOpen(true)}
+                              disabled={isSubmitting}
+                              className='w-full py-3.5 rounded-full bg-red-50 text-red-500 font-bold border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed'
+                            >
+                              <IconTrash size={18} />
+                              Eliminar
+                            </button>
+                          )
                         ) : (
                           <button
                             type='submit'
@@ -860,4 +870,3 @@ const CrearCurso = ({ curso = null, onBack }) => {
 }
 
 export default CrearCurso
-
