@@ -14,7 +14,7 @@ import {
   apiGetCategorias,
   apiCrearCategoria,
   apiActualizarCategoria,
-  apiEliminarCategoria
+  apiEliminarCategoria,
 } from '../../services/categorias'
 
 const Categorias = () => {
@@ -47,7 +47,7 @@ const Categorias = () => {
 
   /* ── Iniciar edición ── */
   const iniciarEdicion = (cat) => {
-    setEditandoId(cat.mmdcategoriacursoid)
+    setEditandoId(cat.categoriaId)
     setEditNombre(cat.nombre)
   }
 
@@ -61,12 +61,14 @@ const Categorias = () => {
     try {
       const payload = {
         codigo: cat.codigo,
-        nombre: editNombre.trim()
+        nombre: editNombre.trim(),
       }
       const res = await apiActualizarCategoria(payload)
       if (res.value) {
-        setCategorias(prev =>
-          prev.map(c => c.mmdcategoriacursoid === cat.mmdcategoriacursoid ? { ...c, nombre: editNombre.trim() } : c)
+        setCategorias((prev) =>
+          prev.map((c) =>
+            c.categoriaId === cat.categoriaId ? { ...c, nombre: editNombre.trim() } : c,
+          ),
         )
         setEditandoId(null)
         toast.success(res.message || 'Categoría actualizada')
@@ -86,7 +88,7 @@ const Categorias = () => {
     try {
       const res = await apiEliminarCategoria(cat.codigo)
       if (res.value) {
-        setCategorias(prev => prev.filter(c => c.mmdcategoriacursoid !== cat.mmdcategoriacursoid))
+        setCategorias((prev) => prev.filter((c) => c.categoriaId !== cat.categoriaId))
         setConfirmEliminarId(null)
         toast.success(res.message || 'Categoría eliminada')
       }
@@ -107,7 +109,7 @@ const Categorias = () => {
       const payloadNombre = nueva.nombre.trim()
       // Simulamos la respuesta JSON proporcionada por el backend al crear
       const res = await apiCrearCategoria(payloadNombre)
-      setCategorias(prev => [...prev, res])
+      setCategorias((prev) => [...prev, res])
       setNueva({ nombre: '' })
       setMostrarFormNueva(false)
       toast.success('Categoría agregada exitosamente')
@@ -117,9 +119,10 @@ const Categorias = () => {
     setIsProcessing(false)
   }
 
+  console.log(categorias)
+
   return (
     <div className='w-full max-w-3xl mx-auto space-y-6'>
-
       {/* Header */}
       <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
         <div>
@@ -127,11 +130,13 @@ const Categorias = () => {
           {loadingInitial ? (
             <p className='text-gray-500 text-sm mt-0.5'>Cargando categorías...</p>
           ) : (
-             <p className='text-gray-500 text-sm mt-0.5'>{categorias.length} categorías registradas</p>
+            <p className='text-gray-500 text-sm mt-0.5'>
+              {categorias.length} categorías registradas
+            </p>
           )}
         </div>
         <button
-          onClick={() => setMostrarFormNueva(v => !v)}
+          onClick={() => setMostrarFormNueva((v) => !v)}
           disabled={loadingInitial || isProcessing}
           className='flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#c2a381] text-white font-bold text-sm shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:-translate-y-0.5 transition-all duration-300 self-start sm:self-auto disabled:opacity-50 disabled:cursor-not-allowed'
         >
@@ -155,8 +160,8 @@ const Categorias = () => {
             <input
               type='text'
               value={nueva.nombre}
-              onChange={e => setNueva({ nombre: e.target.value })}
-              onKeyDown={e => e.key === 'Enter' && agregar()}
+              onChange={(e) => setNueva({ nombre: e.target.value })}
+              onKeyDown={(e) => e.key === 'Enter' && agregar()}
               disabled={isProcessing}
               placeholder='Ej: Pestañas y Cejas'
               className='w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5] transition-all disabled:opacity-60 disabled:bg-gray-50'
@@ -169,11 +174,18 @@ const Categorias = () => {
               disabled={isProcessing}
               className='mt-2 px-6 py-2 rounded-full bg-[#c2a381] text-white font-bold text-sm hover:bg-[#a58b6c] transition-colors flex items-center gap-1.5 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm'
             >
-              {isProcessing ? <IconLoader2 size={15} className='animate-spin' /> : <IconCheck size={15} stroke={2.5} />} 
+              {isProcessing ? (
+                <IconLoader2 size={15} className='animate-spin' />
+              ) : (
+                <IconCheck size={15} stroke={2.5} />
+              )}
               {isProcessing ? 'Guardando...' : 'Agregar'}
             </button>
             <button
-              onClick={() => { setMostrarFormNueva(false); setNueva({ nombre: '' }) }}
+              onClick={() => {
+                setMostrarFormNueva(false)
+                setNueva({ nombre: '' })
+              }}
               disabled={isProcessing}
               className='mt-2 px-6 py-2 rounded-full border border-gray-200 bg-white text-gray-500 font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
             >
@@ -185,12 +197,17 @@ const Categorias = () => {
 
       {/* Lista de categorías */}
       <div className='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
-
         {/* Cabecera tabla */}
         <div className='grid grid-cols-[1fr_auto_auto] px-6 py-3 border-b border-gray-100'>
-          <span className='text-xs font-black text-gray-400 uppercase tracking-widest'>Categoría</span>
-          <span className='text-xs font-black text-gray-400 uppercase tracking-widest hidden sm:block w-32'>Código</span>
-          <span className='text-xs font-black text-gray-400 uppercase tracking-widest text-center w-24'>Acciones</span>
+          <span className='text-xs font-black text-gray-400 uppercase tracking-widest'>
+            Categoría
+          </span>
+          <span className='text-xs font-black text-gray-400 uppercase tracking-widest hidden sm:block w-32'>
+            Código
+          </span>
+          <span className='text-xs font-black text-gray-400 uppercase tracking-widest text-center w-24'>
+            Acciones
+          </span>
         </div>
 
         {/* Filas */}
@@ -200,20 +217,20 @@ const Categorias = () => {
           </div>
         ) : (
           <div className='divide-y divide-gray-50'>
-            {categorias.map(cat => (
+            {categorias.map((cat) => (
               <div
-                key={cat.mmdcategoriacursoid}
+                key={cat.categoriaId}
                 className='grid grid-cols-[1fr_auto_auto] items-center px-6 py-4 gap-4 hover:bg-gray-50/50 transition-colors'
               >
                 {/* Nombre / edición inline */}
-                {editandoId === cat.mmdcategoriacursoid ? (
+                {editandoId === cat.categoriaId ? (
                   <div className='flex items-center gap-2 min-w-0'>
                     <input
                       autoFocus
                       type='text'
                       value={editNombre}
-                      onChange={e => setEditNombre(e.target.value)}
-                      onKeyDown={e => {
+                      onChange={(e) => setEditNombre(e.target.value)}
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') guardarEdicion(cat)
                         if (e.key === 'Escape') cancelarEdicion()
                       }}
@@ -224,7 +241,9 @@ const Categorias = () => {
                 ) : (
                   <div className='flex items-center gap-3 min-w-0'>
                     <IconTag size={18} className='text-[#c2a381] shrink-0' />
-                    <span className='font-semibold text-gray-800 text-sm truncate'>{cat.nombre}</span>
+                    <span className='font-semibold text-gray-800 text-sm truncate'>
+                      {cat.nombre}
+                    </span>
                   </div>
                 )}
 
@@ -235,7 +254,7 @@ const Categorias = () => {
 
                 {/* Acciones */}
                 <div className='flex items-center justify-center gap-1 w-24'>
-                  {editandoId === cat.mmdcategoriacursoid ? (
+                  {editandoId === cat.categoriaId ? (
                     <>
                       <button
                         onClick={() => guardarEdicion(cat)}
@@ -243,7 +262,11 @@ const Categorias = () => {
                         className='w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 flex items-center justify-center transition-colors disabled:opacity-50'
                         title='Guardar'
                       >
-                        {isProcessing ? <IconLoader2 size={15} className='animate-spin' /> : <IconCheck size={15} stroke={2.5} />}
+                        {isProcessing ? (
+                          <IconLoader2 size={15} className='animate-spin' />
+                        ) : (
+                          <IconCheck size={15} stroke={2.5} />
+                        )}
                       </button>
                       <button
                         onClick={cancelarEdicion}
@@ -254,7 +277,7 @@ const Categorias = () => {
                         <IconX size={15} stroke={2} />
                       </button>
                     </>
-                  ) : confirmEliminarId === cat.mmdcategoriacursoid ? (
+                  ) : confirmEliminarId === cat.categoriaId ? (
                     <>
                       <button
                         onClick={() => eliminar(cat)}
@@ -262,7 +285,11 @@ const Categorias = () => {
                         title='Confirmar eliminación'
                         className='w-full sm:w-auto px-2 py-1 h-8 rounded-lg bg-red-50 text-red-500 font-bold text-xs hover:bg-red-100 flex items-center justify-center gap-1 transition-colors disabled:opacity-50'
                       >
-                        {isProcessing ? <IconLoader2 size={13} className='animate-spin' /> : <IconCheck size={13} stroke={2.5} />}
+                        {isProcessing ? (
+                          <IconLoader2 size={13} className='animate-spin' />
+                        ) : (
+                          <IconCheck size={13} stroke={2.5} />
+                        )}
                         <span className='hidden sm:inline'>Sí</span>
                       </button>
                       <button
@@ -284,7 +311,7 @@ const Categorias = () => {
                         <IconPencil size={15} />
                       </button>
                       <button
-                        onClick={() => setConfirmEliminarId(cat.mmdcategoriacursoid)}
+                        onClick={() => setConfirmEliminarId(cat.categoriaId)}
                         disabled={isProcessing || editandoId || confirmEliminarId}
                         className='w-8 h-8 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors disabled:opacity-50'
                         title='Eliminar'
@@ -303,7 +330,9 @@ const Categorias = () => {
                   <IconTag size={24} stroke={1.5} />
                 </div>
                 <p className='text-gray-500 font-semibold'>No hay categorías aún</p>
-                <p className='text-gray-400 text-sm mt-1'>Crea tu primera categoría con el botón de arriba.</p>
+                <p className='text-gray-400 text-sm mt-1'>
+                  Crea tu primera categoría con el botón de arriba.
+                </p>
               </div>
             )}
           </div>
@@ -312,9 +341,9 @@ const Categorias = () => {
 
       {/* Tip */}
       <p className='text-xs text-gray-400 text-center'>
-        Haz clic en ✎ para editar el nombre · Pulsa Enter para confirmar · Esc para cancelar
+        Haz clic en ✎ para editar el nombre · Pulsa Enter para confirmar · Esc para
+        cancelar
       </p>
-
     </div>
   )
 }
