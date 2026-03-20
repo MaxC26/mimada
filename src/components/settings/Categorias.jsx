@@ -40,6 +40,7 @@ const Categorias = () => {
       const data = await apiGetCategorias()
       setCategorias(data)
     } catch (e) {
+      console.error(e)
       toast.error('Error al cargar categorías')
     }
     setLoadingInitial(false)
@@ -74,6 +75,7 @@ const Categorias = () => {
         toast.success(res.message || 'Categoría actualizada')
       }
     } catch (e) {
+      console.error(e)
       toast.error('Error al actualizar')
     }
     setIsProcessing(false)
@@ -93,6 +95,7 @@ const Categorias = () => {
         toast.success(res.message || 'Categoría eliminada')
       }
     } catch (e) {
+      console.error(e)
       toast.error('Error al eliminar')
     }
     setIsProcessing(false)
@@ -114,12 +117,11 @@ const Categorias = () => {
       setMostrarFormNueva(false)
       toast.success('Categoría agregada exitosamente')
     } catch (e) {
+      console.error(e)
       toast.error('Error al agregar categoría')
     }
     setIsProcessing(false)
   }
-
-  console.log(categorias)
 
   return (
     <div className='w-full max-w-3xl mx-auto space-y-6'>
