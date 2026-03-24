@@ -53,9 +53,7 @@ function App() {
                 path={routes.dashboard.inicio}
                 element={
                   <ContenidoSection seccion={SECCIONES_DASHBOARD.INICIO}>
-                    {(contenido, setIsLoading) => (
-                      <Inicio contenido={contenido} setIsLoading={setIsLoading} />
-                    )}
+                    {(contenido) => <Inicio contenido={contenido} />}
                   </ContenidoSection>
                 }
               />
@@ -63,19 +61,15 @@ function App() {
                 path={routes.dashboard.servicios}
                 element={
                   <ContenidoSection seccion={SECCIONES_DASHBOARD.SERVICIOS}>
-                    {(contenido, setIsLoading) => (
-                      <Servicios contenido={contenido} setIsLoading={setIsLoading} />
-                    )}
+                    {(contenido) => <Servicios contenido={contenido} />}
                   </ContenidoSection>
                 }
               />
               <Route
                 path={routes.dashboard.historia}
                 element={
-                  <ContenidoSection seccion='historia'>
-                    {(contenido, setIsLoading) => (
-                      <Historia contenido={contenido} setIsLoading={setIsLoading} />
-                    )}
+                  <ContenidoSection seccion={SECCIONES_DASHBOARD.HISTORIA}>
+                    {(contenido) => <Historia contenido={contenido} />}
                   </ContenidoSection>
                 }
               />

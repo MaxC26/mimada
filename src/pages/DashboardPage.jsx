@@ -10,12 +10,12 @@ import {
   IconExternalLink,
   IconLayoutGrid,
 } from '@tabler/icons-react'
-import { useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../services/login'
 import logoMimada from '../assets/img/logo/logo-mimada.png'
 import { routes } from '../utils/rutas'
-import { decodeToken } from '../utils/utils'
+import { decodeToken, isTokenExpired } from '../utils/utils'
 import { SECCIONES_DASHBOARD } from '../utils/constantes'
 
 const navItems = [
@@ -56,7 +56,17 @@ const DashboardPage = () => {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  const rol = (decodeToken(localStorage.getItem('jwt'))?.rol || '').toUpperCase()
+  const jwt = localStorage.getItem('jwt')
+  const { nombre, rol } = decodeToken(jwt)
+
+  useEffect(() => {
+    if (jwt) {
+      const isExpired = isTokenExpired(jwt)
+      if (isExpired) {
+        logout()
+      }
+    }
+  }, [jwt])
 
   const handleLogout = () => logout(navigate)
 
@@ -87,12 +97,15 @@ const DashboardPage = () => {
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl flex flex-col transition-transform duration-300 md:sticky md:top-0 md:h-screen md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
       >
         {/* Logo */}
-        <div className='flex items-center gap-3 px-6 py-5 border-b border-gray-100'>
+        <Link
+          to={routes.inicio}
+          className='flex items-center gap-3 px-6 py-5 border-b border-gray-100'
+        >
           <img src={logoMimada} alt='Logo' className='h-10 w-auto object-contain' />
           <div>
             <p className='font-black text-gray-900 text-base leading-tight'>Mimadas</p>
             <span className='text-xs font-semibold text-[#c2a381] bg-[#faf7f5] px-2 py-0.5 rounded-full'>
-              {rol}
+              {rol.toUpperCase()}
             </span>
           </div>
           {/* Botón cerrar sidebar en móvil */}
@@ -102,7 +115,7 @@ const DashboardPage = () => {
           >
             <IconX size={20} />
           </button>
-        </div>
+        </Link>
 
         {/* Navegación */}
         <nav className='flex-1 px-3 py-5 space-y-1 overflow-y-auto'>
@@ -133,8 +146,7 @@ const DashboardPage = () => {
               />
             </div>
             <div className='flex-1 min-w-0'>
-              <p className='text-sm font-bold text-gray-900 truncate'>Lucía Méndez</p>
-              <p className='text-xs text-gray-400 truncate'>Socia Platinum</p>
+              <p className='text-sm font-bold text-gray-900 truncate'>{nombre}</p>
             </div>
           </div>
           {/* Ir a la web */}
@@ -189,4 +201,3 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
-

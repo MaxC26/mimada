@@ -5,18 +5,21 @@ import { routes } from '../../utils/rutas'
 import { updateSection } from '../../services/contenido'
 import { toast } from 'sonner'
 
-const Historia = ({ contenido, setIsLoading }) => {
-  const title  = contenido.find((item) => item.llave === 'textHistoria')
+const Historia = ({ contenido }) => {
+  const title = contenido.find((item) => item.llave === 'textHistoria')
   const imagen = contenido.find((item) => item.llave === 'imgHistoria')
 
   let ruta = ''
   let imagenPublica = ''
-  if (imagen) { ruta = imagen.ruta; imagenPublica = imagen.valor }
+  if (imagen) {
+    ruta = imagen.ruta
+    imagenPublica = imagen.valor
+  }
 
-  const [nameFile, setNameFile]         = useState('')
-  const [file, setFile]                 = useState(null)
+  const [nameFile, setNameFile] = useState('')
+  const [file, setFile] = useState(null)
   const [textHistoria, setTextHistoria] = useState(title ? title.valor : '')
-  const [charCount, setCharCount]       = useState(textHistoria.length)
+  const [charCount, setCharCount] = useState(textHistoria.length)
 
   const MAX = 500
 
@@ -33,7 +36,6 @@ const Historia = ({ contenido, setIsLoading }) => {
       toast.dismiss(toastId)
       if (response.status === 200) {
         toast.success('Sección actualizada correctamente')
-        setIsLoading(true)
       }
     } catch {
       toast.dismiss(toastId)
@@ -45,11 +47,13 @@ const Historia = ({ contenido, setIsLoading }) => {
 
   return (
     <div className='w-full max-w-4xl mx-auto space-y-6'>
-
       {/* Aviso */}
       <div className='flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 text-sm text-amber-800'>
         <span className='text-xl leading-none'>⚠️</span>
-        <p>Al guardar esta sección se reemplazará por completo el contenido actual que se muestra en la web.</p>
+        <p>
+          Al guardar esta sección se reemplazará por completo el contenido actual que se
+          muestra en la web.
+        </p>
       </div>
 
       <Formik
@@ -58,7 +62,6 @@ const Historia = ({ contenido, setIsLoading }) => {
       >
         {({ setFieldValue, isSubmitting }) => (
           <Form className='space-y-5'>
-
             {/* Card contenido */}
             <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
               <div className='flex items-center gap-2 mb-5'>
@@ -68,8 +71,12 @@ const Historia = ({ contenido, setIsLoading }) => {
 
               <div>
                 <div className='flex items-center justify-between mb-1.5'>
-                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest'>Texto Principal</label>
-                  <span className={`text-xs font-semibold ${hasError ? 'text-red-500' : 'text-gray-400'}`}>
+                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest'>
+                    Texto Principal
+                  </label>
+                  <span
+                    className={`text-xs font-semibold ${hasError ? 'text-red-500' : 'text-gray-400'}`}
+                  >
                     {charCount}/{MAX}
                   </span>
                 </div>
@@ -110,7 +117,9 @@ const Historia = ({ contenido, setIsLoading }) => {
                 disabled={hasError || isSubmitting}
                 className='px-8 py-2.5 rounded-full bg-[#c2a381] text-white font-bold text-sm shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2'
               >
-                {isSubmitting && <span className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />}
+                {isSubmitting && (
+                  <span className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                )}
                 Guardar Cambios
               </button>
               <button
@@ -122,7 +131,6 @@ const Historia = ({ contenido, setIsLoading }) => {
                 Previsualizar
               </button>
             </div>
-
           </Form>
         )}
       </Formik>

@@ -7,11 +7,11 @@ import LoadingSpinner from '../../components/utils/LoadingSpinner'
  *
  * Uso (render prop):
  *   <ContenidoSection seccion='Head'>
- *     {(contenido, setIsLoading) => <Inicio contenido={contenido} setIsLoading={setIsLoading} />}
+ *     {(contenido) => <Inicio contenido={contenido} />}
  *   </ContenidoSection>
  *
  * @param {string}    seccion  - Identificador de sección para la API
- * @param {Function}  children - Función que recibe (contenido, setIsLoading) y retorna JSX
+ * @param {Function}  children - Función que recibe (contenido) y retorna JSX
  */
 const ContenidoSection = ({ seccion, children }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -32,8 +32,7 @@ const ContenidoSection = ({ seccion, children }) => {
       </div>
     )
 
-  return children(contenido, setIsLoading)
+  return children(contenido)
 }
 
 export default ContenidoSection
-
