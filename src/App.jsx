@@ -22,6 +22,9 @@ import { Inicio } from './components/settings/Inicio'
 import Servicios from './components/settings/Servicios'
 import Historia from './components/settings/Historia'
 import Categorias from './components/settings/Categorias'
+import ExploreListPage from './pages/explore/ExploreListPage'
+import TodosCursosPage from './pages/explore/TodosCursosPage'
+import CursoDetallePage from './pages/explore/CursoDetallePage'
 import ReactModal from 'react-modal'
 
 function App() {
@@ -41,7 +44,11 @@ function App() {
       <Routes>
         <Route path={routes.inicio} element={<Home />} />
         <Route path={routes.home} element={<Home />} />
-        <Route path={routes.explorar} element={<Explore />} />
+        <Route path={routes.explorar + '/*'} element={<Explore />}>
+          <Route index element={<ExploreListPage />} />
+          <Route path='cursos' element={<TodosCursosPage />} />
+          <Route path='curso/:id' element={<CursoDetallePage />} />
+        </Route>
         <Route path={routes.login} element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>

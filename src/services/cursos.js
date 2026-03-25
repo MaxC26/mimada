@@ -44,6 +44,20 @@ export function getCursos() {
   })
 }
 
+export function getCursosPopulares() {
+  const url = `${routes.backend.url}${routes.backend.cursos.getCursosPopulares}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Crea un nuevo curso (acepta FormData para incluir archivos)
 export function createCurso(data) {
   return new Promise((resolve, reject) => {

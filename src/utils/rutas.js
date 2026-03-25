@@ -29,6 +29,7 @@ const routesBackend = Object.freeze({
     createVideo: '/cursos/videos',
     updateVideo: '/cursos/update-video',
     deleteVideo: '/cursos/videos?videoId=:id',
+    getCursosPopulares: '/cursos/populares',
   },
   categorias: {
     getCategorias: '/categorias',
@@ -48,6 +49,12 @@ export const routes = Object.freeze({
   home: context,
   inicio: '/',
   explorar: context + '/explorar',
+  explore: {
+    base: context + '/explorar',
+    inicio: context + '/explorar',
+    cursos: context + '/explorar/cursos',
+    detalle: context + '/explorar/curso/:id',
+  },
   login: context + '/login',
   settings: context + '/settings',
   dashboard: {
