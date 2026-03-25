@@ -7,25 +7,40 @@ import {
 } from '@tabler/icons-react'
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
 import Banner from './Banner'
-
-const categories = [
-  'Todos',
-  'Maquillaje',
-  'Skincare',
-  'Uñas',
-  'Cabello',
-  'Tratamientos Faciales',
-]
+import CursosPopulares from './CursosPopulares'
+import { getCursosPopulares } from '../../services/cursos'
 
 const ExploreListPage = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState(0)
+  const [cursosPopulares, setCursosPopulares] = useState([])
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    const timer = setTimeout(() => setIsLoading(false), 1200)
-    return () => clearTimeout(timer)
+    fetchData()
   }, [])
+
+  const fetchData = async () => {
+    setIsLoading(true)
+    try {
+      const [cursosResult] = await Promise.allSettled([getCursosPopulares()])
+
+      if (cursosResult.status === 'fulfilled') {
+        setCursosPopulares(cursosResult.value.data ?? [])
+      } else {
+        const status = cursosResult.reason?.response?.status
+        if (status === 404) {
+          setCursosPopulares([])
+        } else {
+          console.error('Error cargando cursos populares:', cursosResult.reason)
+          setCursosPopulares([])
+        }
+      }
+    } catch (err) {
+      console.error('Error inesperado:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <>
@@ -51,24 +66,8 @@ const ExploreListPage = () => {
             {/* Hero Banner */}
             <Banner />
 
-            {/* Categorías (Pills) */}
-            <div className='flex overflow-x-auto pb-4 mb-4 gap-3 hide-scrollbar'>
-              {categories.map((cat, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveCategory(index)}
-                  className={`whitespace-nowrap px-6 py-2.5 rounded-full text-base font-semibold transition-colors border shadow-sm ${
-                    index === activeCategory
-                      ? 'bg-[#c2a381] text-white border-[#c2a381]'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#c2a381] hover:text-[#c2a381]'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
             {/* Section Title */}
+            <CursosPopulares cursos={cursosPopulares} />
 
             {/* Sección Beneficios */}
             <div className='mt-12 mb-8 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm'>

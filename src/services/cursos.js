@@ -29,7 +29,7 @@ export function getEstadosCurso() {
   })
 }
 
-// Actualiza un curso existente
+// Obtiene todos los cursos
 export function getCursos() {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursos}`
   return new Promise((resolve, reject) => {
@@ -44,6 +44,7 @@ export function getCursos() {
   })
 }
 
+// Obtiene los cursos populares (para la página de Explorar)
 export function getCursosPopulares() {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursosPopulares}`
   return new Promise((resolve, reject) => {

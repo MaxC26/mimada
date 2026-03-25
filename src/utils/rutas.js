@@ -21,6 +21,7 @@ const routesBackend = Object.freeze({
   },
   cursos: {
     getCursos: '/cursos',
+    getCursosPopulares: '/cursos/populares',
     createCurso: '/cursos',
     updateCurso: '/cursos',
     deleteCurso: '/cursos?cursoId=:id',
@@ -29,7 +30,6 @@ const routesBackend = Object.freeze({
     createVideo: '/cursos/videos',
     updateVideo: '/cursos/update-video',
     deleteVideo: '/cursos/videos?videoId=:id',
-    getCursosPopulares: '/cursos/populares',
   },
   categorias: {
     getCategorias: '/categorias',
