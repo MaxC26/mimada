@@ -23,6 +23,7 @@ const ExploreListPage = () => {
     setIsLoading(true)
     try {
       const [cursosResult] = await Promise.allSettled([getCursosPopulares()])
+      console.log('🚀 ~ fetchData ~ cursosResult:', cursosResult)
 
       if (cursosResult.status === 'fulfilled') {
         setCursosPopulares(cursosResult.value.data ?? [])

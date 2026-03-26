@@ -44,6 +44,24 @@ export function getCursos() {
   })
 }
 
+// Obtiene el detalle completo de un curso por su ID
+export function getCursoById(cursoId) {
+  const url = `${routes.backend.url}${routes.backend.cursos.getCursoById}`.replace(
+    ':id',
+    cursoId,
+  )
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Obtiene los cursos populares (para la página de Explorar)
 export function getCursosPopulares() {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursosPopulares}`

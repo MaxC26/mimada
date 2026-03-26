@@ -81,10 +81,10 @@ const TodosCursosPage = () => {
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-4'>
           <div>
             <h1 className='text-3xl md:text-4xl font-black text-gray-900 leading-tight'>
-              Todos los <span className='text-[#c2a381]'>Cursos</span>
+              Todos los cursos
             </h1>
             <p className='text-gray-500 mt-1'>
-              {cursos.length} cursos disponibles para ti
+              {cursos.length} cursos disponible(s) para ti
             </p>
           </div>
 
@@ -105,13 +105,14 @@ const TodosCursosPage = () => {
       </div>
 
       {/* Filtros */}
-      <div className='flex items-center gap-3 mb-6 flex-wrap'>
-        <div className='flex overflow-x-auto pb-4 mb-4 gap-3 hide-scrollbar flex-1'>
+      <div className='flex flex-col lg:flex-row lg:items-center gap-4 mb-6'>
+        {/* Categorías con scroll horizontal */}
+        <div className='flex overflow-x-auto gap-2 py-2 px-1 hide-scrollbar w-full lg:flex-1'>
           {[{ categoriaId: 0, nombre: 'Todos' }, ...(categorias || [])].map((cat) => (
             <button
               key={cat.categoriaId}
               onClick={() => setActiveCategory(cat.categoriaId)}
-              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-base font-semibold transition-colors border shadow-sm ${
+              className={`whitespace-nowrap px-5 py-2 rounded-full text-sm lg:text-base font-semibold transition-colors border shadow-sm ${
                 cat.categoriaId === activeCategory
                   ? 'bg-[#c2a381] text-white border-[#c2a381]'
                   : 'bg-white text-gray-600 border-gray-200 hover:border-[#c2a381] hover:text-[#c2a381]'
@@ -121,14 +122,18 @@ const TodosCursosPage = () => {
             </button>
           ))}
         </div>
-        <button className='flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-600 font-semibold hover:border-[#c2a381] hover:text-[#c2a381] transition-colors shadow-sm shrink-0'>
-          <IconAdjustmentsHorizontal size={15} />
-          Filtros
-        </button>
-        <button className='flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-600 font-semibold hover:border-[#c2a381] hover:text-[#c2a381] transition-colors shadow-sm shrink-0'>
-          <IconSortDescending size={15} />
-          Ordenar
-        </button>
+
+        {/* Botones de acción */}
+        <div className='flex items-center gap-2 w-full lg:w-auto shrink-0'>
+          <button className='flex-1 lg:flex-none flex justify-center items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-600 font-semibold hover:border-[#c2a381] hover:text-[#c2a381] transition-colors shadow-sm'>
+            <IconAdjustmentsHorizontal size={15} />
+            Filtros
+          </button>
+          <button className='flex-1 lg:flex-none flex justify-center items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-gray-600 font-semibold hover:border-[#c2a381] hover:text-[#c2a381] transition-colors shadow-sm'>
+            <IconSortDescending size={15} />
+            Ordenar
+          </button>
+        </div>
       </div>
 
       {/* Contenido */}

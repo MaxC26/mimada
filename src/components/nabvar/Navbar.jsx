@@ -34,7 +34,7 @@ export const Navbar = ({ isExplore = false }) => {
     >
       <div className='container mx-auto px-4 lg:px-8 h-full flex items-center justify-between'>
         {/* Logo */}
-        <div className='flex items-center gap-1 md:gap-2'>
+        <Link to={routes.inicio} className='flex items-center gap-1 md:gap-2'>
           <img
             src={logoMimada}
             alt='Logo Mimada'
@@ -43,7 +43,7 @@ export const Navbar = ({ isExplore = false }) => {
           <span className='text-2xl md:text-3xl font-bold text-[#c2a381] ml-1 md:ml-2'>
             Mimada
           </span>
-        </div>
+        </Link>
 
         {/* Barra de Búsqueda Centrada (Solo si es Explore y Desktop) */}
         {isExplore && (
@@ -77,7 +77,7 @@ export const Navbar = ({ isExplore = false }) => {
                 </li>
                 <li>
                   <Link
-                    to={routes.explorar}
+                    to={routes.explore.inicio}
                     className='text-gray-800 text-base font-medium hover:text-[#c2a381] transition-colors'
                   >
                     Explorar
@@ -106,7 +106,7 @@ export const Navbar = ({ isExplore = false }) => {
                 </li>
                 <li>
                   <Link
-                    to={routes.explorar}
+                    to={routes.explore.inicio}
                     className='text-[#c2a381] text-sm lg:text-base font-medium transition-colors'
                   >
                     Explorar

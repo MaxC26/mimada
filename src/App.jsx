@@ -44,10 +44,10 @@ function App() {
       <Routes>
         <Route path={routes.inicio} element={<Home />} />
         <Route path={routes.home} element={<Home />} />
-        <Route path={routes.explorar + '/*'} element={<Explore />}>
+        <Route path={routes.explore.inicio} element={<Explore />}>
           <Route index element={<ExploreListPage />} />
-          <Route path='cursos' element={<TodosCursosPage />} />
-          <Route path='curso/:id' element={<CursoDetallePage />} />
+          <Route path={routes.explore.cursos} element={<TodosCursosPage />} />
+          <Route path={routes.explore.detalle} element={<CursoDetallePage />} />
         </Route>
         <Route path={routes.login} element={<LoginPage />} />
 

@@ -21,7 +21,8 @@ const routesBackend = Object.freeze({
   },
   cursos: {
     getCursos: '/cursos',
-    getCursosPopulares: '/cursos/populares',
+    getCursoById: '/cursos/detalle?cursoId=:id',
+    getCursosPopulares: '/cursos/top',
     createCurso: '/cursos',
     updateCurso: '/cursos',
     deleteCurso: '/cursos?cursoId=:id',
@@ -48,12 +49,11 @@ const routeFiles = Object.freeze({
 export const routes = Object.freeze({
   home: context,
   inicio: '/',
-  explorar: context + '/explorar',
   explore: {
     base: context + '/explorar',
     inicio: context + '/explorar',
     cursos: context + '/explorar/cursos',
-    detalle: context + '/explorar/curso/:id',
+    detalle: context + '/explorar/cursos/:id',
   },
   login: context + '/login',
   settings: context + '/settings',
