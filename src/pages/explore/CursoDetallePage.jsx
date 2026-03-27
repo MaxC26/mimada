@@ -35,7 +35,7 @@ const CursoDetallePage = () => {
           newData = { ...newData, lecciones: resVideos.value.data }
         } else {
           if (resCurso.status === 'fulfilled') {
-            setError(
+            console.error(
               resVideos.reason?.response?.data?.message ??
                 'No se pudo cargar las lecciones.',
             )

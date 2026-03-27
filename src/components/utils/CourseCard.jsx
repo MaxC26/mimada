@@ -1,4 +1,4 @@
-import { IconShoppingCart, IconStarFilled } from '@tabler/icons-react'
+import { IconShoppingCart } from '@tabler/icons-react'
 import RatingStars from './RatingStars'
 
 export const CourseCard = ({
@@ -56,11 +56,15 @@ export const CourseCard = ({
 
         {/* Ratings */}
         <div className='flex items-center gap-1 mb-4 mt-auto'>
-          <span className='font-bold text-sm text-gray-700 ml-1'>
-            {parseFloat(calificacionPromedio).toFixed(1)}
-          </span>
-          <RatingStars rating={calificacionPromedio} size={14} />
-          <span className='text-gray-400 text-xs ml-1'>({totalCalificaciones})</span>
+          {parseFloat(calificacionPromedio) > 0 && (
+            <>
+              <span className='font-bold text-sm text-gray-700 ml-1'>
+                {parseFloat(calificacionPromedio).toFixed(1)}
+              </span>
+              <RatingStars rating={calificacionPromedio} size={14} />
+              <span className='text-gray-400 text-xs ml-1'>({totalCalificaciones})</span>
+            </>
+          )}
         </div>
 
         {/* Footer de Tarjeta: Precio y Carrito/Boton */}

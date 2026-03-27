@@ -29,7 +29,6 @@ const AccordionItem = ({ index, titulo }) => {
 /* ── Componente principal ── */
 const CursoDetalle = ({ data, onBack }) => {
   const [tab, setTab] = useState('descripcion')
-  const [playing, setPlaying] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
 
   console.log(data)
@@ -50,7 +49,7 @@ const CursoDetalle = ({ data, onBack }) => {
     reviews: reseñasData.map((r, idx) => ({
       nombre: `${r.nombre || ''} ${r.apellido || ''}`.trim(),
       avatar: `https://i.pravatar.cc/150?img=${(idx % 50) + 1}`,
-      texto: r.comentario || 'Excelente curso.',
+      texto: r.comentario,
       estrellas: parseInt(r.calificacion) || 5,
     })),
     ratingDist: [5, 4, 3, 2, 1].map((stars) => {
@@ -145,7 +144,7 @@ const CursoDetalle = ({ data, onBack }) => {
             {/* Play button */}
             <button
               className='absolute inset-0 flex items-center justify-center group'
-              onClick={() => setPlaying(true)}
+              // onClick={() => setPlaying(true)}
             >
               <div className='w-16 h-16 rounded-full bg-[#c2a381] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300'>
                 <IconPlayerPlay size={28} fill='white' className='text-white ml-1' />
