@@ -8,20 +8,27 @@ import { Navbar } from '../components/nabvar/Navbar'
 import { useEffect } from 'react'
 import { getAllContenido } from '../services/contenido'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
+import { toast } from 'sonner'
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const getAllContent = async () => {
     const updatedContent = { ...content } // Copia del estado actual
-    const contenido = await getAllContenido()
-    contenido.data.forEach((item) => {
-      if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
-        updatedContent[item.llave] = item.valor
-      }
-    })
-    setContent(updatedContent)
-    setIsLoading(false)
+    try {
+      const contenido = await getAllContenido()
+      contenido.data.forEach((item) => {
+        if (Object.prototype.hasOwnProperty.call(updatedContent, item.llave)) {
+          updatedContent[item.llave] = item.valor
+        }
+      })
+      setContent(updatedContent)
+    } catch (error) {
+      console.error('Error al obtener el contenido:', error)
+      toast.error('No se pudo cargar el contenido')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const [content, setContent] = useState({
@@ -66,4 +73,3 @@ const Home = () => {
 }
 
 export default Home
-
