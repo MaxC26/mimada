@@ -1,4 +1,5 @@
 import { IconShoppingCart, IconStarFilled } from '@tabler/icons-react'
+import RatingStars from './RatingStars'
 
 export const CourseCard = ({
   titulo,
@@ -53,22 +54,12 @@ export const CourseCard = ({
           <p className='text-gray-500 text-sm'>{author ?? 'Mimada'}</p>
         </div>
 
-        {/* // NOTE - FIX para que muestre las estrellas necesarias */}
-        {/* Poner las estrellas dependiendo de la calificación */}
         {/* Ratings */}
         <div className='flex items-center gap-1 mb-4 mt-auto'>
-          {/* <IconStarFilled size={14} className='text-[#c2a381] shrink-0' /> */}
           <span className='font-bold text-sm text-gray-700 ml-1'>
-            {calificacionPromedio}
+            {parseFloat(calificacionPromedio).toFixed(1)}
           </span>
-          {/* NOTE - Use Stars Component */}
-          <div className='flex text-[#ffb800] ml-1'>
-            <IconStarFilled size={12} />
-            <IconStarFilled size={12} />
-            <IconStarFilled size={12} />
-            <IconStarFilled size={12} />
-            <IconStarFilled size={12} />
-          </div>
+          <RatingStars rating={calificacionPromedio} size={14} />
           <span className='text-gray-400 text-xs ml-1'>({totalCalificaciones})</span>
         </div>
 

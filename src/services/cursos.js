@@ -44,6 +44,24 @@ export function getCursos() {
   })
 }
 
+// Obtiene todos los cursos por estado
+export function getCursosByEstado(estado) {
+  const url = `${routes.backend.url}${routes.backend.cursos.getCursosByEstado}`.replace(
+    ':estado',
+    estado,
+  )
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Obtiene el detalle completo de un curso por su ID
 export function getCursoById(cursoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursoById}`.replace(
