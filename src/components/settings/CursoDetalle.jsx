@@ -100,6 +100,7 @@ const CURSO_MOCK = {
   },
 }
 
+// NOTE - hacer componente
 /* ── Sub: Stars ── */
 const Stars = ({ rating, size = 16 }) => (
   <div className='flex gap-0.5'>
@@ -116,6 +117,7 @@ const Stars = ({ rating, size = 16 }) => (
   </div>
 )
 
+// NOTE - Modify to show the lectures
 /* ── Sub: Accordion item ── */
 const AccordionItem = ({ index, titulo, lecciones }) => {
   const [open, setOpen] = useState(false)
@@ -154,13 +156,14 @@ const AccordionItem = ({ index, titulo, lecciones }) => {
 const CursoDetalle = ({ data, onBack }) => {
   const [tab, setTab] = useState('descripcion')
   const [playing, setPlaying] = useState(false)
+  const [showAllReviews, setShowAllReviews] = useState(false)
 
   console.log(data)
 
   // Transformar datos del API (o fallback) a la estructura plana usada por React
   const curso = data?.curso ?? {}
-  const ratingData = data?.rating || { promedio: 0, total: 0, distribucion: [] }
   const reseñasData = data?.reseñas || []
+  const ratingData = data?.rating || { promedio: 0, total: 0, distribucion: [] }
   // const extra = data?.extra
 
   const detalle = {
@@ -174,6 +177,20 @@ const CursoDetalle = ({ data, onBack }) => {
     // precioOriginal: extra.precioOriginal,
     // descuento: extra.descuento,
     // duracion: extra.duracion,
+    reviews: reseñasData.map((r, idx) => ({
+      nombre: `${r.nombre || ''} ${r.apellido || ''}`.trim(),
+      avatar: `https://i.pravatar.cc/150?img=${(idx % 50) + 1}`,
+      texto: r.comentario || 'Excelente curso.',
+      estrellas: parseInt(r.calificacion) || 5,
+    })),
+    //
+    // NOTE - ESTO ES SOLO PARA PROBAR
+    // reviews: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
+    //   nombre: `Estudiante ${i}`,
+    //   avatar: `https://i.pravatar.cc/150?img=${(i % 50) + 1}`,
+    //   texto: `Este curso es excelente, lo recomiendo mucho. ${i}`,
+    //   estrellas: (i % 5) + 1,
+    // })),
     rating: parseFloat(ratingData.promedio) || 0,
     totalReviews: ratingData.total || 0,
     // incluye: extra.incluye,
@@ -184,6 +201,7 @@ const CursoDetalle = ({ data, onBack }) => {
       { icon: IconStar, texto: 'Acceso vitalicio' },
     ],
     // garantia: extra.garantia,
+    garantia: '7 días de garantía incondicional',
     // beneficios: extra.beneficios,
     // instructor: extra.instructor,
     instructor: {
@@ -193,13 +211,14 @@ const CursoDetalle = ({ data, onBack }) => {
       avatar: 'https://i.pravatar.cc/150?img=47',
       bio: 'Referencia nacional de lujo, la Dra. Helena Silva formó más de 5.000 alumnas en todo el Brasil. Su metodología fusiona la excelencia del arte con el humanismo de los atenciones estéticos.',
     },
-    // curriculo: extra.curriculo,
-    reviews: reseñasData.map((r, idx) => ({
-      nombre: `${r.nombre || ''} ${r.apellido || ''}`.trim(),
-      avatar: `https://i.pravatar.cc/150?img=${(idx % 50) + 1}`,
-      texto: r.comentario || 'Excelente curso.',
-      estrellas: parseInt(r.calificacion) || 5,
-    })),
+    // lecciones: leccionesData,
+    lecciones: [
+      { titulo: 'Introducción al Método Mimadas', lecciones: 3 },
+      { titulo: 'Anatomía y Visagismo Aplicado', lecciones: 5 },
+      { titulo: 'Técnicas de Harmonización Labial', lecciones: 4 },
+      { titulo: 'Protocolos Avanzados de Botulínica', lecciones: 6 },
+      { titulo: 'Marketing para Clínicas de Lujo', lecciones: 3 },
+    ],
     ratingDist: [5, 4, 3, 2, 1].map((stars) => {
       const match = ratingData.distribucion?.find(
         (d) => parseInt(d.calificacion) === stars,
@@ -282,7 +301,7 @@ const CursoDetalle = ({ data, onBack }) => {
             {[
               { id: 'descripcion', label: 'Descripción' },
               { id: 'instructor', label: 'Instructor' },
-              { id: 'curriculo', label: 'Currículo' },
+              { id: 'lecciones', label: 'Lecciones' },
             ].map((t) => (
               <button
                 key={t.id}
@@ -354,13 +373,13 @@ const CursoDetalle = ({ data, onBack }) => {
             </div>
           )}
 
-          {/* Tab: Currículo */}
-          {tab === 'curriculo' && (
+          {/* Tab: Lecciones */}
+          {tab === 'lecciones' && (
             <div className='space-y-3'>
               <h3 className='font-black text-gray-900 text-xl mb-4'>
-                Contenido Programático
+                Contenido del curso
               </h3>
-              {detalle?.curriculo?.map((mod, i) => (
+              {detalle?.lecciones?.map((mod, i) => (
                 <AccordionItem
                   key={mod.titulo}
                   index={i + 1}
@@ -406,11 +425,11 @@ const CursoDetalle = ({ data, onBack }) => {
                   ))}
                 </div>
               </div>
-              {/* Tarjetas de review */}
+              {/* Tarjetas de review (Máximo 3) */}
               <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                {detalle?.reviews?.map((rev) => (
+                {detalle?.reviews?.slice(0, 3).map((rev, idx) => (
                   <div
-                    key={rev.nombre}
+                    key={`card-${rev.nombre}-${idx}`}
                     className='bg-white border border-gray-100 rounded-2xl p-5 shadow-sm'
                   >
                     <div className='flex items-center gap-3 mb-3'>
@@ -428,10 +447,48 @@ const CursoDetalle = ({ data, onBack }) => {
                   </div>
                 ))}
               </div>
-              <button className='mt-4 text-sm font-bold text-[#c2a381] hover:underline flex items-center gap-1'>
-                Ver los {detalle?.totalReviews?.toLocaleString()} comentarios{' '}
-                <IconChevronDown size={16} />
-              </button>
+
+              {/* Lista adicional de comentarios */}
+              {showAllReviews && detalle?.reviews?.length > 3 && (
+                <div className='mt-6 flex flex-col gap-4'>
+                  {detalle.reviews.slice(3).map((rev, idx) => (
+                    <div
+                      key={`list-${rev.nombre}-${idx}`}
+                      className='flex items-start gap-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow'
+                    >
+                      <img
+                        src={rev.avatar}
+                        alt={rev.nombre}
+                        className='w-12 h-12 rounded-full object-cover shrink-0'
+                      />
+                      <div className='flex-1'>
+                        <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-1'>
+                          <p className='text-sm font-black text-gray-900'>{rev.nombre}</p>
+                          <Stars rating={rev.estrellas} size={13} />
+                        </div>
+                        <p className='text-sm text-gray-600 leading-relaxed'>
+                          {rev.texto}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {detalle?.reviews?.length > 3 && (
+                <button
+                  onClick={() => setShowAllReviews(!showAllReviews)}
+                  className='mt-6 text-sm font-bold text-[#c2a381] hover:underline flex items-center justify-center gap-1 w-full sm:w-auto mx-auto'
+                >
+                  {showAllReviews
+                    ? 'Mostrar menos'
+                    : `Ver todos los ${detalle?.totalReviews?.toLocaleString() || detalle?.reviews?.length} comentarios`}
+                  <IconChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${showAllReviews ? 'rotate-180' : ''}`}
+                  />
+                </button>
+              )}
             </div>
           )}
         </div>
