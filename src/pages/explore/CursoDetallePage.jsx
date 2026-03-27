@@ -67,19 +67,19 @@ const CursoDetallePage = () => {
     )
   }
 
-  // if (error) {
-  //   return (
-  //     <div className='max-w-6xl mx-auto px-4 lg:px-8 py-20 flex flex-col items-center gap-4 text-center'>
-  //       <p className='text-gray-500 text-sm'>{error}</p>
-  //       <button
-  //         onClick={handleBack}
-  //         className='text-sm font-bold text-[#c2a381] hover:underline'
-  //       >
-  //         ← Volver
-  //       </button>
-  //     </div>
-  //   )
-  // }
+  if (error) {
+    return (
+      <div className='max-w-6xl mx-auto px-4 lg:px-8 py-20 flex flex-col items-center gap-4 text-center'>
+        <p className='text-gray-500 text-sm'>{error}</p>
+        <button
+          onClick={handleBack}
+          className='text-sm font-bold text-[#c2a381] hover:underline'
+        >
+          ← Volver
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className='max-w-6xl mx-auto px-4 lg:px-8'>
