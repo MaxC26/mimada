@@ -6,7 +6,7 @@ import {
   IconUsersGroup,
 } from '@tabler/icons-react'
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
-import Banner from './Banner'
+import Banner from '../../components/explore/Banner'
 import CursosPopulares from './CursosPopulares'
 import { getCursosPopulares } from '../../services/cursos'
 

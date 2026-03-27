@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import CursoDetalle from '../../components/settings/CursoDetalle'
-import { getCursoById } from '../../services/cursos'
+import CursoDetalle from '../../components/explore/CursoDetalle'
+import { getCursoById, getVideosCurso } from '../../services/cursos'
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
 
 const CursoDetallePage = () => {
@@ -14,19 +14,45 @@ const CursoDetallePage = () => {
 
   useEffect(() => {
     if (!id) return
+
+    fetchData(id)
+  }, [id])
+
+  const fetchData = async (id) => {
     setLoading(true)
     setError(null)
-    getCursoById(id)
-      .then((res) => {
-        setData(res.data)
-      })
-      .catch((err) => {
-        setError(err?.response?.data?.message ?? 'No se pudo cargar el curso.')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [id])
+    let newData = {}
+    try {
+      const [resCurso, resVideos] = await Promise.allSettled([
+        getCursoById(id),
+        getVideosCurso(id),
+      ])
+
+      if (resCurso.status === 'fulfilled') {
+        newData = { ...resCurso.value.data }
+
+        if (resVideos.status === 'fulfilled') {
+          newData = { ...newData, lecciones: resVideos.value.data }
+        } else {
+          if (resCurso.status === 'fulfilled') {
+            setError(
+              resVideos.reason?.response?.data?.message ??
+                'No se pudo cargar las lecciones.',
+            )
+          }
+        }
+      } else {
+        setError(
+          resCurso.reason?.response?.data?.message ?? 'No se pudo cargar el curso.',
+        )
+      }
+    } catch (err) {
+      console.error('Error inesperado:', err)
+    } finally {
+      setLoading(false)
+      setData(newData)
+    }
+  }
 
   const handleBack = () => {
     navigate(-1)

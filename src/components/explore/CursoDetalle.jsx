@@ -6,148 +6,22 @@ import {
   IconBook2,
   IconCertificate,
   IconChevronDown,
-  IconChevronRight,
   IconArrowLeft,
   IconShoppingCart,
   IconCheck,
 } from '@tabler/icons-react'
+import RatingStars from '../utils/RatingStars'
 
-/* ── Datos de ejemplo devueltos como mock si no hay curso ── */
-const CURSO_MOCK = {
-  curso: {
-    cursoId: 1,
-    titulo: 'Mimadas Premium: Masterclass de Estética y Visagismo',
-    descripcion:
-      'Este curso fue desarrollado para profesionales que buscan elevar la calidad de sus atenciones al máximo. A través de módulos prácticos y teóricos, aprenderás técnicas avanzadas de harmonización facial, utilizando los protocolos exclusivos que formarán Mimadas una referencia nacional.',
-    imagenPortada:
-      'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=1200&auto=format&fit=crop',
-    precio: '89.00',
-    nivel: 'avanzado',
-    calificacionPromedio: '4.9',
-    totalCalificaciones: 1250,
-    categoria: 'Mimadas Premium',
-  },
-  rating: {
-    promedio: '4.9',
-    total: 1250,
-    distribucion: [
-      { calificacion: 5, total: '975' },
-      { calificacion: 4, total: '150' },
-      { calificacion: 3, total: '87' },
-      { calificacion: 2, total: '25' },
-      { calificacion: 1, total: '13' },
-    ],
-  },
-  reseñas: [
-    {
-      calificacion: 5,
-      comentario:
-        'El curso superó todas mis expectativas. La metodología es muy completa y los protocolos de lujo me han marcado la diferencia.',
-      fechaCreacion: '2026-03-24T23:03:39.662Z',
-      nombre: 'Ana María',
-      apellido: 'Castro',
-    },
-    {
-      calificacion: 4,
-      comentario:
-        'Lo que más me gustó fueron los detalles que nadie te enseña. Las técnicas avanzadas que no vi en ningún otro lugar.',
-      fechaCreacion: '2026-03-24T23:18:12.821Z',
-      nombre: 'Roberta',
-      apellido: 'Pérez',
-    },
-    {
-      calificacion: 5,
-      comentario:
-        'Mejor reconocimiento que he tenido. El soporte es increíble y la plataforma es muy fácil de usar. ¡Estoy muy contenta!',
-      fechaCreacion: '2026-03-24T23:13:09.077Z',
-      nombre: 'Luciana',
-      apellido: 'Gomes',
-    },
-  ],
-  extra: {
-    subtitulo:
-      'Perfecciona tus técnicas con la metodología exclusiva Mimadas y destácate en el mercado de lujo.',
-    precioOriginal: 120.0,
-    descuento: 26,
-    duracion: '11:28',
-    garantia: '7 días de garantía incondicional',
-    incluye: [
-      { icon: IconClock, texto: '40 horas de contenido en video' },
-      { icon: IconBook2, texto: 'Apuntes PDF completos' },
-      { icon: IconCertificate, texto: 'Certificado de conclusión' },
-      { icon: IconStar, texto: 'Acceso vitalicio' },
-    ],
-    beneficios: [
-      'Técnicas al nivel de alto patrón',
-      'Protocolos de botulínica premium',
-      'Marketing y gestión para clínicas',
-      'Certificación reconocida Mimadas',
-    ],
-    instructor: {
-      nombre: 'Dra. Helena Silva',
-      titulo: 'Especialista en Estética Avanzada',
-      tags: ['15 AÑOS DE EXP.', 'PROFA NACIONAL'],
-      avatar: 'https://i.pravatar.cc/150?img=47',
-      bio: 'Referencia nacional de lujo, la Dra. Helena Silva formó más de 5.000 alumnas en todo el Brasil. Su metodología fusiona la excelencia del arte con el humanismo de los atenciones estéticos.',
-    },
-    curriculo: [
-      { titulo: 'Introducción al Método Mimadas', lecciones: 3 },
-      { titulo: 'Anatomía y Visagismo Aplicado', lecciones: 5 },
-      { titulo: 'Técnicas de Harmonización Labial', lecciones: 4 },
-      { titulo: 'Protocolos Avanzados de Botulínica', lecciones: 6 },
-      { titulo: 'Marketing para Clínicas de Lujo', lecciones: 3 },
-    ],
-  },
-}
-
-// NOTE - hacer componente
-/* ── Sub: Stars ── */
-const Stars = ({ rating, size = 16 }) => (
-  <div className='flex gap-0.5'>
-    {[1, 2, 3, 4, 5].map((i) => (
-      <IconStar
-        key={i}
-        size={size}
-        className={
-          i <= Math.round(rating) ? 'fill-[#c2a381] text-[#c2a381]' : 'text-gray-300'
-        }
-        stroke={0}
-      />
-    ))}
-  </div>
-)
-
-// NOTE - Modify to show the lectures
 /* ── Sub: Accordion item ── */
-const AccordionItem = ({ index, titulo, lecciones }) => {
-  const [open, setOpen] = useState(false)
+const AccordionItem = ({ index, titulo }) => {
   return (
-    <div
-      className={`border border-gray-100 rounded-xl overflow-hidden transition-all ${open ? 'bg-[#faf7f5]' : 'bg-white hover:bg-gray-50'}`}
-    >
-      <button
-        className='w-full flex items-center justify-between px-5 py-4 text-left'
-        onClick={() => setOpen(!open)}
-      >
-        <div className='flex items-center gap-3'>
-          <span className='w-7 h-7 rounded-lg bg-[#c2a381] text-white text-xs font-black flex items-center justify-center shrink-0'>
-            {String(index).padStart(2, '0')}
-          </span>
-          <span className='font-semibold text-gray-800 text-sm'>{titulo}</span>
-        </div>
-        {open ? (
-          <IconChevronDown size={18} className='text-[#c2a381] shrink-0' />
-        ) : (
-          <IconChevronRight size={18} className='text-gray-400 shrink-0' />
-        )}
-      </button>
-      {open && (
-        <div className='px-5 pb-4'>
-          <p className='text-xs text-gray-500 ml-10'>
-            {lecciones} lecciones incluidas en este módulo
-          </p>
-        </div>
-      )}
+    <div className='border border-gray-100 rounded-xl overflow-hidden bg-white hover:bg-[#faf7f5] transition-all px-5 py-4 flex items-center justify-between gap-4'>
+      <div className='flex items-center gap-3'>
+        <span className='w-7 h-7 rounded-lg bg-[#c2a381] text-white text-xs font-black flex items-center justify-center shrink-0'>
+          {String(index).padStart(2, '0')}
+        </span>
+        <span className='font-semibold text-gray-800 text-sm'>{titulo}</span>
+      </div>
     </div>
   )
 }
@@ -164,7 +38,7 @@ const CursoDetalle = ({ data, onBack }) => {
   const curso = data?.curso ?? {}
   const reseñasData = data?.reseñas || []
   const ratingData = data?.rating || { promedio: 0, total: 0, distribucion: [] }
-  // const extra = data?.extra
+  const leccionesData = data?.lecciones || []
 
   const detalle = {
     breadcrumb: ['Inicio', 'Cursos', curso.categoria || 'General'],
@@ -172,53 +46,13 @@ const CursoDetalle = ({ data, onBack }) => {
     descripcion: curso.descripcion || '',
     precio: parseFloat(curso.precio) || 0,
     thumbnail: curso.imagenPortada || '',
-    // subtitulo:
-    // 'Este curso fue desarrollado para profesionales que buscan elevar la calidad de sus atenciones al máximo. A través de módulos prácticos y teóricos, aprenderás técnicas avanzadas de harmonización facial, utilizando los protocolos exclusivos que formarán Mimadas una referencia nacional.',
-    // precioOriginal: extra.precioOriginal,
-    // descuento: extra.descuento,
-    // duracion: extra.duracion,
+    lecciones: leccionesData,
     reviews: reseñasData.map((r, idx) => ({
       nombre: `${r.nombre || ''} ${r.apellido || ''}`.trim(),
       avatar: `https://i.pravatar.cc/150?img=${(idx % 50) + 1}`,
       texto: r.comentario || 'Excelente curso.',
       estrellas: parseInt(r.calificacion) || 5,
     })),
-    //
-    // NOTE - ESTO ES SOLO PARA PROBAR
-    // reviews: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
-    //   nombre: `Estudiante ${i}`,
-    //   avatar: `https://i.pravatar.cc/150?img=${(i % 50) + 1}`,
-    //   texto: `Este curso es excelente, lo recomiendo mucho. ${i}`,
-    //   estrellas: (i % 5) + 1,
-    // })),
-    rating: parseFloat(ratingData.promedio) || 0,
-    totalReviews: ratingData.total || 0,
-    // incluye: extra.incluye,
-    incluye: [
-      { icon: IconClock, texto: `${curso.duracionTotal} horas de contenido en video` },
-      { icon: IconBook2, texto: 'Apuntes PDF completos' },
-      { icon: IconCertificate, texto: 'Certificado de conclusión' },
-      { icon: IconStar, texto: 'Acceso vitalicio' },
-    ],
-    // garantia: extra.garantia,
-    garantia: '7 días de garantía incondicional',
-    // beneficios: extra.beneficios,
-    // instructor: extra.instructor,
-    instructor: {
-      nombre: 'Dra. Helena Silva',
-      titulo: 'Especialista en Estética Avanzada',
-      tags: ['15 AÑOS DE EXP.', 'PROFA NACIONAL'],
-      avatar: 'https://i.pravatar.cc/150?img=47',
-      bio: 'Referencia nacional de lujo, la Dra. Helena Silva formó más de 5.000 alumnas en todo el Brasil. Su metodología fusiona la excelencia del arte con el humanismo de los atenciones estéticos.',
-    },
-    // lecciones: leccionesData,
-    lecciones: [
-      { titulo: 'Introducción al Método Mimadas', lecciones: 3 },
-      { titulo: 'Anatomía y Visagismo Aplicado', lecciones: 5 },
-      { titulo: 'Técnicas de Harmonización Labial', lecciones: 4 },
-      { titulo: 'Protocolos Avanzados de Botulínica', lecciones: 6 },
-      { titulo: 'Marketing para Clínicas de Lujo', lecciones: 3 },
-    ],
     ratingDist: [5, 4, 3, 2, 1].map((stars) => {
       const match = ratingData.distribucion?.find(
         (d) => parseInt(d.calificacion) === stars,
@@ -227,6 +61,37 @@ const CursoDetalle = ({ data, onBack }) => {
       const pct = ratingData.total > 0 ? Math.round((count / ratingData.total) * 100) : 0
       return { estrellas: stars, pct }
     }),
+    rating: parseFloat(ratingData.promedio) || 0,
+    totalReviews: ratingData.total || 0,
+    garantia: '7 días de garantía incondicional',
+    incluye: [
+      { icon: IconClock, texto: `${curso.duracionTotal} horas de contenido en video` },
+      { icon: IconBook2, texto: 'Apuntes PDF completos' },
+      { icon: IconCertificate, texto: 'Certificado de conclusión' },
+      { icon: IconStar, texto: 'Acceso vitalicio' },
+    ],
+    instructor: {
+      nombre: 'Dra. Helena Silva',
+      titulo: 'Especialista en Estética Avanzada',
+      tags: ['15 AÑOS DE EXP.', 'PROFA NACIONAL'],
+      avatar: 'https://i.pravatar.cc/150?img=47',
+      bio: 'Referencia nacional de lujo, la Dra. Helena Silva formó más de 5.000 alumnas en todo el Brasil. Su metodología fusiona la excelencia del arte con el humanismo de los atenciones estéticos.',
+    },
+    // NOTE - ESTO ES SOLO PARA PROBAR
+    // reviews: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
+    //   nombre: `Estudiante ${i}`,
+    //   avatar: `https://i.pravatar.cc/150?img=${(i % 50) + 1}`,
+    //   texto: `Este curso es excelente, lo recomiendo mucho. ${i}`,
+    //   estrellas: (i % 5) + 1,
+    // })),
+    // NOTE - ESTO ES SOLO PARA PROBAR
+    // ratingDist: [
+    //   { estrellas: 5, pct: 85 },
+    //   { estrellas: 4, pct: 10 },
+    //   { estrellas: 3, pct: 3 },
+    //   { estrellas: 2, pct: 1 },
+    //   { estrellas: 1, pct: 1 },
+    // ],
   }
 
   return (
@@ -301,16 +166,18 @@ const CursoDetalle = ({ data, onBack }) => {
             {[
               { id: 'descripcion', label: 'Descripción' },
               { id: 'instructor', label: 'Instructor' },
-              { id: 'lecciones', label: 'Lecciones' },
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all ${tab === t.id ? 'border-[#c2a381] text-[#c2a381]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
-              >
-                {t.label}
-              </button>
-            ))}
+              leccionesData.length > 0 && { id: 'lecciones', label: 'Lecciones' },
+            ]
+              .filter(Boolean)
+              .map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`px-5 py-2.5 text-sm font-bold border-b-2 transition-all ${tab === t.id ? 'border-[#c2a381] text-[#c2a381]' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                >
+                  {t.label}
+                </button>
+              ))}
           </div>
 
           {/* Tab: Descripción */}
@@ -380,12 +247,7 @@ const CursoDetalle = ({ data, onBack }) => {
                 Contenido del curso
               </h3>
               {detalle?.lecciones?.map((mod, i) => (
-                <AccordionItem
-                  key={mod.titulo}
-                  index={i + 1}
-                  titulo={mod.titulo}
-                  lecciones={mod.lecciones}
-                />
+                <AccordionItem key={mod.titulo} index={i + 1} titulo={mod.titulo} />
               ))}
             </div>
           )}
@@ -400,7 +262,7 @@ const CursoDetalle = ({ data, onBack }) => {
                 {/* Rating global */}
                 <div className='flex flex-col items-center justify-center bg-[#faf7f5] rounded-2xl px-8 py-6 shrink-0'>
                   <p className='text-6xl font-black text-[#c2a381]'>{detalle?.rating}</p>
-                  <Stars rating={detalle?.rating} size={20} />
+                  <RatingStars rating={detalle?.rating} size={20} />
                   <p className='text-xs text-gray-500 mt-1'>
                     Promedio de {detalle?.totalReviews?.toLocaleString()} reseñas
                   </p>
@@ -432,6 +294,7 @@ const CursoDetalle = ({ data, onBack }) => {
                     key={`card-${rev.nombre}-${idx}`}
                     className='bg-white border border-gray-100 rounded-2xl p-5 shadow-sm'
                   >
+                    {console.log(rev)}
                     <div className='flex items-center gap-3 mb-3'>
                       <img
                         src={rev.avatar}
@@ -440,7 +303,7 @@ const CursoDetalle = ({ data, onBack }) => {
                       />
                       <div>
                         <p className='text-sm font-bold text-gray-900'>{rev.nombre}</p>
-                        <Stars rating={rev.estrellas} size={11} />
+                        <RatingStars rating={rev.estrellas} size={11} />
                       </div>
                     </div>
                     <p className='text-xs text-gray-600 leading-relaxed'>{rev.texto}</p>
@@ -464,7 +327,7 @@ const CursoDetalle = ({ data, onBack }) => {
                       <div className='flex-1'>
                         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-1'>
                           <p className='text-sm font-black text-gray-900'>{rev.nombre}</p>
-                          <Stars rating={rev.estrellas} size={13} />
+                          <RatingStars rating={rev.estrellas} size={13} />
                         </div>
                         <p className='text-sm text-gray-600 leading-relaxed'>
                           {rev.texto}
@@ -501,14 +364,14 @@ const CursoDetalle = ({ data, onBack }) => {
               <p className='text-3xl font-black text-gray-900'>
                 ${detalle?.precio?.toFixed(2)}
               </p>
-              <div className='flex items-center gap-2 mt-0.5'>
+              {/* <div className='flex items-center gap-2 mt-0.5'>
                 <p className='text-sm text-gray-400 line-through'>
                   ${detalle?.precioOriginal?.toFixed(2)}
                 </p>
                 <span className='text-xs font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full'>
                   {detalle?.descuento}% OFF
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* Botones */}
