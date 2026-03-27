@@ -3,8 +3,8 @@ import { IconShoppingCart, IconStarFilled } from '@tabler/icons-react'
 export const CourseCard = ({
   titulo,
   author,
-  rating,
-  reviews,
+  calificacionPromedio,
+  totalCalificaciones,
   duracionTotal,
   precio,
   imagenPortada,
@@ -29,9 +29,11 @@ export const CourseCard = ({
         </div>
 
         {/* Badge inferior derecho de tiempo (Mobile view mostly, but good for all) */}
-        <div className='absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-medium text-white shadow-sm'>
-          {duracionTotal}
-        </div>
+        {duracionTotal && (
+          <div className='absolute bottom-3 right-3 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-medium text-white shadow-sm'>
+            {duracionTotal}
+          </div>
+        )}
       </div>
 
       {/* Contenido Inferior */}
@@ -48,13 +50,18 @@ export const CourseCard = ({
               className='w-full h-full object-cover'
             />
           </div>
-          <p className='text-gray-500 text-sm'>{author}</p>
+          <p className='text-gray-500 text-sm'>{author ?? 'Mimada'}</p>
         </div>
 
+        {/* // NOTE - FIX para que muestre las estrellas necesarias */}
+        {/* Poner las estrellas dependiendo de la calificación */}
         {/* Ratings */}
         <div className='flex items-center gap-1 mb-4 mt-auto'>
-          <IconStarFilled size={14} className='text-[#c2a381] shrink-0' />
-          <span className='font-bold text-sm text-gray-700 ml-1'>{rating}</span>
+          {/* <IconStarFilled size={14} className='text-[#c2a381] shrink-0' /> */}
+          <span className='font-bold text-sm text-gray-700 ml-1'>
+            {calificacionPromedio}
+          </span>
+          {/* NOTE - Use Stars Component */}
           <div className='flex text-[#ffb800] ml-1'>
             <IconStarFilled size={12} />
             <IconStarFilled size={12} />
@@ -62,7 +69,7 @@ export const CourseCard = ({
             <IconStarFilled size={12} />
             <IconStarFilled size={12} />
           </div>
-          <span className='text-gray-400 text-xs ml-1'>({reviews})</span>
+          <span className='text-gray-400 text-xs ml-1'>({totalCalificaciones})</span>
         </div>
 
         {/* Footer de Tarjeta: Precio y Carrito/Boton */}
@@ -82,9 +89,6 @@ export const CourseCard = ({
           <div className='hidden md:flex items-center justify-between w-full'>
             {/* Layout Desktop */}
             <div className='flex flex-col'>
-              <span className='text-gray-400 text-[10px] font-medium mb-0.5 tracking-wide'>
-                {duracionTotal} lectivas
-              </span>
               <span className='font-bold text-xl text-gray-900 leading-none'>
                 ${precio}
               </span>

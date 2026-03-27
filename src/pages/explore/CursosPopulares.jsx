@@ -68,7 +68,7 @@ const CursosPopulares = ({ cursos, categorias }) => {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16'>
           {cursos?.map((course) => (
             <CourseCard
-              key={course.id}
+              key={course.cursoId}
               {...course}
               onClick={() => handleVerDetalle(course)}
             />
