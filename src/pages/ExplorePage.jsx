@@ -2,7 +2,7 @@ import Footer from '../components/Footer'
 import { Navbar } from '../components/nabvar/Navbar'
 import { Outlet } from 'react-router-dom'
 
-const Explore = () => {
+const ExplorePage = () => {
   return (
     <div className='flex min-h-screen bg-gray-50 flex-col font-sans'>
       <Navbar isExplore={true} />
@@ -16,4 +16,4 @@ const Explore = () => {
   )
 }
 
-export default Explore
+export default ExplorePage

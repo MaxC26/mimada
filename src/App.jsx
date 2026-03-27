@@ -1,7 +1,6 @@
 import { Toaster } from 'sonner'
 import './App.css'
 import Home from './pages/Home'
-import Explore from './pages/Explore'
 import { BottomNav } from './components/nabvar/BottomNav'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
@@ -26,6 +25,7 @@ import ExploreListPage from './pages/explore/ExploreListPage'
 import TodosCursosPage from './pages/explore/TodosCursosPage'
 import CursoDetallePage from './pages/explore/CursoDetallePage'
 import ReactModal from 'react-modal'
+import ExplorePage from './pages/ExplorePage'
 
 function App() {
   ReactModal.setAppElement('#root')
@@ -44,7 +44,7 @@ function App() {
       <Routes>
         <Route path={routes.inicio} element={<Home />} />
         <Route path={routes.home} element={<Home />} />
-        <Route path={routes.explore.inicio} element={<Explore />}>
+        <Route path={routes.explore.inicio} element={<ExplorePage />}>
           <Route index element={<ExploreListPage />} />
           <Route path={routes.explore.cursos} element={<TodosCursosPage />} />
           <Route path={routes.explore.detalle} element={<CursoDetallePage />} />
