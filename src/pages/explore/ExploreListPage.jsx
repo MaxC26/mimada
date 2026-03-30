@@ -7,7 +7,7 @@ import {
 } from '@tabler/icons-react'
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
 import Banner from '../../components/explore/Banner'
-import CursosPopulares from './CursosPopulares'
+import CursosPopulares from '../../components/explore/CursosPopulares'
 import { getCursosPopulares } from '../../services/cursos'
 
 const ExploreListPage = () => {
@@ -23,7 +23,6 @@ const ExploreListPage = () => {
     setIsLoading(true)
     try {
       const [cursosResult] = await Promise.allSettled([getCursosPopulares()])
-      console.log('🚀 ~ fetchData ~ cursosResult:', cursosResult)
 
       if (cursosResult.status === 'fulfilled') {
         setCursosPopulares(cursosResult.value.data ?? [])

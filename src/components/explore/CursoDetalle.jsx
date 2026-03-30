@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  IconPlayerPlay,
   IconStar,
   IconClock,
   IconBook2,
@@ -30,8 +29,6 @@ const AccordionItem = ({ index, titulo }) => {
 const CursoDetalle = ({ data, onBack }) => {
   const [tab, setTab] = useState('descripcion')
   const [showAllReviews, setShowAllReviews] = useState(false)
-
-  console.log(data)
 
   // Transformar datos del API (o fallback) a la estructura plana usada por React
   const curso = data?.curso ?? {}
@@ -141,23 +138,6 @@ const CursoDetalle = ({ data, onBack }) => {
               alt={detalle?.titulo}
               className='w-full h-full object-cover opacity-80'
             />
-            {/* Play button */}
-            <button
-              className='absolute inset-0 flex items-center justify-center group'
-              // onClick={() => setPlaying(true)}
-            >
-              <div className='w-16 h-16 rounded-full bg-[#c2a381] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300'>
-                <IconPlayerPlay size={28} fill='white' className='text-white ml-1' />
-              </div>
-            </button>
-            {/* Progress bar */}
-            <div className='absolute bottom-0 left-0 right-0 bg-black/60 px-4 py-2 flex items-center gap-3'>
-              <span className='text-white text-xs font-mono'>00:45</span>
-              <div className='flex-1 h-1 bg-white/30 rounded-full'>
-                <div className='h-full w-[6%] bg-[#c2a381] rounded-full' />
-              </div>
-              <span className='text-white text-xs font-mono'>{detalle?.duracion}</span>
-            </div>
           </div>
 
           {/* Tabs */}

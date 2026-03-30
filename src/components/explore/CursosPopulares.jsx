@@ -1,4 +1,4 @@
-import { CourseCard } from '../../components/utils/CourseCard'
+import { CourseCard } from '../utils/CourseCard'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
 import { useEffect } from 'react'
