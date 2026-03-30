@@ -4,28 +4,19 @@ import { Link, useLocation } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
 import { ROLES } from '../../utils/constantes'
-import { decodeToken, isTokenExpired } from '../../utils/utils'
+import { useAuth } from '../../context/AuthContext'
 
 export const Navbar = ({ isExplore = false }) => {
-  const [login, setLogin] = useState(false)
+  const { user, isAuthenticated } = useAuth()
+  const login = isAuthenticated
+  const rol = (user?.rol || '').toLowerCase()
+
+  console.log('Navbar Debug -> isAuth:', isAuthenticated, ' | rol evaluado:', rol, ' | data original:', user)
+
   const location = useLocation()
 
   const homeRoutes = [routes.inicio, routes.home, routes.home + '/']
   const isHomeActive = homeRoutes.includes(location.pathname)
-
-  const jwt = localStorage.getItem('jwt')
-  const rol = (decodeToken(jwt)?.rol || '').toLowerCase()
-
-  useEffect(() => {
-    if (jwt) {
-      const isExpired = isTokenExpired(jwt)
-      if (isExpired) {
-        setLogin(false)
-      } else {
-        setLogin(true)
-      }
-    }
-  }, [jwt])
 
   return (
     <div

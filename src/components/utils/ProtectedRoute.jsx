@@ -1,25 +1,17 @@
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
-import { useEffect } from 'react'
-import { isTokenExpired } from '../../utils/utils'
-import { logout } from '../../services/login'
+import { useAuth } from '../../context/AuthContext'
 
 const ProtectedRoute = () => {
-  const navigate = useNavigate()
+  const { isAuthenticated, isLoading } = useAuth()
+  const location = useLocation()
 
-  const jwt = localStorage.getItem('jwt')
+  if (isLoading) {
+    return <div className='min-h-screen flex items-center justify-center text-[#c2a381]'>Cargando...</div>
+  }
 
-  useEffect(() => {
-    if (jwt) {
-      const isExpired = isTokenExpired(jwt)
-      if (isExpired) {
-        logout()
-      }
-    }
-  }, [jwt, navigate])
-
-  if (!jwt) {
-    return <Navigate to={routes.login} state={{ from: location.pathname }} replace /> // Redirige si no hay token
+  if (!isAuthenticated) {
+    return <Navigate to={routes.login} state={{ from: location.pathname }} replace />
   }
 
   return <Outlet />

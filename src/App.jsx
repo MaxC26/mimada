@@ -13,7 +13,6 @@ import HomeServicioPage from './pages/previsualizar/HomeServicioPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
 import { ROLES, SECCIONES_DASHBOARD } from './utils/constantes'
-import { decodeToken } from './utils/utils'
 import CrearCursoSection from './pages/dashboard/CrearCursoSection'
 import ContenidoSection from './pages/dashboard/ContenidoSection'
 import Cursos from './components/settings/Cursos'
@@ -26,18 +25,23 @@ import TodosCursosPage from './pages/explore/TodosCursosPage'
 import CursoDetallePage from './pages/explore/CursoDetallePage'
 import ReactModal from 'react-modal'
 import ExplorePage from './pages/ExplorePage'
+import { useAuth } from './context/AuthContext'
 
 function App() {
   ReactModal.setAppElement('#root')
   const location = useLocation()
   const navigate = useNavigate()
 
-  const jwt = localStorage.getItem('jwt')
-  const rol = (decodeToken(jwt)?.rol || '').toLowerCase()
+  const { user, isLoading } = useAuth()
+  const rol = (user?.rol || '').toLowerCase()
 
   const hideBottomNav = [routes.login, routes.settings].some((r) =>
     location.pathname.startsWith(r),
   )
+
+  if (isLoading) {
+    return <div className='min-h-screen flex items-center justify-center text-[#c2a381]'>Cargando...</div>
+  }
 
   return (
     <>

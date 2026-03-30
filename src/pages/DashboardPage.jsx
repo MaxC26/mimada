@@ -10,13 +10,13 @@ import {
   IconExternalLink,
   IconLayoutGrid,
 } from '@tabler/icons-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../services/login'
 import logoMimada from '../assets/img/logo/logo-mimada.png'
 import { routes } from '../utils/rutas'
-import { decodeToken, isTokenExpired } from '../utils/utils'
 import { SECCIONES_DASHBOARD } from '../utils/constantes'
+import { useAuth } from '../context/AuthContext'
 
 const navItems = [
   {
@@ -55,18 +55,10 @@ const DashboardPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const jwt = localStorage.getItem('jwt')
-  const { nombre, rol } = decodeToken(jwt)
-
-  useEffect(() => {
-    if (jwt) {
-      const isExpired = isTokenExpired(jwt)
-      if (isExpired) {
-        logout()
-      }
-    }
-  }, [jwt])
+  
+  const { user } = useAuth()
+  const rol = (user?.rol || user?.role || '').toUpperCase()
+  const nombre = user?.nombre || user?.name || 'Usuario'
 
   const handleLogout = () => logout(navigate)
 

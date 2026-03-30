@@ -1,14 +1,16 @@
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-react'
 import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { login } from '../../services/login'
+import { login, getMe } from '../../services/login'
 import { validarLogin } from '../../utils/formValidation'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
+import { useAuth } from '../../context/AuthContext'
 
 const Login = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { loginContext } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [errorLogin, setErrorLogin] = useState(null)
 
@@ -16,8 +18,16 @@ const Login = () => {
     try {
       const response = await login(values)
       if (response.status === 200) {
-        const { data } = response
-        localStorage.setItem('jwt', data.token)
+        // La autenticación real está en la cookie. Obtenemos el perfil para la UI:
+        try {
+          const meResponse = await getMe()
+          if (meResponse?.user) {
+            loginContext(meResponse.user)
+          }
+        } catch (meError) {
+          console.error('Error al obtener perfil', meError)
+        }
+        
         const redirectTo = location.state?.from || '/'
         navigate(redirectTo, { replace: true })
       }
