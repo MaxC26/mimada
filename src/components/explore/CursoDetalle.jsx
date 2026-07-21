@@ -11,6 +11,9 @@ import {
   IconCheck,
 } from '@tabler/icons-react'
 import RatingStars from '../utils/RatingStars'
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
+import { createPayPalOrder, capturePayPalOrder } from '../../services/pagos'
+import { toast } from 'sonner'
 
 /* ── Sub: Accordion item ── */
 const AccordionItem = ({ index, titulo }) => {
@@ -27,7 +30,7 @@ const AccordionItem = ({ index, titulo }) => {
 }
 
 /* ── Componente principal ── */
-const CursoDetalle = ({ data, onBack }) => {
+const CursoDetalle = ({ data, cursoId, onBack }) => {
   const [tab, setTab] = useState('descripcion')
   const [showAllReviews, setShowAllReviews] = useState(false)
 
@@ -374,9 +377,74 @@ const CursoDetalle = ({ data, onBack }) => {
             </div>
 
             {/* Botones */}
-            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
-              Comprar curso ahora
-            </button>
+            <PayPalScriptProvider
+              options={{
+                'client-id':
+                  'BAAqXghrD-TsFEZnsKbp1SKvdJknhrMIBL88_S3ZDf2_CAt1znUKoH1zCQtInTBHF-cyWHtO42eQlPvalE',
+                currency: 'USD',
+                intent: 'capture',
+                'disable-funding': 'card,credit,paylater',
+              }}
+            >
+              {/* Contenedor estático transparente para no alterar el botón nativo */}
+              <div className='relative z-0 mt-2 w-full h-[45px] rounded-full flex flex-col justify-center overflow-hidden'>
+                <PayPalButtons
+                  fundingSource='paypal'
+                  style={{
+                    layout: 'vertical',
+                    shape: 'pill',
+                    color: 'gold',
+                    height: 45,
+                    label: 'pay',
+                  }}
+                  createOrder={async () => {
+                    try {
+                      const res = await createPayPalOrder(cursoId)
+                      console.log('Respuesta de createOrder backend:', res.data)
+
+                      const orderId =
+                        res.data.orderId ||
+                        res.data.orderID ||
+                        res.data.id ||
+                        res.data.order_id
+
+                      if (!orderId) {
+                        throw new Error('El backend no retornó un ID de orden válido.')
+                      }
+                      return orderId
+                    } catch (error) {
+                      if (error.response) {
+                        toast.error(
+                          error.response.data?.message ||
+                            'Error al procesar la solicitud.',
+                        )
+                      } else {
+                        toast.error('Hubo un error iniciando el pago.')
+                        console.error('PayPal createOrder Error:', error)
+                      }
+
+                      return null // Retornar null detiene a PayPal
+                    }
+                  }}
+                  onApprove={async (data) => {
+                    try {
+                      await capturePayPalOrder(data.orderID)
+                      toast.success('¡Pago exitoso! Disfruta tu nuevo curso.')
+                    } catch (error) {
+                      toast.error('Error al procesar el pago')
+                      console.error(error)
+                    }
+                  }}
+                  onError={(err) => {
+                    if (!String(err).includes('Expected an order id')) {
+                      toast.error('Hubo un problema con la plataforma de pago')
+                      console.error('PayPal onError:', err)
+                    }
+                  }}
+                />
+              </div>
+            </PayPalScriptProvider>
+
             <button className='w-full py-3 rounded-full border-2 border-[#c2a381] text-[#c2a381] font-bold text-sm hover:bg-[#faf7f5] transition-colors flex items-center justify-center gap-2'>
               <IconShoppingCart size={16} />
               Añadir al carrito
@@ -413,3 +481,4 @@ const CursoDetalle = ({ data, onBack }) => {
 }
 
 export default CursoDetalle
+

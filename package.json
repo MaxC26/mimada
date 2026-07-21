@@ -13,6 +13,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^10.1.2",
     "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.0.17",
     "aos": "^2.3.4",

@@ -19,7 +19,6 @@ const Login = () => {
     try {
       const response = await login(values)
       if (response.status === 200) {
-        // La autenticación real está en la cookie. Obtenemos el perfil para la UI:
         try {
           const meResponse = await getMe()
           if (meResponse?.user) {
@@ -28,7 +27,7 @@ const Login = () => {
         } catch (meError) {
           console.error('Error al obtener perfil', meError)
         }
-        
+
         const redirectTo = location.state?.from || '/'
         navigate(redirectTo, { replace: true })
       }
@@ -45,15 +44,10 @@ const Login = () => {
     try {
       const userGoogle = await signInWithGoogle()
       if (userGoogle) {
-        const displayName = userGoogle.displayName || ''
-        const nameParts = displayName.split(' ')
-        const nombre = nameParts[0] || ''
-        const apellido = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+        const idToken = await userGoogle.getIdToken()
 
         const response = await socialLogin({
-          email: userGoogle.email,
-          nombre,
-          apellido
+          idToken,
         })
 
         if (response.status === 200) {
@@ -65,7 +59,7 @@ const Login = () => {
           } catch (meError) {
             console.error('Error al obtener perfil', meError)
           }
-          
+
           const redirectTo = location.state?.from || '/'
           navigate(redirectTo, { replace: true })
         }
@@ -84,19 +78,10 @@ const Login = () => {
     try {
       const userFacebook = await signInWithFacebook()
       if (userFacebook) {
-        const displayName = userFacebook.displayName || ''
-        const nameParts = displayName.split(' ')
-        const nombre = nameParts[0] || ''
-        const apellido = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
-
-        // Facebook a veces no provee el correo si la cuenta es usando número de teléfono. 
-        // Si es vital, validamos o usamos un placeholder (NO recomendado para prod si el ID es basado en el correo).
-        const email = userFacebook.email || `${userFacebook.uid}@facebook.mimada.com` 
+        const idToken = await userFacebook.getIdToken()
 
         const response = await socialLogin({
-          email,
-          nombre,
-          apellido
+          idToken,
         })
 
         if (response.status === 200) {
@@ -108,7 +93,7 @@ const Login = () => {
           } catch (meError) {
             console.error('Error al obtener perfil', meError)
           }
-          
+
           const redirectTo = location.state?.from || '/'
           navigate(redirectTo, { replace: true })
         }
@@ -126,7 +111,6 @@ const Login = () => {
   return (
     /* ── Wrapper principal ── */
     <div className='min-h-screen flex flex-col md:flex-row'>
-
       {/* ── Columna izquierda: Imagen full-height (solo desktop) ── */}
       <div className='hidden md:block md:w-1/2 relative'>
         <img
@@ -139,11 +123,13 @@ const Login = () => {
         {/* Texto sobre imagen */}
         <div className='absolute bottom-10 left-10 right-10 text-white'>
           <h2 className='text-4xl font-black leading-tight mb-3'>
-            Eleva tu<br />
+            Eleva tu
+            <br />
             <span className='text-[#e3d5c8]'>Belleza Natural</span>
           </h2>
           <p className='text-white/80 leading-relaxed'>
-            Únete a nuestra comunidad de expertas y accede a tratamientos exclusivos y cursos premium.
+            Únete a nuestra comunidad de expertas y accede a tratamientos exclusivos y
+            cursos premium.
           </p>
         </div>
       </div>
@@ -151,7 +137,6 @@ const Login = () => {
       {/* ── Columna derecha: Formulario full-height ── */}
       <div className='flex-1 bg-white flex items-center justify-center p-6 md:p-12'>
         <div className='w-full max-w-md'>
-
           {/* Logo + título */}
           <div className='mb-8'>
             {/* Imagen hero SOLO móvil (arriba del formulario) */}
@@ -164,11 +149,17 @@ const Login = () => {
             </div>
 
             <div className='flex items-center gap-3 mb-5'>
-              <img src={logoMimada} alt='Logo Mimada' className='h-14 w-auto object-contain' />
+              <img
+                src={logoMimada}
+                alt='Logo Mimada'
+                className='h-14 w-auto object-contain'
+              />
               <span className='text-3xl font-black text-[#c2a381]'>Mimada</span>
             </div>
 
-            <h1 className='text-3xl font-black text-gray-900 mb-1'>¡Bienvenido de nuevo!</h1>
+            <h1 className='text-3xl font-black text-gray-900 mb-1'>
+              ¡Bienvenido de nuevo!
+            </h1>
             <p className='text-gray-500 text-sm'>Inicia sesión para continuar</p>
           </div>
 
@@ -182,13 +173,14 @@ const Login = () => {
           >
             {({ handleSubmit, errors, isSubmitting }) => (
               <Form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-
                 {/* Email */}
                 <div>
                   <label className='block text-sm font-semibold text-gray-700 mb-1.5'>
                     Correo electrónico
                   </label>
-                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.email ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}>
+                  <div
+                    className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.email ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}
+                  >
                     <IconMail size={18} className='text-gray-400 shrink-0' stroke={1.5} />
                     <Field
                       type='email'
@@ -205,12 +197,16 @@ const Login = () => {
                 {/* Contraseña */}
                 <div>
                   <div className='flex items-center justify-between mb-1.5'>
-                    <label className='text-sm font-semibold text-gray-700'>Contraseña</label>
+                    <label className='text-sm font-semibold text-gray-700'>
+                      Contraseña
+                    </label>
                     {/* <button type='button' className='text-xs font-semibold text-[#c2a381] hover:underline'>
                       ¿Olvidaste tu contraseña?
                     </button> */}
                   </div>
-                  <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.password ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}>
+                  <div
+                    className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.password ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}
+                  >
                     <IconLock size={18} className='text-gray-400 shrink-0' stroke={1.5} />
                     <Field
                       type={showPassword ? 'text' : 'password'}
@@ -222,12 +218,15 @@ const Login = () => {
                       type='button'
                       onClick={() => setShowPassword(!showPassword)}
                       className='text-gray-400 hover:text-gray-600 shrink-0'
-                      aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                    >
-                      {showPassword
-                        ? <IconEyeOff size={18} stroke={1.5} />
-                        : <IconEye size={18} stroke={1.5} />
+                      aria-label={
+                        showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                       }
+                    >
+                      {showPassword ? (
+                        <IconEyeOff size={18} stroke={1.5} />
+                      ) : (
+                        <IconEye size={18} stroke={1.5} />
+                      )}
                     </button>
                   </div>
                   {errors.password && (
@@ -254,7 +253,6 @@ const Login = () => {
                     'Iniciar sesión'
                   )}
                 </button>
-
               </Form>
             )}
           </Formik>
@@ -262,7 +260,9 @@ const Login = () => {
           {/* Divisor OR */}
           <div className='flex items-center gap-3 my-5'>
             <div className='flex-1 h-px bg-gray-200' />
-            <span className='text-xs font-semibold text-gray-400 uppercase tracking-widest'>O continúa con</span>
+            <span className='text-xs font-semibold text-gray-400 uppercase tracking-widest'>
+              O continúa con
+            </span>
             <div className='flex-1 h-px bg-gray-200' />
           </div>
 
@@ -270,26 +270,38 @@ const Login = () => {
           <div className='grid grid-cols-2 gap-3'>
             <button
               type='button'
-              onClick={handleGoogleLogin} 
+              onClick={handleGoogleLogin}
               className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
             >
               {/* Google SVG Icon */}
               <svg width='18' height='18' viewBox='0 0 18 18'>
-                <path fill='#EA4335' d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z'/>
-                <path fill='#4285F4' d='M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z'/>
-                <path fill='#FBBC05' d='M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z'/>
-                <path fill='#34A853' d='M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z'/>
+                <path
+                  fill='#EA4335'
+                  d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z'
+                />
+                <path
+                  fill='#4285F4'
+                  d='M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z'
+                />
+                <path
+                  fill='#FBBC05'
+                  d='M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z'
+                />
+                <path
+                  fill='#34A853'
+                  d='M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z'
+                />
               </svg>
               Google
             </button>
             <button
               type='button'
-              onClick={handleFacebookLogin} 
+              onClick={handleFacebookLogin}
               className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
             >
               {/* Facebook SVG Icon */}
               <svg width='18' height='18' viewBox='0 0 24 24' fill='#1877F2'>
-                <path d='M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z'/>
+                <path d='M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z' />
               </svg>
               Facebook
             </button>
@@ -309,3 +321,4 @@ const Login = () => {
 }
 
 export default Login
+

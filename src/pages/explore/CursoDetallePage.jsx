@@ -83,7 +83,7 @@ const CursoDetallePage = () => {
 
   return (
     <div className='max-w-6xl mx-auto px-4 lg:px-8'>
-      <CursoDetalle data={data} onBack={handleBack} />
+      <CursoDetalle data={data} cursoId={id} onBack={handleBack} />
     </div>
   )
 }

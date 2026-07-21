@@ -41,6 +41,10 @@ const routesBackend = Object.freeze({
     updateCategoria: '/categorias',
     deleteCategoria: '/categorias',
   },
+  pagos: {
+    createOrder: '/pagos/create-order',
+    captureOrder: '/pagos/capture-order',
+  },
 })
 
 export const context = '/mimada'
