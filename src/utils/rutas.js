@@ -40,6 +40,12 @@ const routesBackend = Object.freeze({
     updateCategoria: '/categorias',
     deleteCategoria: '/categorias',
   },
+  carrito: {
+    getCarrito: '/cart', // GET  → obtiene el carrito del usuario autenticado
+    addItem: '/cart/item', // POST → agrega un curso al carrito { cursoId }
+    removeItem: '/cart/item/:id', // DELETE → elimina un curso del carrito
+    clearCarrito: '/cart', // DELETE → vacía todo el carrito
+  },
 })
 
 export const context = '/mimada'

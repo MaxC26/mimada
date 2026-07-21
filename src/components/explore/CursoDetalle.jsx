@@ -10,6 +10,7 @@ import {
   IconCheck,
 } from '@tabler/icons-react'
 import RatingStars from '../utils/RatingStars'
+import { useCart } from '../../context/CartContext'
 
 /* ── Sub: Accordion item ── */
 const AccordionItem = ({ index, titulo }) => {
@@ -29,6 +30,7 @@ const AccordionItem = ({ index, titulo }) => {
 const CursoDetalle = ({ data, onBack }) => {
   const [tab, setTab] = useState('descripcion')
   const [showAllReviews, setShowAllReviews] = useState(false)
+  const { addToCart, isInCart, openCart } = useCart()
 
   // Transformar datos del API (o fallback) a la estructura plana usada por React
   const curso = data?.curso ?? {}
@@ -354,13 +356,32 @@ const CursoDetalle = ({ data, onBack }) => {
             </div>
 
             {/* Botones */}
-            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'>
+            <button
+              onClick={() => {
+                addToCart(curso)
+                openCart()
+              }}
+              className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'
+            >
               Comprar curso ahora
             </button>
-            <button className='w-full py-3 rounded-full border-2 border-[#c2a381] text-[#c2a381] font-bold text-sm hover:bg-[#faf7f5] transition-colors flex items-center justify-center gap-2'>
-              <IconShoppingCart size={16} />
-              Añadir al carrito
-            </button>
+            {isInCart(curso.cursoId) ? (
+              <button
+                onClick={openCart}
+                className='w-full py-3 rounded-full border-2 border-green-500 text-green-600 font-bold text-sm hover:bg-green-50 transition-colors flex items-center justify-center gap-2'
+              >
+                <IconCheck size={16} stroke={2.5} />
+                Ya está en tu carrito
+              </button>
+            ) : (
+              <button
+                onClick={() => addToCart(curso)}
+                className='w-full py-3 rounded-full border-2 border-[#c2a381] text-[#c2a381] font-bold text-sm hover:bg-[#faf7f5] transition-colors flex items-center justify-center gap-2'
+              >
+                <IconShoppingCart size={16} />
+                Añadir al carrito
+              </button>
+            )}
 
             {/* Lo que incluye */}
             <div className='pt-2 border-t border-gray-100'>

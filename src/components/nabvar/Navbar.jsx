@@ -1,13 +1,15 @@
 import { IconBrandWhatsapp, IconSearch, IconShoppingCart } from '@tabler/icons-react'
-import { useEffect, useState } from 'react'
+
 import { Link, useLocation } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
 import { ROLES } from '../../utils/constantes'
 import { useAuth } from '../../context/AuthContext'
+import { useCart } from '../../context/CartContext'
 
 export const Navbar = ({ isExplore = false }) => {
   const { user, isAuthenticated } = useAuth()
+  const { itemCount, openCart } = useCart()
   const login = isAuthenticated
   const rol = (user?.rol || '').toLowerCase()
 
@@ -140,11 +142,16 @@ export const Navbar = ({ isExplore = false }) => {
                     Iniciar Sesión
                   </Link>
                 )}
-                <button className='relative p-2 text-gray-600 hover:text-[#c2a381] transition-colors'>
+                <button
+                  onClick={openCart}
+                  className='relative p-2 text-gray-600 hover:text-[#c2a381] transition-colors'
+                >
                   <IconShoppingCart stroke={1.5} size={24} />
-                  <span className='absolute top-0 right-0 bg-[#c2a381] text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border border-white'>
-                    2
-                  </span>
+                  {itemCount > 0 && (
+                    <span className='absolute top-0 right-0 bg-[#c2a381] text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border border-white'>
+                      {itemCount > 9 ? '9+' : itemCount}
+                    </span>
+                  )}
                 </button>
                 {login ? (
                   <div className='hidden md:block w-9 h-9 rounded-full bg-gray-200 overflow-hidden border-2 border-[#f3ece5] cursor-pointer'>

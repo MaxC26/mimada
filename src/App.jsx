@@ -26,6 +26,7 @@ import CursoDetallePage from './pages/explore/CursoDetallePage'
 import ReactModal from 'react-modal'
 import ExplorePage from './pages/ExplorePage'
 import { useAuth } from './context/AuthContext'
+import CartDrawer from './components/cart/CartDrawer'
 
 function App() {
   ReactModal.setAppElement('#root')
@@ -120,6 +121,7 @@ function App() {
 
       <Toaster className='ps-1' position='top-right' richColors='true' />
       {!hideBottomNav && <BottomNav />}
+      <CartDrawer />
     </>
   )
 }
