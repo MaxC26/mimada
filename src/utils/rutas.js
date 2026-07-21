@@ -13,6 +13,7 @@ const routesBackend = Object.freeze({
     register: '/user/register',
     logout: '/user/logout',
     me: '/user/me',
+    socialLogin: '/user/social-login',
   },
   contenido: {
     getAllContenido: '/contenido',
@@ -45,6 +46,10 @@ const routesBackend = Object.freeze({
     addItem: '/cart/item', // POST → agrega un curso al carrito { cursoId }
     removeItem: '/cart/item/:id', // DELETE → elimina un curso del carrito
     clearCarrito: '/cart', // DELETE → vacía todo el carrito
+  },
+  pagos: {
+    createOrder: '/pagos/create-order',
+    captureOrder: '/pagos/capture-order',
   },
 })
 

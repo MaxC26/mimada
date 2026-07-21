@@ -9,9 +9,14 @@ import { useEffect } from 'react'
 import { getAllContenido } from '../services/contenido'
 import LoadingSpinner from '../components/utils/LoadingSpinner'
 import { toast } from 'sonner'
+import { useAuth } from '../context/AuthContext'
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
+  const { user, isAuthenticated } = useAuth()
+  const rol = (user?.rol || '').toLowerCase()
+  const userInitials = user ? `${user.nombre?.charAt(0) || ''}${user.apellido?.charAt(0) || ''}`.toUpperCase().substring(0, 2) : 'U'
+  const primerNombre = user?.nombre ? user.nombre.split(' ')[0] : 'Usuario'
 
   const getAllContent = async () => {
     const updatedContent = { ...content } // Copia del estado actual
@@ -62,7 +67,26 @@ const Home = () => {
       ) : (
         <div className='flex flex-col w-full'>
           <Navbar />
-          <Head content={content} />
+          
+          {/* Welcome Section para el usuario logueado */}
+          {isAuthenticated && rol === 'usuario' && (
+            <div className='w-full bg-white pt-20 md:pt-28 pb-4 relative z-10'>
+              <div className='container mx-auto px-4 lg:px-8 flex items-center justify-start gap-4'>
+                <div className='flex items-center justify-center w-16 h-16 rounded-full bg-gray-900 text-white font-bold text-2xl tracking-wide'>
+                  {userInitials || 'U'}
+                </div>
+                <div className='flex flex-col'>
+                  <h1 className='text-2xl md:text-[28px] font-extrabold text-gray-900 leading-tight tracking-tight'>
+                    Hola de nuevo, {primerNombre}
+                  </h1>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className={isAuthenticated && rol === 'usuario' ? '-mt-12 md:-mt-16' : ''}>
+            <Head content={content} />
+          </div>
           <Body content={content} />
           <OurStory content={content} />
           <Footer />
