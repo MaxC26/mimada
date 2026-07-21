@@ -5,6 +5,8 @@ import { routes } from '../../utils/rutas'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
 import { ROLES } from '../../utils/constantes'
 import { useAuth } from '../../context/AuthContext'
+import { logout } from '../../services/login'
+import { signOutFromGoogle } from '../../services/google'
 
 export const Navbar = ({ isExplore = false }) => {
   const { user, isAuthenticated } = useAuth()
@@ -12,8 +14,60 @@ export const Navbar = ({ isExplore = false }) => {
   const rol = (user?.rol || '').toLowerCase()
 
   console.log('Navbar Debug -> isAuth:', isAuthenticated, ' | rol evaluado:', rol, ' | data original:', user)
-
+  const [showDropdown, setShowDropdown] = useState(false)
   const location = useLocation()
+
+  const handleLogout = async () => {
+    await signOutFromGoogle()
+    await logout()
+  }
+
+  const userInitials = user ? `${user.nombre?.charAt(0) || ''}${user.apellido?.charAt(0) || ''}`.toUpperCase().substring(0, 2) : 'U'
+
+  const UserDropdown = () => (
+    <div className='relative'>
+      <div 
+        className='flex items-center justify-center w-10 h-10 rounded-full bg-gray-900 border-2 border-white text-white font-bold cursor-pointer text-sm shadow-sm hover:ring-2 hover:ring-[#c2a381] transition-all'
+        onClick={() => setShowDropdown(!showDropdown)}
+      >
+        {userInitials || 'MC'}
+      </div>
+      {showDropdown && (
+        <div 
+          className='absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl py-2 border border-gray-100' 
+          onMouseLeave={() => setShowDropdown(false)}
+        >
+          <div className='px-4 py-4 border-b border-gray-100 flex items-center gap-3'>
+             <div className='flex items-center justify-center w-12 h-12 rounded-full bg-gray-900 text-white font-bold text-lg shrink-0'>
+                {userInitials || 'MC'}
+             </div>
+             <div className='flex-1 min-w-0'>
+               <p className='text-sm font-bold text-gray-900 truncate'>{user?.nombre} {user?.apellido}</p>
+               <p className='text-xs text-gray-500 truncate'>{user?.email}</p>
+             </div>
+          </div>
+          <div className='py-2'>
+            <Link 
+              to={routes.explore.inicio} 
+              className='block px-5 py-2 text-sm text-gray-700 hover:text-[#c2a381] font-semibold hover:bg-gray-50 transition-colors'
+              onClick={() => setShowDropdown(false)}
+            >
+              Mi aprendizaje
+            </Link>
+          </div>
+          <div className='border-t border-gray-100'></div>
+          <div className='py-2'>
+            <button 
+              onClick={handleLogout}
+              className='w-full text-left px-5 py-2 text-sm text-gray-700 font-semibold hover:text-red-600 hover:bg-gray-50 transition-colors'
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 
   const homeRoutes = [routes.inicio, routes.home, routes.home + '/']
   const isHomeActive = homeRoutes.includes(location.pathname)
@@ -147,13 +201,7 @@ export const Navbar = ({ isExplore = false }) => {
                   </span>
                 </button>
                 {login ? (
-                  <div className='hidden md:block w-9 h-9 rounded-full bg-gray-200 overflow-hidden border-2 border-[#f3ece5] cursor-pointer'>
-                    <img
-                      src='https://i.pravatar.cc/150?img=47'
-                      alt='User Profile'
-                      className='w-full h-full object-cover'
-                    />
-                  </div>
+                  <UserDropdown />
                 ) : (
                   <Link
                     to={routes.login}
@@ -166,19 +214,21 @@ export const Navbar = ({ isExplore = false }) => {
             ) : (
               /* Botones en modo Home */
               <div className='flex items-center gap-3'>
-                {!login && (
+                {!login ? (
                   <Link
                     to={routes.login}
                     className='hidden md:flex items-center px-5 py-2 rounded-full border-2 border-[#c2a381] text-[#c2a381] text-sm font-bold hover:bg-[#faf7f5] transition-colors'
                   >
                     Iniciar Sesión
                   </Link>
+                ) : (
+                  <UserDropdown />
                 )}
                 <a
                   href='https://wa.me/+50372755604'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='cursor-pointer inline-block'
+                  className='cursor-pointer inline-block ml-2'
                 >
                   <button className='bg-[#c2a381] px-4 sm:px-5 h-[36px] md:h-[40px] rounded-full flex items-center justify-center gap-1.5 shadow-md hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300'>
                     <IconBrandWhatsapp stroke={2} color='#ffffff' size={18} />

@@ -15,6 +15,20 @@ export function login(data) {
   })
 }
 
+// Envía datos de inicio de sesión social
+export function socialLogin(data) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${routes.backend.url}${routes.backend.user.socialLogin}`, data)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Obtiene el perfil del usuario activo (basado en la cookie)
 export async function getMe() {
   const response = await axios.get(`${routes.backend.url}${routes.backend.user.me}`)

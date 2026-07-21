@@ -13,6 +13,7 @@ const routesBackend = Object.freeze({
     register: '/user/register',
     logout: '/user/logout',
     me: '/user/me',
+    socialLogin: '/user/social-login',
   },
   contenido: {
     getAllContenido: '/contenido',

@@ -1,7 +1,8 @@
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-react'
 import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { login, getMe } from '../../services/login'
+import { login, socialLogin, getMe } from '../../services/login'
+import { signInWithGoogle, signInWithFacebook } from '../../services/google'
 import { validarLogin } from '../../utils/formValidation'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
@@ -36,6 +37,88 @@ const Login = () => {
       if (error.response) {
         console.error('Error response:', error.response.data)
         setErrorLogin(error.response.data.mensaje)
+      }
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    try {
+      const userGoogle = await signInWithGoogle()
+      if (userGoogle) {
+        const displayName = userGoogle.displayName || ''
+        const nameParts = displayName.split(' ')
+        const nombre = nameParts[0] || ''
+        const apellido = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+
+        const response = await socialLogin({
+          email: userGoogle.email,
+          nombre,
+          apellido
+        })
+
+        if (response.status === 200) {
+          try {
+            const meResponse = await getMe()
+            if (meResponse?.user) {
+              loginContext(meResponse.user)
+            }
+          } catch (meError) {
+            console.error('Error al obtener perfil', meError)
+          }
+          
+          const redirectTo = location.state?.from || '/'
+          navigate(redirectTo, { replace: true })
+        }
+      }
+    } catch (error) {
+      console.error('Error en Google Login', error)
+      if (error.response?.data?.mensaje) {
+        setErrorLogin(error.response.data.mensaje)
+      } else {
+        setErrorLogin('Error al conectar con Google')
+      }
+    }
+  }
+
+  const handleFacebookLogin = async () => {
+    try {
+      const userFacebook = await signInWithFacebook()
+      if (userFacebook) {
+        const displayName = userFacebook.displayName || ''
+        const nameParts = displayName.split(' ')
+        const nombre = nameParts[0] || ''
+        const apellido = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+
+        // Facebook a veces no provee el correo si la cuenta es usando número de teléfono. 
+        // Si es vital, validamos o usamos un placeholder (NO recomendado para prod si el ID es basado en el correo).
+        const email = userFacebook.email || `${userFacebook.uid}@facebook.mimada.com` 
+
+        const response = await socialLogin({
+          email,
+          nombre,
+          apellido
+        })
+
+        if (response.status === 200) {
+          try {
+            const meResponse = await getMe()
+            if (meResponse?.user) {
+              loginContext(meResponse.user)
+            }
+          } catch (meError) {
+            console.error('Error al obtener perfil', meError)
+          }
+          
+          const redirectTo = location.state?.from || '/'
+          navigate(redirectTo, { replace: true })
+        }
+      }
+    } catch (error) {
+      console.error('Error en Facebook Login', error)
+      if (error.response?.data?.mensaje) {
+        setErrorLogin(error.response.data.mensaje)
+      } else {
+        setErrorLogin('Error al conectar con Facebook')
       }
     }
   }
@@ -123,9 +206,9 @@ const Login = () => {
                 <div>
                   <div className='flex items-center justify-between mb-1.5'>
                     <label className='text-sm font-semibold text-gray-700'>Contraseña</label>
-                    <button type='button' className='text-xs font-semibold text-[#c2a381] hover:underline'>
+                    {/* <button type='button' className='text-xs font-semibold text-[#c2a381] hover:underline'>
                       ¿Olvidaste tu contraseña?
-                    </button>
+                    </button> */}
                   </div>
                   <div className={`flex items-center gap-3 border rounded-xl px-4 py-3 transition-all ${errors.password ? 'border-red-400' : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'}`}>
                     <IconLock size={18} className='text-gray-400 shrink-0' stroke={1.5} />
@@ -185,7 +268,11 @@ const Login = () => {
 
           {/* Botones sociales */}
           <div className='grid grid-cols-2 gap-3'>
-            <button className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'>
+            <button
+              type='button'
+              onClick={handleGoogleLogin} 
+              className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
+            >
               {/* Google SVG Icon */}
               <svg width='18' height='18' viewBox='0 0 18 18'>
                 <path fill='#EA4335' d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z'/>
@@ -195,7 +282,11 @@ const Login = () => {
               </svg>
               Google
             </button>
-            <button className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'>
+            <button
+              type='button'
+              onClick={handleFacebookLogin} 
+              className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
+            >
               {/* Facebook SVG Icon */}
               <svg width='18' height='18' viewBox='0 0 24 24' fill='#1877F2'>
                 <path d='M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z'/>
@@ -205,12 +296,12 @@ const Login = () => {
           </div>
 
           {/* Registro */}
-          <p className='text-center text-sm text-gray-500 mt-6'>
+          {/* <p className='text-center text-sm text-gray-500 mt-6'>
             ¿No tienes cuenta?{' '}
             <button className='text-[#c2a381] font-bold hover:underline'>
               Crear cuenta
             </button>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
