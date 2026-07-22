@@ -37,6 +37,17 @@ export const validarCurso = (esEdicion) =>
         if (!(value instanceof File)) return false
         return value.size <= 5 * 1024 * 1024
       }),
+    descuento: esEdicion
+      ? Yup.number()
+          .typeError('El descuento debe ser un número.')
+          .min(0, 'El descuento no puede ser negativo.')
+          .when('precio', ([precio], schema) =>
+            schema.max(
+              Number(precio) || 0,
+              'El descuento no puede ser mayor al precio.',
+            ),
+          )
+      : Yup.number(),
   })
 
 export const validarVideoCurso = Yup.object({

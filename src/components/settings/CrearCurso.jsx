@@ -24,6 +24,7 @@ import {
 import UploadVideoModal from './UploadVideoModal'
 import LoadingSpinner from '../utils/LoadingSpinner'
 import { validarCurso } from '../../utils/formValidation'
+import { calcPorcentajeDescuento } from '../../utils/utils'
 
 /* ── Helpers ── */
 const inputClass = (hasError) =>
@@ -128,8 +129,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
         prev.map((leccion) =>
           leccion.videoId === Number(videoData.videoId)
             ? { ...leccion, ...videoData }
-            : leccion,
-        ),
+            : leccion
+        )
       )
     } else {
       setLecciones((prev) => [
@@ -210,6 +211,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
       }
 
       if (esEdicion) {
+        formData.append('descuento', values.descuento || 0)
         formData.append('estado', values.estado)
         formData.append('cursoId', values.cursoid)
         await updateCurso(formData)
@@ -260,6 +262,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
               descripcion: curso?.descripcion || '',
               categoria: curso?.categoriaId || '',
               precio: curso?.precio?.toString() || '',
+              descuento: curso?.descuento?.toString() || '',
+              porcentaje: calcPorcentajeDescuento(curso?.descuento, curso?.precio),
               dificultad: curso?.nivel || '',
               estado: curso?.estadoId || '',
               duracion: curso?.duracion || '',
@@ -471,6 +475,111 @@ const CrearCurso = ({ curso = null, onBack }) => {
                             </div>
                           </div>
 
+                          {/* Descuento + Porcentaje (solo edición) */}
+                          {esEdicion && (
+                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                              <div>
+                                <label className='block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5'>
+                                  Descuento (USD)
+                                </label>
+                                <Field name='descuento'>
+                                  {({ field, meta }) => (
+                                    <>
+                                      <div
+                                        className={`flex items-center border rounded-xl px-4 py-3 transition-all ${
+                                          meta.touched && meta.error
+                                            ? 'border-red-400 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100'
+                                            : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'
+                                        }`}
+                                      >
+                                        <span className='text-gray-400 text-sm mr-2'>
+                                          $
+                                        </span>
+                                        <input
+                                          type='number'
+                                          min={0}
+                                          step='0.01'
+                                          placeholder='0.00'
+                                          className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
+                                          {...field}
+                                          onChange={(e) => {
+                                            const descVal = e.target.value
+                                            field.onChange(e)
+                                            const precio = Number(values.precio)
+                                            if (precio > 0 && descVal !== '') {
+                                              const pct = (
+                                                (Number(descVal) / precio) *
+                                                100
+                                              ).toFixed(0)
+                                              setFieldValue('porcentaje', pct)
+                                            } else {
+                                              setFieldValue('porcentaje', '')
+                                            }
+                                          }}
+                                        />
+                                      </div>
+                                      {meta.touched && meta.error && (
+                                        <p className='text-xs text-red-500 mt-1'>
+                                          {meta.error}
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                </Field>
+                              </div>
+                              <div>
+                                <label className='block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5'>
+                                  Porcentaje (%)
+                                </label>
+                                <Field name='porcentaje'>
+                                  {({ field, meta }) => (
+                                    <>
+                                      <div
+                                        className={`flex items-center border rounded-xl px-4 py-3 transition-all ${
+                                          meta.touched && meta.error
+                                            ? 'border-red-400 focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-100'
+                                            : 'border-gray-200 focus-within:border-[#c2a381] focus-within:ring-2 focus-within:ring-[#f3ece5]'
+                                        }`}
+                                      >
+                                        <input
+                                          type='number'
+                                          min={0}
+                                          max={100}
+                                          step='0.01'
+                                          placeholder='0.00'
+                                          className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
+                                          {...field}
+                                          onChange={(e) => {
+                                            const pctVal = e.target.value
+                                            field.onChange(e)
+                                            const precio = Number(values.precio)
+                                            if (precio > 0 && pctVal !== '') {
+                                              const desc = (
+                                                (Number(pctVal) / 100) *
+                                                precio
+                                              ).toFixed(2)
+                                              setFieldValue('descuento', desc)
+                                            } else {
+                                              setFieldValue('descuento', '')
+                                            }
+                                          }}
+                                        />
+                                        <span className='text-gray-400 text-sm ml-2'>
+                                          %
+                                        </span>
+                                      </div>
+                                      {meta.touched && meta.error && (
+                                        <p className='text-xs text-red-500 mt-1'>
+                                          {meta.error}
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                </Field>
+                              </div>
+                            </div>
+                          )}
+
                           {/* Dificultad + Estado */}
                           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                             <div>
@@ -509,7 +618,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                       <>
                                         <select
                                           className={selectClass(
-                                            meta.touched && meta.error,
+                                            meta.touched && meta.error
                                           )}
                                           name={field.name}
                                           value={field.value}
