@@ -69,6 +69,7 @@ export const routes = Object.freeze({
     detalle: context + '/explorar/cursos/:id',
   },
   login: context + '/login',
+  checkout: context + '/checkout',
   settings: context + '/settings',
   dashboard: {
     base: context + '/settings',

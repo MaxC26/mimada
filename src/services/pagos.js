@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { routes } from '../utils/rutas'
 
-export function createPayPalOrder(cursoId) {
+export function createPayPalOrder(cursos) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${routes.backend.url}${routes.backend.pagos.createOrder}`, { cursoId })
+      .post(`${routes.backend.url}${routes.backend.pagos.createOrder}`, cursos)
       .then(function (response) {
         resolve(response)
       })
@@ -17,7 +17,9 @@ export function createPayPalOrder(cursoId) {
 export function capturePayPalOrder(orderId) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${routes.backend.url}${routes.backend.pagos.captureOrder}`, { paypalOrderId: orderId })
+      .post(`${routes.backend.url}${routes.backend.pagos.captureOrder}`, {
+        paypalOrderId: orderId,
+      })
       .then(function (response) {
         resolve(response)
       })

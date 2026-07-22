@@ -27,6 +27,7 @@ import ReactModal from 'react-modal'
 import ExplorePage from './pages/ExplorePage'
 import { useAuth } from './context/AuthContext'
 import CartDrawer from './components/cart/CartDrawer'
+import CheckoutPage from './pages/CheckoutPage'
 
 function App() {
   ReactModal.setAppElement('#root')
@@ -37,11 +38,15 @@ function App() {
   const rol = (user?.rol || '').toLowerCase()
 
   const hideBottomNav = [routes.login, routes.settings].some((r) =>
-    location.pathname.startsWith(r),
+    location.pathname.startsWith(r)
   )
 
   if (isLoading) {
-    return <div className='min-h-screen flex items-center justify-center text-[#c2a381]'>Cargando...</div>
+    return (
+      <div className='min-h-screen flex items-center justify-center text-[#c2a381]'>
+        Cargando...
+      </div>
+    )
   }
 
   return (
@@ -55,6 +60,8 @@ function App() {
           <Route path={routes.explore.detalle} element={<CursoDetallePage />} />
         </Route>
         <Route path={routes.login} element={<LoginPage />} />
+        {/* Checkout */}
+        <Route path={routes.checkout} element={<CheckoutPage />} />
 
         <Route element={<ProtectedRoute />}>
           {/* Dashboard con rutas anidadas */}
@@ -95,7 +102,7 @@ function App() {
                         routes.dashboard.editarCurso.replace(':id', curso.cursoId),
                         {
                           state: { curso },
-                        },
+                        }
                       )
                     }
                   />

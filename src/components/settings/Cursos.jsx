@@ -149,9 +149,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
               <p className='text-xs font-black text-[#c2a381] uppercase tracking-widest mb-1 md:hidden'>
                 Panel de Instructor
               </p>
-              <h2 className='text-2xl md:text-3xl font-black text-gray-900'>
-                Mis Cursos
-              </h2>
+              <h2 className='text-2xl md:text-3xl font-black text-gray-900'>Cursos</h2>
               <p className='text-gray-500 text-sm mt-0.5 hidden md:block'>
                 Gestiona y analiza el rendimiento de tus formaciones.
               </p>

@@ -1,12 +1,12 @@
 import { IconEye, IconEyeOff, IconMail, IconLock } from '@tabler/icons-react'
 import { Field, Form, Formik } from 'formik'
 import { useState } from 'react'
-import { login, socialLogin, getMe } from '../../services/login'
-import { signInWithGoogle, signInWithFacebook } from '../../services/google'
+import { login, getMe } from '../../services/login'
 import { validarLogin } from '../../utils/formValidation'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logoMimada from '../../assets/img/logo/logo-mimada.png'
 import { useAuth } from '../../context/AuthContext'
+import SocialLoginButtons from './SocialLoginButtons'
 
 const Login = () => {
   const location = useLocation()
@@ -40,72 +40,13 @@ const Login = () => {
     }
   }
 
-  const handleGoogleLogin = async () => {
-    try {
-      const userGoogle = await signInWithGoogle()
-      if (userGoogle) {
-        const idToken = await userGoogle.getIdToken()
-
-        const response = await socialLogin({
-          idToken,
-        })
-
-        if (response.status === 200) {
-          try {
-            const meResponse = await getMe()
-            if (meResponse?.user) {
-              loginContext(meResponse.user)
-            }
-          } catch (meError) {
-            console.error('Error al obtener perfil', meError)
-          }
-
-          const redirectTo = location.state?.from || '/'
-          navigate(redirectTo, { replace: true })
-        }
-      }
-    } catch (error) {
-      console.error('Error en Google Login', error)
-      if (error.response?.data?.mensaje) {
-        setErrorLogin(error.response.data.mensaje)
-      } else {
-        setErrorLogin('Error al conectar con Google')
-      }
-    }
+  const handleSocialSuccess = () => {
+    const redirectTo = location.state?.from || '/'
+    navigate(redirectTo, { replace: true })
   }
 
-  const handleFacebookLogin = async () => {
-    try {
-      const userFacebook = await signInWithFacebook()
-      if (userFacebook) {
-        const idToken = await userFacebook.getIdToken()
-
-        const response = await socialLogin({
-          idToken,
-        })
-
-        if (response.status === 200) {
-          try {
-            const meResponse = await getMe()
-            if (meResponse?.user) {
-              loginContext(meResponse.user)
-            }
-          } catch (meError) {
-            console.error('Error al obtener perfil', meError)
-          }
-
-          const redirectTo = location.state?.from || '/'
-          navigate(redirectTo, { replace: true })
-        }
-      }
-    } catch (error) {
-      console.error('Error en Facebook Login', error)
-      if (error.response?.data?.mensaje) {
-        setErrorLogin(error.response.data.mensaje)
-      } else {
-        setErrorLogin('Error al conectar con Facebook')
-      }
-    }
+  const handleSocialError = (message) => {
+    setErrorLogin(message)
   }
 
   return (
@@ -267,45 +208,10 @@ const Login = () => {
           </div>
 
           {/* Botones sociales */}
-          <div className='grid grid-cols-2 gap-3'>
-            <button
-              type='button'
-              onClick={handleGoogleLogin}
-              className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
-            >
-              {/* Google SVG Icon */}
-              <svg width='18' height='18' viewBox='0 0 18 18'>
-                <path
-                  fill='#EA4335'
-                  d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.616z'
-                />
-                <path
-                  fill='#4285F4'
-                  d='M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z'
-                />
-                <path
-                  fill='#FBBC05'
-                  d='M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z'
-                />
-                <path
-                  fill='#34A853'
-                  d='M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z'
-                />
-              </svg>
-              Google
-            </button>
-            <button
-              type='button'
-              onClick={handleFacebookLogin}
-              className='flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors'
-            >
-              {/* Facebook SVG Icon */}
-              <svg width='18' height='18' viewBox='0 0 24 24' fill='#1877F2'>
-                <path d='M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.887v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z' />
-              </svg>
-              Facebook
-            </button>
-          </div>
+          <SocialLoginButtons
+            onSuccess={handleSocialSuccess}
+            onError={handleSocialError}
+          />
 
           {/* Registro */}
           {/* <p className='text-center text-sm text-gray-500 mt-6'>
@@ -321,4 +227,3 @@ const Login = () => {
 }
 
 export default Login
-

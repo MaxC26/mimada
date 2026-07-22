@@ -1,7 +1,10 @@
 import { IconShoppingCart } from '@tabler/icons-react'
 import RatingStars from './RatingStars'
+import { useCart } from '../../context/CartContext'
 
 export const CourseCard = ({
+  cursoId,
+  id,
   titulo,
   author,
   calificacionPromedio,
@@ -12,6 +15,20 @@ export const CourseCard = ({
   categoria,
   onClick,
 }) => {
+  const { addToCart, openCart } = useCart()
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation()
+    addToCart({
+      cursoId: cursoId ?? id,
+      titulo,
+      precio,
+      imagenPortada,
+      categoria,
+    })
+    openCart()
+  }
+
   return (
     <div
       className='bg-white rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col group cursor-pointer'
@@ -70,13 +87,19 @@ export const CourseCard = ({
         {/* Footer de Tarjeta: Precio y Carrito/Boton */}
         <div className='flex items-center justify-between pt-4 border-t border-gray-100'>
           <div className='flex flex-col md:hidden w-full'>
-            {/* Layout Móvil: Precio arriba del botón */}
+            {/* Layout Móvil: Precio y Botón de Carrito */}
             <div className='flex justify-between items-center mb-3 w-full'>
               <span className='font-bold text-2xl text-[#c2a381] leading-none'>
                 ${precio}
               </span>
+              <button
+                onClick={handleAddToCart}
+                className='bg-[#c2a381] text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm hover:bg-[#a58b6c] transition-colors'
+              >
+                <IconShoppingCart size={18} stroke={2} />
+              </button>
             </div>
-            <button className='w-full bg-[#f3ece5] text-[#c2a381] font-bold py-3 rounded-xl hover:bg-[#c2a381] hover:text-white transition-colors'>
+            <button className='w-full bg-[#f3ece5] text-[#c2a381] font-bold py-2.5 rounded-xl text-xs hover:bg-[#c2a381] hover:text-white transition-colors'>
               Ver detalles
             </button>
           </div>
@@ -88,7 +111,10 @@ export const CourseCard = ({
                 ${precio}
               </span>
             </div>
-            <button className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300 shadow-sm'>
+            <button
+              onClick={handleAddToCart}
+              className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300 shadow-sm'
+            >
               <IconShoppingCart size={20} stroke={2} />
             </button>
           </div>

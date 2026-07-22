@@ -7,9 +7,12 @@ import {
 } from '@tabler/icons-react'
 import { useCart } from '../../context/CartContext'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { routes } from '../../utils/rutas'
 
 const CartDrawer = () => {
-  const { items, total, itemCount, isOpen, closeCart, removeFromCart, clearCart } = useCart()
+  const { items, total, itemCount, isOpen, closeCart, removeFromCart, clearCart } =
+    useCart()
 
   // Bloquear scroll del body cuando el drawer está abierto
   useEffect(() => {
@@ -72,13 +75,14 @@ const CartDrawer = () => {
                   Explora nuestros cursos y agrega los que más te gusten
                 </p>
               </div>
-              <button
+              <Link
+                to={routes.explore.cursos}
                 onClick={closeCart}
                 className='mt-2 text-sm font-bold text-[#c2a381] hover:underline flex items-center gap-1'
               >
                 Ver cursos
                 <IconArrowRight size={15} />
-              </button>
+              </Link>
             </div>
           ) : (
             items.map((item) => (
@@ -96,7 +100,11 @@ const CartDrawer = () => {
                     />
                   ) : (
                     <div className='w-full h-full flex items-center justify-center bg-[#f3ece5]'>
-                      <IconShoppingBag size={20} className='text-[#c2a381]' stroke={1.5} />
+                      <IconShoppingBag
+                        size={20}
+                        className='text-[#c2a381]'
+                        stroke={1.5}
+                      />
                     </div>
                   )}
                 </div>
@@ -119,7 +127,7 @@ const CartDrawer = () => {
                 {/* Botón eliminar */}
                 <button
                   onClick={() => removeFromCart(item.cursoId)}
-                  className='absolute top-3 right-3 p-1 text-gray-300 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100'
+                  className='absolute top-3 right-3 p-1 text-gray-400 hover:text-red-500 transition-colors'
                   title='Eliminar'
                 >
                   <IconTrash size={15} />
@@ -135,14 +143,20 @@ const CartDrawer = () => {
             {/* Total */}
             <div className='flex items-center justify-between'>
               <span className='text-sm text-gray-500 font-medium'>Total</span>
-              <span className='text-2xl font-black text-gray-900'>${total.toFixed(2)}</span>
+              <span className='text-2xl font-black text-gray-900'>
+                ${total.toFixed(2)}
+              </span>
             </div>
 
-            {/* CTA */}
-            <button className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center justify-center gap-2'>
+            {/* Checkout */}
+            <Link
+              to={routes.checkout}
+              onClick={closeCart}
+              className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm flex items-center justify-center gap-2 no-underline'
+            >
               <IconShoppingBag size={16} />
               Proceder al pago
-            </button>
+            </Link>
 
             {/* Clear */}
             <button

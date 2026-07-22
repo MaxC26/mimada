@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { getMe } from '../services/login'
+import { socialLogin, getMe } from '../services/login'
+import { signInWithGoogle, signInWithFacebook } from '../services/google'
 
 const AuthContext = createContext(null)
 
@@ -45,8 +46,67 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false)
   }
 
+  /**
+   * Social login genérico (usado internamente por handleGoogleLogin / handleFacebookLogin).
+   * Recibe el firebaseUser y callbacks opcionales { onSuccess, onError }.
+   */
+  const processSocialLogin = async (firebaseUser, { onSuccess } = {}) => {
+    const idToken = await firebaseUser.getIdToken()
+
+    const response = await socialLogin({ idToken })
+
+    if (response.status === 200) {
+      try {
+        const meResponse = await getMe()
+        if (meResponse?.user) {
+          loginContext(meResponse.user)
+        }
+      } catch (meError) {
+        console.error('Error al obtener perfil', meError)
+      }
+
+      onSuccess?.()
+    }
+  }
+
+  const handleGoogleLogin = async ({ onSuccess, onError } = {}) => {
+    try {
+      const userGoogle = await signInWithGoogle()
+      if (userGoogle) {
+        await processSocialLogin(userGoogle, { onSuccess, onError })
+      }
+    } catch (error) {
+      console.error('Error en Google Login', error)
+      const message = error.response?.data?.mensaje || 'Error al conectar con Google'
+      onError?.(message)
+    }
+  }
+
+  const handleFacebookLogin = async ({ onSuccess, onError } = {}) => {
+    try {
+      const userFacebook = await signInWithFacebook()
+      if (userFacebook) {
+        await processSocialLogin(userFacebook, { onSuccess, onError })
+      }
+    } catch (error) {
+      console.error('Error en Facebook Login', error)
+      const message = error.response?.data?.mensaje || 'Error al conectar con Facebook'
+      onError?.(message)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, loginContext, logoutContext }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        loginContext,
+        logoutContext,
+        handleGoogleLogin,
+        handleFacebookLogin,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
