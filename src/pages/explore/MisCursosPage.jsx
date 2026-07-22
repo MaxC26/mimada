@@ -81,7 +81,7 @@ const MisCursosPage = () => {
         <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-4'>
           <div>
             <h1 className='text-3xl md:text-4xl font-black text-gray-900 leading-tight'>
-              Todos los cursos
+              Mis cursos
             </h1>
             <p className='text-gray-500 mt-1'>
               {cursos.length} cursos disponible(s) para ti
@@ -154,6 +154,7 @@ const MisCursosPage = () => {
               key={course.cursoId}
               {...course}
               onClick={() => handleVerDetalle(course)}
+              isMine={true}
             />
           ))}
         </div>

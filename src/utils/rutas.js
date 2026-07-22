@@ -26,6 +26,7 @@ const routesBackend = Object.freeze({
     getCursosByEstado: '/cursos/cursosByEstado?estado=:estado',
     getCursoById: '/cursos/detalle?cursoId=:id',
     getCursosPopulares: '/cursos/top',
+    getMisCursos: '/cursos/mis-cursos',
     createCurso: '/cursos',
     updateCurso: '/cursos',
     deleteCurso: '/cursos?cursoId=:id',
