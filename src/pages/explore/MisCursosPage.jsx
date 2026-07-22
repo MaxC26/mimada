@@ -9,7 +9,7 @@ import {
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
-import { getCategoriasCurso, getCursosByEstado } from '../../services/cursos'
+import { getCategoriasCurso, getMisCursos } from '../../services/cursos'
 
 const MisCursosPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -29,7 +29,7 @@ const MisCursosPage = () => {
     try {
       const [categoriasResult, cursosResult] = await Promise.allSettled([
         getCategoriasCurso(),
-        getCursosByEstado('publicado'),
+        getMisCursos(),
       ])
 
       if (cursosResult.status === 'fulfilled') {

@@ -48,7 +48,7 @@ export function getCursos() {
 export function getCursosByEstado(estado) {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursosByEstado}`.replace(
     ':estado',
-    estado,
+    estado
   )
   return new Promise((resolve, reject) => {
     axios
@@ -66,7 +66,7 @@ export function getCursosByEstado(estado) {
 export function getCursoById(cursoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursoById}`.replace(
     ':id',
-    cursoId,
+    cursoId
   )
   return new Promise((resolve, reject) => {
     axios
@@ -83,6 +83,21 @@ export function getCursoById(cursoId) {
 // Obtiene los cursos populares (para la página de Explorar)
 export function getCursosPopulares() {
   const url = `${routes.backend.url}${routes.backend.cursos.getCursosPopulares}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+// Obtiene todos los cursos por estado
+export function getMisCursos() {
+  const url = `${routes.backend.url}${routes.backend.cursos.getMisCursos}`
   return new Promise((resolve, reject) => {
     axios
       .get(url)
@@ -128,7 +143,7 @@ export function updateCurso(data) {
 export function deleteCurso(cursoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.deleteCurso}`.replace(
     ':id',
-    cursoId,
+    cursoId
   )
   return new Promise((resolve, reject) => {
     axios
@@ -146,7 +161,7 @@ export function deleteCurso(cursoId) {
 export function getVideosCurso(cursoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.getVideosCurso}`.replace(
     ':id',
-    cursoId,
+    cursoId
   )
   return new Promise((resolve, reject) => {
     axios
@@ -194,7 +209,7 @@ export function updateVideoCurso(data) {
 export function deleteVideoCurso(videoId) {
   const url = `${routes.backend.url}${routes.backend.cursos.deleteVideo}`.replace(
     ':id',
-    videoId,
+    videoId
   )
   return new Promise((resolve, reject) => {
     axios
