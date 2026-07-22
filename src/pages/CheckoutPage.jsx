@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { Navbar } from '../components/nabvar/Navbar'
-import Footer from '../components/Footer'
+import Footer from '../components/utils/Footer'
 import { routes } from '../utils/rutas'
 import {
   IconArrowLeft,
@@ -231,7 +231,9 @@ const CheckoutPage = () => {
                         disabled={!isAuthenticated}
                         createOrder={async () => {
                           try {
-                            const cursos = items.map((item) => ({ cursoId: item.cursoId }))
+                            const cursos = items.map((item) => ({
+                              cursoId: item.cursoId,
+                            }))
                             const res = await createPayPalOrder(cursos)
                             console.log('Respuesta de createOrder backend:', res.data)
 

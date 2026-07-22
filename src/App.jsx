@@ -28,6 +28,7 @@ import ExplorePage from './pages/ExplorePage'
 import { useAuth } from './context/AuthContext'
 import CartDrawer from './components/cart/CartDrawer'
 import CheckoutPage from './pages/CheckoutPage'
+import MisCursosPage from './pages/explore/MisCursosPage'
 
 function App() {
   ReactModal.setAppElement('#root')
@@ -58,6 +59,9 @@ function App() {
           <Route index element={<ExploreListPage />} />
           <Route path={routes.explore.cursos} element={<TodosCursosPage />} />
           <Route path={routes.explore.detalle} element={<CursoDetallePage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path={routes.explore.misCursos} element={<MisCursosPage />} />
+          </Route>
         </Route>
         <Route path={routes.login} element={<LoginPage />} />
         {/* Checkout */}

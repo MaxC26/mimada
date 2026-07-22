@@ -64,7 +64,7 @@ export const Navbar = ({ isExplore = false }) => {
           </div>
           <div className='py-2'>
             <Link
-              to={routes.explore.inicio}
+              to={routes.explore.misCursos}
               className='block px-5 py-2 text-sm text-gray-700 hover:text-[#c2a381] font-semibold hover:bg-gray-50 transition-colors'
               onClick={() => setShowDropdown(false)}
             >
@@ -176,12 +176,12 @@ export const Navbar = ({ isExplore = false }) => {
                 {login && (
                   <>
                     <li>
-                      <a
-                        href='#'
+                      <Link
+                        to={routes.explore.misCursos}
                         className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
                       >
                         Mis Cursos
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <a

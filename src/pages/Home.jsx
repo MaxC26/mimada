@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Footer from '../components/Footer'
+import Footer from '../components/utils/Footer'
 import { Head } from '../components/head/Head'
 import Body from '../components/home/Body'
 
@@ -15,7 +15,11 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { user, isAuthenticated } = useAuth()
   const rol = (user?.rol || '').toLowerCase()
-  const userInitials = user ? `${user.nombre?.charAt(0) || ''}${user.apellido?.charAt(0) || ''}`.toUpperCase().substring(0, 2) : 'U'
+  const userInitials = user
+    ? `${user.nombre?.charAt(0) || ''}${user.apellido?.charAt(0) || ''}`
+        .toUpperCase()
+        .substring(0, 2)
+    : 'U'
   const primerNombre = user?.nombre ? user.nombre.split(' ')[0] : 'Usuario'
 
   const getAllContent = async () => {
@@ -67,7 +71,7 @@ const Home = () => {
       ) : (
         <div className='flex flex-col w-full'>
           <Navbar />
-          
+
           {/* Welcome Section para el usuario logueado */}
           {isAuthenticated && rol === 'usuario' && (
             <div className='w-full bg-white pt-20 md:pt-28 pb-4 relative z-10'>

@@ -67,6 +67,7 @@ export const routes = Object.freeze({
     inicio: context + '/explorar',
     cursos: context + '/explorar/cursos',
     detalle: context + '/explorar/cursos/:id',
+    misCursos: context + '/explorar/mis-cursos',
   },
   login: context + '/login',
   checkout: context + '/checkout',

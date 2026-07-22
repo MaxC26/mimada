@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from '../../components/nabvar/Navbar'
-import Footer from '../../components/Footer'
+import Footer from '../../components/utils/Footer'
 import OurStory from '../../components/home/OurStory'
 import LoadingSpinner from '../../components/utils/LoadingSpinner'
 
