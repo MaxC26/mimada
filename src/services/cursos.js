@@ -95,9 +95,23 @@ export function getCursosPopulares() {
   })
 }
 
-// Obtiene todos los cursos por estado
+// Obtiene cursos de usuario loggeado
 export function getMisCursos() {
   const url = `${routes.backend.url}${routes.backend.cursos.getMisCursos}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+export function getEstadisticasCursos() {
+  const url = `${routes.backend.url}${routes.backend.cursos.getEstadisticas}`
   return new Promise((resolve, reject) => {
     axios
       .get(url)

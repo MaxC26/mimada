@@ -10,37 +10,10 @@ import {
   IconChartBar,
   IconPhoto,
 } from '@tabler/icons-react'
-import { getCursos } from '../../services/cursos'
+import { getCursos, getEstadisticasCursos } from '../../services/cursos'
 import { toast } from 'sonner'
 import { ESTADOS_CURSO } from '../../utils/constantes'
 import LoadingSpinner from '../utils/LoadingSpinner'
-
-const STATS = [
-  {
-    label: 'TOTAL ESTUDIANTES',
-    valor: '4,208',
-    cambio: '+14% desde el mes pasado',
-    icon: IconUsers,
-    color: 'text-[#c2a381]',
-    bg: 'bg-[#faf7f5]',
-  },
-  {
-    label: 'GANANCIAS TOTALES',
-    valor: '€56,770',
-    cambio: '+8% desde el mes pasado',
-    icon: IconCurrencyEuro,
-    color: 'text-[#c2a381]',
-    bg: 'bg-[#faf7f5]',
-  },
-  {
-    label: 'CALIFICACIÓN PROMEDIO',
-    valor: '4.8 / 5.0',
-    cambio: 'Basado en 250 reseñas',
-    icon: IconStar,
-    color: 'text-[#c2a381]',
-    bg: 'bg-[#faf7f5]',
-  },
-]
 
 const TABS = ['Todos los cursos', 'Publicados', 'Borradores', 'Archivados']
 
@@ -79,6 +52,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const [cursos, setCursos] = useState([])
+  const [estadisticas, setEstadisticas] = useState(null)
   const [noCursos, setNoCursos] = useState(false)
 
   const cursosFiltrados = cursos.filter((c) => {
@@ -101,6 +75,33 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
       .length,
   }
 
+  const STATS = [
+    {
+      label: 'TOTAL ESTUDIANTES',
+      valor: estadisticas?.totalEstudiantes?.valor || 0,
+      cambio: `+${estadisticas?.totalEstudiantes?.porcentaje || 0}% desde el mes pasado`,
+      icon: IconUsers,
+      color: 'text-[#c2a381]',
+      bg: 'bg-[#faf7f5]',
+    },
+    {
+      label: 'GANANCIAS TOTALES',
+      valor: `$${estadisticas?.ganancias?.valor || 0}`,
+      cambio: `+${estadisticas?.ganancias?.porcentaje || 0}% desde el mes pasado`,
+      icon: IconCurrencyEuro,
+      color: 'text-[#c2a381]',
+      bg: 'bg-[#faf7f5]',
+    },
+    {
+      label: 'CALIFICACIÓN PROMEDIO',
+      valor: `${estadisticas?.calificacion?.valor || 0}/ 5.0`,
+      cambio: `Basado en ${estadisticas?.calificacion?.totalResenas || 0} reseñas`,
+      icon: IconStar,
+      color: 'text-[#c2a381]',
+      bg: 'bg-[#faf7f5]',
+    },
+  ]
+
   /* ── Carga de datos ── */
   useEffect(() => {
     fetchData()
@@ -112,7 +113,10 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
     setIsLoading(true)
     setNoCursos(false)
     try {
-      const [cursosResult] = await Promise.allSettled([getCursos()])
+      const [cursosResult, estadisticasResult] = await Promise.allSettled([
+        getCursos(),
+        getEstadisticasCursos(),
+      ])
 
       if (cursosResult.status === 'fulfilled') {
         setCursos(cursosResult.value.data)
@@ -125,6 +129,13 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
           console.error('Error cargando cursos:', cursosResult.reason)
           ErrorMessage('Error al cargar los cursos')
         }
+      }
+
+      if (estadisticasResult.status === 'fulfilled') {
+        setEstadisticas(estadisticasResult.value.data)
+      } else {
+        console.error('Error cargando estadísticas:', estadisticasResult.reason)
+        setEstadisticas(null)
       }
     } catch (err) {
       console.error('Error inesperado:', err)
