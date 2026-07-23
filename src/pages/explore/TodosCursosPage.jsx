@@ -154,6 +154,7 @@ const TodosCursosPage = () => {
               key={course.cursoId}
               {...course}
               onClick={() => handleVerDetalle(course)}
+              isMine={course.comprado}
             />
           ))}
         </div>
@@ -163,4 +164,3 @@ const TodosCursosPage = () => {
 }
 
 export default TodosCursosPage
-

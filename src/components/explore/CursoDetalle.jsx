@@ -11,6 +11,7 @@ import {
 } from '@tabler/icons-react'
 import RatingStars from '../utils/RatingStars'
 import { useCart } from '../../context/CartContext'
+import { calcPorcentajeDescuento } from '../../utils/utils'
 
 /* ── Sub: Accordion item ── */
 const AccordionItem = ({ index, titulo }) => {
@@ -43,6 +44,8 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
     titulo: curso.titulo || '',
     descripcion: curso.descripcion || '',
     precio: parseFloat(curso.precio) || 0,
+    descuento: parseFloat(curso.descuento) || 0,
+    isMine: curso.comprado || false,
     thumbnail: curso.imagenPortada || '',
     lecciones: leccionesData,
     reviews: reseñasData.map((r, idx) => ({
@@ -340,21 +343,29 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
         <div className='w-full lg:w-80 shrink-0'>
           <div className='sticky top-25 bg-white rounded-2xl border border-gray-100 shadow-md p-6 space-y-4'>
             {/* Precio */}
-            <div>
-              <p className='text-3xl font-black text-gray-900'>
-                ${detalle?.precio?.toFixed(2)}
-              </p>
-              {detalle?.descuento && (
-                <div className='flex items-center gap-2 mt-0.5'>
-                  <p className='text-sm text-gray-400 line-through'>
-                    ${detalle?.precioOriginal?.toFixed(2)}
+            <>
+              <div className='flex items-center gap-2.5 flex-wrap'>
+                <p className='text-4xl font-black text-gray-900'>
+                  $
+                  {(detalle?.descuento > 0
+                    ? detalle.precio - detalle.descuento
+                    : detalle?.precio
+                  )?.toFixed(2)}
+                </p>
+                {detalle?.descuento > 0 && (
+                  <p className='text-xl text-gray-400 line-through'>
+                    ${detalle?.precio?.toFixed(2)}
                   </p>
-                  <span className='text-xs font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full'>
-                    {detalle?.descuento}% OFF
+                )}
+              </div>
+              {detalle?.descuento > 0 && (
+                <div className='mt-1'>
+                  <span className='text-xs font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
+                    {calcPorcentajeDescuento(detalle?.descuento, detalle?.precio)}% OFF
                   </span>
                 </div>
               )}
-            </div>
+            </>
 
             {/* Botones */}
             {/* <button
@@ -366,7 +377,12 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
             >
               Comprar curso ahora
             </button> */}
-            {isInCart(curso.cursoId) ? (
+            {detalle?.isMine ? (
+              <div className='w-full py-3.5 rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-700 font-bold text-sm flex items-center justify-center gap-2'>
+                <IconCheck size={18} stroke={2.5} />
+                Este curso ya te pertenece
+              </div>
+            ) : isInCart(curso.cursoId) ? (
               <button
                 onClick={openCart}
                 className='w-full py-3 rounded-full border-2 border-green-500 text-green-600 font-bold text-sm hover:bg-green-50 transition-colors flex items-center justify-center gap-2'

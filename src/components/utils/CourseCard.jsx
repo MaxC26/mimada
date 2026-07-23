@@ -1,4 +1,4 @@
-import { IconShoppingCart } from '@tabler/icons-react'
+import { IconShoppingCart, IconArrowRight } from '@tabler/icons-react'
 import RatingStars from './RatingStars'
 import { useCart } from '../../context/CartContext'
 
@@ -86,7 +86,17 @@ export const CourseCard = ({
         </div>
 
         {/* Footer de Tarjeta: Precio y Carrito/Boton */}
-        {!isMine && (
+        {isMine ? (
+          <div className='pt-4 border-t border-gray-100 mt-auto'>
+            <button
+              onClick={onClick}
+              className='w-full bg-[#c2a381] text-white font-bold py-3 rounded-xl text-sm shadow-md shadow-[#c2a381]/25 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2'
+            >
+              Ir a curso
+              <IconArrowRight size={16} stroke={2.5} />
+            </button>
+          </div>
+        ) : (
           <div className='flex items-center justify-between pt-4 border-t border-gray-100'>
             <div className='flex flex-col md:hidden w-full'>
               {/* Layout Móvil: Precio y Botón de Carrito */}

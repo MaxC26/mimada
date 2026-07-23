@@ -90,6 +90,7 @@ export const CartProvider = ({ children }) => {
         cursoId: curso.cursoId ?? curso.id,
         titulo: curso.titulo,
         precio: parseFloat(curso.precio) || 0,
+        descuento: parseFloat(curso.descuento) || 0,
         imagenPortada: curso.imagenPortada ?? curso.thumbnail ?? '',
         categoria: curso.categoria ?? '',
       }
@@ -126,7 +127,10 @@ export const CartProvider = ({ children }) => {
     [items],
   )
 
-  const total = items.reduce((acc, i) => acc + i.precio, 0)
+  const total = items.reduce(
+    (acc, i) => acc + (i.descuento > 0 ? i.precio - i.descuento : i.precio),
+    0,
+  )
   const itemCount = items.length
 
   return (

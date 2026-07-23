@@ -9,6 +9,7 @@ import { useCart } from '../../context/CartContext'
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { routes } from '../../utils/rutas'
+import { calcPorcentajeDescuento } from '../../utils/utils'
 
 const CartDrawer = () => {
   const { items, total, itemCount, isOpen, closeCart, removeFromCart, clearCart } =
@@ -119,9 +120,29 @@ const CartDrawer = () => {
                       {item.categoria}
                     </p>
                   )}
-                  <p className='text-base font-black text-gray-900 mt-1'>
-                    ${item.precio.toFixed(2)}
-                  </p>
+                  <div className='mt-1'>
+                    <div className='flex items-center gap-2 flex-wrap'>
+                      <p className='text-base font-black text-gray-900'>
+                        $
+                        {(item?.descuento > 0
+                          ? item.precio - item.descuento
+                          : item?.precio
+                        )?.toFixed(2)}
+                      </p>
+                      {item?.descuento > 0 && (
+                        <p className='text-xs text-gray-400 line-through'>
+                          ${item?.precio?.toFixed(2)}
+                        </p>
+                      )}
+                    </div>
+                    {item?.descuento > 0 && (
+                      <div className='mt-0.5'>
+                        <span className='text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
+                          {calcPorcentajeDescuento(item?.descuento, item?.precio)}% OFF
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Botón eliminar */}

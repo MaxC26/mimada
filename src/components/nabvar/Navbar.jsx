@@ -177,10 +177,10 @@ export const Navbar = ({ isExplore = false }) => {
                   <>
                     <li>
                       <Link
-                        to={routes.explore.misCursos}
+                        to={routes.explore.cursos}
                         className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
                       >
-                        Mis Cursos
+                        Cursos
                       </Link>
                     </li>
                     <li>

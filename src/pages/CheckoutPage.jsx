@@ -16,15 +16,23 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { createPayPalOrder, capturePayPalOrder } from '../services/pagos'
 import { toast } from 'sonner'
 import SocialLoginButtons from '../components/login/SocialLoginButtons'
+import { calcPorcentajeDescuento } from '../utils/utils'
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
-  const { items, total, itemCount, removeFromCart, clearCart } = useCart()
+  const { items, itemCount, removeFromCart, clearCart } = useCart()
   const { user, isAuthenticated } = useAuth()
+
+  const subtotal = items.reduce((acc, i) => acc + (i.precio || 0), 0)
+  const totalDescuentos = items.reduce(
+    (acc, i) => acc + (i.descuento > 0 ? i.descuento : 0),
+    0
+  )
+  const finalTotal = subtotal - totalDescuentos
 
   const handlePaymentSuccess = () => {
     clearCart()
-    toast.success('¡Pago exitoso! Disfruta tus nuevos cursos.')
+    toast.success('¡Pago exitoso! Disfruta tus nuevos cursos.', { duration: 5000 })
     navigate(routes.explore.cursos)
   }
 
@@ -156,9 +164,30 @@ const CheckoutPage = () => {
                               {item.categoria}
                             </p>
                           )}
-                          <p className='text-lg font-black text-gray-900 mt-1.5'>
-                            ${item.precio.toFixed(2)}
-                          </p>
+                          <div className='mt-1.5'>
+                            <div className='flex items-center gap-2 flex-wrap'>
+                              <p className='text-lg font-black text-gray-900'>
+                                $
+                                {(item?.descuento > 0
+                                  ? item.precio - item.descuento
+                                  : item?.precio
+                                )?.toFixed(2)}
+                              </p>
+                              {item?.descuento > 0 && (
+                                <p className='text-xs text-gray-400 line-through'>
+                                  ${item?.precio?.toFixed(2)}
+                                </p>
+                              )}
+                            </div>
+                            {item?.descuento > 0 && (
+                              <div className='mt-0.5'>
+                                <span className='text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
+                                  {calcPorcentajeDescuento(item?.descuento, item?.precio)}
+                                  % OFF
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
 
                         {/* Botón eliminar */}
@@ -196,13 +225,23 @@ const CheckoutPage = () => {
                       <span className='text-gray-500'>
                         Subtotal ({itemCount} {itemCount === 1 ? 'curso' : 'cursos'})
                       </span>
-                      <span className='font-bold text-gray-900'>${total.toFixed(2)}</span>
+                      <span className='font-bold text-gray-900'>
+                        ${subtotal.toFixed(2)}
+                      </span>
                     </div>
+
+                    {totalDescuentos > 0 && (
+                      <div className='flex items-center justify-between text-sm text-green-600 font-medium'>
+                        <span>Descuentos</span>
+                        <span className='font-bold'>-${totalDescuentos.toFixed(2)}</span>
+                      </div>
+                    )}
+
                     <div className='border-t border-gray-100'></div>
                     <div className='flex items-center justify-between'>
                       <span className='text-base font-bold text-gray-900'>Total</span>
                       <span className='text-2xl font-black text-gray-900'>
-                        ${total.toFixed(2)}
+                        ${finalTotal.toFixed(2)}
                       </span>
                     </div>
                   </div>
