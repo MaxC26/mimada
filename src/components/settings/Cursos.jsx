@@ -14,6 +14,7 @@ import { getCursos, getEstadisticasCursos } from '../../services/cursos'
 import { toast } from 'sonner'
 import { ESTADOS_CURSO } from '../../utils/constantes'
 import LoadingSpinner from '../utils/LoadingSpinner'
+import { calcPorcentajeDescuento } from '../../utils/utils'
 
 const TABS = ['Todos los cursos', 'Publicados', 'Borradores', 'Archivados']
 
@@ -144,6 +145,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
       setIsLoading(false)
     }
   }
+  console.log(cursosFiltrados)
 
   return (
     <div className='w-full space-y-6'>
@@ -210,14 +212,16 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
           {/* ── Tabla Desktop ── */}
           <div className='hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
             <div className='overflow-x-auto'>
-              <div className='min-w-[1000px]'>
+              <div className='min-w-[1200px]'>
                 {/* Cabecera */}
                 {cursos.length > 0 && (
-                  <div className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-3 border-b border-gray-100'>
+                  <div className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] px-6 py-3 border-b border-gray-100'>
                     {[
                       'Detalles del Curso',
                       'Estado',
                       'Precio',
+                      'Descuento',
+                      'Precio Descuento',
                       'Estudiantes',
                       'Ganancias',
                       'Acciones',
@@ -254,7 +258,7 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                     cursosFiltrados.map((curso) => (
                       <div
                         key={curso.cursoId}
-                        className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] px-6 py-4 items-center hover:bg-gray-50/50 transition-colors'
+                        className='grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] px-6 py-4 items-center hover:bg-gray-50/50 transition-colors'
                       >
                         {/* Detalles */}
                         <div className='flex items-center gap-3 min-w-0 pr-4'>
@@ -280,15 +284,41 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                         {/* Precio */}
                         <div>
                           {curso.precio ? (
-                            <>
-                              <p className='font-bold text-gray-900 text-sm'>
-                                {curso.precio.toLocaleString()}
+                            <p className='font-bold text-gray-900 text-sm'>
+                              ${parseFloat(curso.precio).toFixed(2)}
+                            </p>
+                          ) : (
+                            <span className='text-gray-300 text-lg'>—</span>
+                          )}
+                        </div>
+                        {/* Descuento */}
+                        <div>
+                          {parseFloat(curso.descuento) > 0 ? (
+                            <div className='flex gap-2'>
+                              <p className='font-bold text-green-600 text-sm'>
+                                ${parseFloat(curso.descuento).toFixed(2)}
                               </p>
-                              {/* NOTE: Mostrar ganancias */}
-                              <p className='text-xs text-green-600 font-semibold'>
-                                {curso.precio}
-                              </p>
-                            </>
+                              <span className='text-[10px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full inline-block mt-0.5'>
+                                {calcPorcentajeDescuento(curso.descuento, curso.precio)}%
+                                OFF
+                              </span>
+                            </div>
+                          ) : (
+                            <span className='text-gray-300 text-lg'>—</span>
+                          )}
+                        </div>
+                        {/* Precio Descuento */}
+                        <div>
+                          {curso.precio ? (
+                            <p className='font-bold text-gray-900 text-sm'>
+                              $
+                              {(
+                                parseFloat(curso.precio) -
+                                (parseFloat(curso.descuento) > 0
+                                  ? parseFloat(curso.descuento)
+                                  : 0)
+                              ).toFixed(2)}
+                            </p>
                           ) : (
                             <span className='text-gray-300 text-lg'>—</span>
                           )}
@@ -296,10 +326,10 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                         {/* Estudiantes */}
                         <div>
                           {/* NOTE: Mostrar estudiantes */}
-                          {curso.estudiantes ? (
+                          {curso.totalEstudiantes ? (
                             <>
                               <p className='font-bold text-gray-900 text-sm'>
-                                {curso.estudiantes.toLocaleString()}
+                                {curso.totalEstudiantes}
                               </p>
                               <p className='text-xs text-green-600 font-semibold'>
                                 {curso.estudiantesMes}
@@ -312,9 +342,9 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                         {/* Ganancias */}
                         <div>
                           {/* NOTE: Mostrar ganancias */}
-                          {curso.ganancias ? (
+                          {curso.gananciasTotales ? (
                             <p className='font-bold text-gray-900 text-sm'>
-                              €{curso.ganancias.toLocaleString()}.00
+                              ${curso.gananciasTotales}
                             </p>
                           ) : (
                             <span className='text-gray-300 text-lg'>—</span>
