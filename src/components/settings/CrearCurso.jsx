@@ -502,6 +502,11 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                           placeholder='0.00'
                                           className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
                                           {...field}
+                                          onKeyDown={(e) => {
+                                            if (['e', 'E', '-'].includes(e.key)) {
+                                              e.preventDefault()
+                                            }
+                                          }}
                                           onChange={(e) => {
                                             const descVal = e.target.value
                                             field.onChange(e)
@@ -545,17 +550,25 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                           type='number'
                                           min={0}
                                           max={100}
-                                          step='0.01'
-                                          placeholder='0.00'
+                                          step='1'
+                                          placeholder='0'
                                           className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
                                           {...field}
+                                          onKeyDown={(e) => {
+                                            if (['.', ',', 'e', 'E', '-'].includes(e.key)) {
+                                              e.preventDefault()
+                                            }
+                                          }}
                                           onChange={(e) => {
-                                            const pctVal = e.target.value
+                                            const rawVal = e.target.value
+                                            const cleanVal =
+                                              rawVal !== '' ? String(Math.floor(Number(rawVal))) : ''
+                                            e.target.value = cleanVal
                                             field.onChange(e)
                                             const precio = Number(values.precio)
-                                            if (precio > 0 && pctVal !== '') {
+                                            if (precio > 0 && cleanVal !== '') {
                                               const desc = (
-                                                (Number(pctVal) / 100) *
+                                                (Number(cleanVal) / 100) *
                                                 precio
                                               ).toFixed(2)
                                               setFieldValue('descuento', desc)
