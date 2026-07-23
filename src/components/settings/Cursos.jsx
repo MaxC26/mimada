@@ -270,16 +270,16 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                           />
                           <div className='min-w-0'>
                             <p className='font-bold text-gray-900 text-sm truncate'>
-                              {curso.titulo}
+                              {curso?.titulo}
                             </p>
                             <p className='text-xs text-gray-400 mt-0.5'>
-                              Nivel: {curso.nivel} · {curso.lecciones} Lecciones
+                              Nivel: {curso?.nivel} · {curso?.lecciones} Lecciones
                             </p>
                           </div>
                         </div>
                         {/* Estado */}
                         <div>
-                          <EstadoBadge estado={curso.estado} />
+                          <EstadoBadge estado={curso?.estado} />
                         </div>
                         {/* Precio */}
                         <div>
@@ -299,8 +299,8 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                                 ${parseFloat(curso.descuento).toFixed(2)}
                               </p>
                               <span className='text-[10px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full inline-block mt-0.5'>
-                                {calcPorcentajeDescuento(curso.descuento, curso.precio)}%
-                                OFF
+                                {calcPorcentajeDescuento(curso?.descuento, curso?.precio)}
+                                % OFF
                               </span>
                             </div>
                           ) : (
@@ -329,10 +329,10 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                           {curso.totalEstudiantes ? (
                             <>
                               <p className='font-bold text-gray-900 text-sm'>
-                                {curso.totalEstudiantes}
+                                {curso?.totalEstudiantes}
                               </p>
                               <p className='text-xs text-green-600 font-semibold'>
-                                {curso.estudiantesMes}
+                                {curso?.estudiantesMes}
                               </p>
                             </>
                           ) : (
