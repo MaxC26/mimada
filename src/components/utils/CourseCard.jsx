@@ -1,6 +1,7 @@
 import { IconShoppingCart, IconArrowRight } from '@tabler/icons-react'
 import RatingStars from './RatingStars'
 import { useCart } from '../../context/CartContext'
+import { calcPorcentajeDescuento } from '../../utils/utils'
 
 export const CourseCard = ({
   cursoId,
@@ -11,6 +12,7 @@ export const CourseCard = ({
   totalCalificaciones,
   duracionTotal,
   precio,
+  descuento,
   imagenPortada,
   categoria,
   isMine,
@@ -18,12 +20,16 @@ export const CourseCard = ({
 }) => {
   const { addToCart, openCart } = useCart()
 
+  const numPrecio = parseFloat(precio) || 0
+  const numDescuento = parseFloat(descuento) || 0
+
   const handleAddToCart = (e) => {
     e.stopPropagation()
     addToCart({
       cursoId: cursoId ?? id,
       titulo,
-      precio,
+      precio: numPrecio,
+      descuento: numDescuento,
       imagenPortada,
       categoria,
     })
@@ -100,13 +106,32 @@ export const CourseCard = ({
           <div className='flex items-center justify-between pt-4 border-t border-gray-100'>
             <div className='flex flex-col md:hidden w-full'>
               {/* Layout Móvil: Precio y Botón de Carrito */}
-              <div className='flex justify-between items-center mb-3 w-full'>
-                <span className='font-bold text-2xl text-[#c2a381] leading-none'>
-                  ${precio}
-                </span>
+              <div className='flex justify-between items-center mb-3 w-full gap-2'>
+                <div>
+                  <div className='flex items-baseline gap-2 flex-wrap'>
+                    <span className='font-bold text-2xl text-[#c2a381] leading-none'>
+                      $
+                      {(numDescuento > 0 ? numPrecio - numDescuento : numPrecio)?.toFixed(
+                        2
+                      )}
+                    </span>
+                    {numDescuento > 0 && (
+                      <span className='text-sm text-gray-400 line-through'>
+                        ${numPrecio?.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  {numDescuento > 0 && (
+                    <div className=''>
+                      <span className='text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
+                        {calcPorcentajeDescuento(numDescuento, numPrecio)}% OFF
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <button
                   onClick={handleAddToCart}
-                  className='bg-[#c2a381] text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm hover:bg-[#a58b6c] transition-colors'
+                  className='bg-[#c2a381] text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm hover:bg-[#a58b6c] transition-colors shrink-0'
                 >
                   <IconShoppingCart size={18} stroke={2} />
                 </button>
@@ -116,16 +141,33 @@ export const CourseCard = ({
               </button>
             </div>
 
-            <div className='hidden md:flex items-center justify-between w-full'>
+            <div className='hidden md:flex items-center justify-between w-full gap-2'>
               {/* Layout Desktop */}
-              <div className='flex flex-col'>
-                <span className='font-bold text-xl text-gray-900 leading-none'>
-                  ${precio}
-                </span>
+              <div className='flex flex-col min-w-0'>
+                <div className='flex items-baseline gap-2 flex-wrap'>
+                  <span className='font-bold text-xl text-gray-900 leading-none'>
+                    $
+                    {(numDescuento > 0 ? numPrecio - numDescuento : numPrecio)?.toFixed(
+                      2
+                    )}
+                  </span>
+                  {numDescuento > 0 && (
+                    <span className='text-md text-gray-400 line-through'>
+                      ${numPrecio?.toFixed(2)}
+                    </span>
+                  )}
+                </div>
+                {numDescuento > 0 && (
+                  <div className=''>
+                    <span className='text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
+                      {calcPorcentajeDescuento(numDescuento, numPrecio)}% OFF
+                    </span>
+                  </div>
+                )}
               </div>
               <button
                 onClick={handleAddToCart}
-                className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300 shadow-sm'
+                className='bg-[#f3ece5] text-[#c2a381] w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#c2a381] hover:text-white transition-colors duration-300 shadow-sm shrink-0'
               >
                 <IconShoppingCart size={20} stroke={2} />
               </button>

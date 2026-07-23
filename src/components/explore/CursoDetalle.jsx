@@ -359,7 +359,7 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
                 )}
               </div>
               {detalle?.descuento > 0 && (
-                <div className='mt-1'>
+                <div className=''>
                   <span className='text-xs font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full inline-block'>
                     {calcPorcentajeDescuento(detalle?.descuento, detalle?.precio)}% OFF
                   </span>
