@@ -293,10 +293,10 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
                         </div>
                         {/* Descuento */}
                         <div>
-                          {parseFloat(curso.descuento) > 0 ? (
+                          {parseFloat(curso?.descuento) > 0 ? (
                             <div className='flex gap-2'>
                               <p className='font-bold text-green-600 text-sm'>
-                                ${parseFloat(curso.descuento).toFixed(2)}
+                                ${parseFloat(curso?.descuento).toFixed(2)}
                               </p>
                               <span className='text-[10px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full inline-block mt-0.5'>
                                 {calcPorcentajeDescuento(curso?.descuento, curso?.precio)}
