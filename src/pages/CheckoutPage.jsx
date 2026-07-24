@@ -17,6 +17,7 @@ import { createPayPalOrder, capturePayPalOrder } from '../services/pagos'
 import { toast } from 'sonner'
 import SocialLoginButtons from '../components/login/SocialLoginButtons'
 import { calcPorcentajeDescuento } from '../utils/utils'
+import UserAvatar from '../components/utils/UserAvatar'
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
@@ -93,11 +94,7 @@ const CheckoutPage = () => {
                   </p>
                   {isAuthenticated ? (
                     <div className='flex items-center gap-4'>
-                      <div className='flex items-center justify-center w-12 h-12 rounded-full bg-gray-900 text-white font-bold text-lg shrink-0'>
-                        {`${user?.nombre?.charAt(0) || ''}${user?.apellido?.charAt(0) || ''}`
-                          .toUpperCase()
-                          .substring(0, 2) || 'U'}
-                      </div>
+                      <UserAvatar user={user} size='lg' />
                       <div className='flex-1 min-w-0'>
                         <p className='text-sm font-bold text-gray-900 truncate'>
                           {user?.nombre} {user?.apellido}
