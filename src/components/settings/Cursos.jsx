@@ -145,7 +145,6 @@ const Cursos = ({ onEditCurso, onNuevoCurso }) => {
       setIsLoading(false)
     }
   }
-  console.log(cursosFiltrados)
 
   return (
     <div className='w-full space-y-6'>

@@ -9,6 +9,7 @@ import { useCart } from '../../context/CartContext'
 import { logout } from '../../services/login'
 import { signOutFromGoogle } from '../../services/google'
 import { useState } from 'react'
+import UserAvatar from '../utils/UserAvatar'
 
 export const Navbar = ({ isExplore = false }) => {
   const { user, isAuthenticated } = useAuth()
@@ -32,29 +33,21 @@ export const Navbar = ({ isExplore = false }) => {
     await logout()
   }
 
-  const userInitials = user
-    ? `${user.nombre?.charAt(0) || ''}${user.apellido?.charAt(0) || ''}`
-        .toUpperCase()
-        .substring(0, 2)
-    : 'U'
-
   const UserDropdown = () => (
     <div className='relative'>
-      <div
-        className='flex items-center justify-center w-10 h-10 rounded-full bg-gray-900 border-2 border-white text-white font-bold cursor-pointer text-sm shadow-sm hover:ring-2 hover:ring-[#c2a381] transition-all'
+      <UserAvatar
+        user={user}
+        size='md'
+        className='border-2 border-white cursor-pointer shadow-sm hover:ring-2 hover:ring-[#c2a381] transition-all'
         onClick={() => setShowDropdown(!showDropdown)}
-      >
-        {userInitials || 'MC'}
-      </div>
+      />
       {showDropdown && (
         <div
           className='absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl py-2 border border-gray-100'
           onMouseLeave={() => setShowDropdown(false)}
         >
           <div className='px-4 py-4 border-b border-gray-100 flex items-center gap-3'>
-            <div className='flex items-center justify-center w-12 h-12 rounded-full bg-gray-900 text-white font-bold text-lg shrink-0'>
-              {userInitials || 'MC'}
-            </div>
+            <UserAvatar user={user} size='lg' />
             <div className='flex-1 min-w-0'>
               <p className='text-sm font-bold text-gray-900 truncate'>
                 {user?.nombre} {user?.apellido}
@@ -183,14 +176,14 @@ export const Navbar = ({ isExplore = false }) => {
                         Cursos
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <a
                         href='#'
                         className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
                       >
                         Perfil
                       </a>
-                    </li>
+                    </li> */}
                   </>
                 )}
               </ul>
