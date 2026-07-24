@@ -46,7 +46,6 @@ const selectClass = (hasError) =>
 /* ─────────────────────────────────────── */
 
 const CrearCurso = ({ curso = null, onBack }) => {
-  console.log('🚀 ~ CrearCurso ~ curso:', curso)
   const Loading = (text) => toast.loading(text)
   const Success = (text) => toast.success(text)
   // const Warning = (text) => toast.warning(text)
