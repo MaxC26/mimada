@@ -253,7 +253,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
           const caracteristicas = values.caracteristicas?.map((item) => ({
             caracteristicaId: item,
           }))
-          formData.append('caracteristicasId', caracteristicas)
+          formData.append('caracteristicasId', JSON.stringify(caracteristicas))
         }
 
         if (values.instructor) {
