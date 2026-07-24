@@ -124,6 +124,36 @@ export function getEstadisticasCursos() {
   })
 }
 
+// Obtiene la lista de instructores disponibles
+export function getInstructores() {
+  const url = `${routes.backend.url}${routes.backend.user.getInstructores}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
+// Obtiene las características / servicios incluidos de los cursos
+export function getCaracteristicasCurso() {
+  const url = `${routes.backend.url}${routes.backend.cursos.getCaracteristicas}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 // Crea un nuevo curso (acepta FormData para incluir archivos)
 export function createCurso(data) {
   return new Promise((resolve, reject) => {

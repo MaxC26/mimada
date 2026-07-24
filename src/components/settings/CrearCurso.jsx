@@ -20,6 +20,8 @@ import {
   getEstadosCurso,
   getVideosCurso,
   deleteVideoCurso,
+  getInstructores,
+  getCaracteristicasCurso,
 } from '../../services/cursos'
 import UploadVideoModal from './UploadVideoModal'
 import LoadingSpinner from '../utils/LoadingSpinner'
@@ -55,6 +57,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
   const [autoSaved, setAutoSaved] = useState('14:24')
   const [categorias, setCategorias] = useState([])
   const [estados, setEstados] = useState([])
+  const [instructores, setInstructores] = useState([])
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [lecciones, setLecciones] = useState([
     { id: 1, titulo: 'Introducción y Materiales', duracion: '08:24', estado: 'listo' },
@@ -73,6 +76,9 @@ const CrearCurso = ({ curso = null, onBack }) => {
   // Acciones de estado
   const [isConfirmadorEliminadoOpen, setIsConfirmadorEliminadoOpen] = useState(false)
 
+  // Lista de elementos incluidos
+  const [opcionesIncluidas, setOpcionesIncluidas] = useState([])
+
   /* ── Carga de datos ── */
   useEffect(() => {
     fetchData()
@@ -83,10 +89,18 @@ const CrearCurso = ({ curso = null, onBack }) => {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      const [categoriasResult, videosResult, estadosResult] = await Promise.allSettled([
+      const [
+        categoriasResult,
+        videosResult,
+        estadosResult,
+        instructoresResult,
+        caracteristicasResult,
+      ] = await Promise.allSettled([
         getCategoriasCurso(),
         esEdicion && getVideosCurso(curso.cursoId),
         esEdicion && getEstadosCurso(),
+        esEdicion && getInstructores(),
+        esEdicion && getCaracteristicasCurso(),
       ])
 
       if (categoriasResult.status === 'fulfilled') {
@@ -101,6 +115,25 @@ const CrearCurso = ({ curso = null, onBack }) => {
       } else {
         console.error('Error al cargar los estados:', estadosResult.reason)
         ErrorMessage('Error al cargar los estados')
+      }
+
+      if (instructoresResult?.status === 'fulfilled') {
+        setInstructores(instructoresResult.value.data ?? [])
+      } else if (instructoresResult?.status === 'rejected') {
+        console.error(
+          'Error al cargar los instructores:',
+          instructoresResult.reason?.response?.data?.message
+        )
+      }
+
+      if (caracteristicasResult.status === 'fulfilled') {
+        const caracteristicasData = caracteristicasResult.value.data
+        setOpcionesIncluidas(caracteristicasData)
+      } else if (caracteristicasResult.status === 'rejected') {
+        console.error(
+          'Error al cargar las características:',
+          caracteristicasResult.reason
+        )
       }
 
       if (videosResult.status === 'fulfilled') {
@@ -211,9 +244,22 @@ const CrearCurso = ({ curso = null, onBack }) => {
       }
 
       if (esEdicion) {
+        formData.append('cursoId', values.cursoid)
         formData.append('descuento', values.descuento || 0)
         formData.append('estado', values.estado)
-        formData.append('cursoId', values.cursoid)
+
+        // Enviar caracteristicas como array de objetos
+        if (values.caracteristicas?.length > 0) {
+          const caracteristicas = values.caracteristicas?.map((item) => ({
+            caracteristicaId: item,
+          }))
+          formData.append('caracteristicasId', caracteristicas)
+        }
+
+        if (values.instructor) {
+          formData.append('instructorId', values.instructor)
+        }
+
         await updateCurso(formData)
       } else {
         await createCurso(formData)
@@ -266,8 +312,10 @@ const CrearCurso = ({ curso = null, onBack }) => {
               porcentaje: calcPorcentajeDescuento(curso?.descuento, curso?.precio),
               dificultad: curso?.nivel || '',
               estado: curso?.estadoId || '',
-              duracion: curso?.duracion || '',
+              instructor: curso?.mmdusuarioid || '',
+              duracion: curso?.duracionTotal || '',
               thumbnail: curso?.imagenPortada || null,
+              caracteristicas: [],
             }}
             validationSchema={validarCurso(esEdicion)}
             onSubmit={handleSubmit}
@@ -555,14 +603,18 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                           className='flex-1 text-sm text-gray-800 outline-none bg-transparent'
                                           {...field}
                                           onKeyDown={(e) => {
-                                            if (['.', ',', 'e', 'E', '-'].includes(e.key)) {
+                                            if (
+                                              ['.', ',', 'e', 'E', '-'].includes(e.key)
+                                            ) {
                                               e.preventDefault()
                                             }
                                           }}
                                           onChange={(e) => {
                                             const rawVal = e.target.value
                                             const cleanVal =
-                                              rawVal !== '' ? String(Math.floor(Number(rawVal))) : ''
+                                              rawVal !== ''
+                                                ? String(Math.floor(Number(rawVal)))
+                                                : ''
                                             e.target.value = cleanVal
                                             field.onChange(e)
                                             const precio = Number(values.precio)
@@ -623,6 +675,48 @@ const CrearCurso = ({ curso = null, onBack }) => {
                             {esEdicion && (
                               <div>
                                 <label className='block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5'>
+                                  Instructor
+                                </label>
+                                <Field name='instructor'>
+                                  {({ field, meta }) => (
+                                    <>
+                                      <select
+                                        className={selectClass(
+                                          meta.touched && meta.error
+                                        )}
+                                        {...field}
+                                      >
+                                        <option value=''>Selecciona un instructor</option>
+                                        {instructores?.map((inst) => (
+                                          <option
+                                            key={inst.mmdusuarioid}
+                                            value={inst.mmdusuarioid}
+                                          >
+                                            {inst.nombre
+                                              ? `${inst.nombre} ${inst.apellido || ''}`.trim()
+                                              : inst.titulo ||
+                                                inst.nombreCompleto ||
+                                                inst.email}
+                                          </option>
+                                        ))}
+                                      </select>
+                                      {meta.touched && meta.error && (
+                                        <p className='text-xs text-red-500 mt-1'>
+                                          {meta.error}
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                </Field>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Instructor (solo edición) */}
+                          {esEdicion && (
+                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                              <div>
+                                <label className='block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5'>
                                   Estado
                                 </label>
                                 <Field name='estado'>
@@ -658,8 +752,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                   }}
                                 </Field>
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          )}
 
                           {/* Status bar */}
                           <div className='flex items-center gap-1.5 mt-1'>
@@ -680,6 +774,66 @@ const CrearCurso = ({ curso = null, onBack }) => {
                           </div>
                         </div>
                       </div>
+
+                      {/* Incluidos */}
+                      {esEdicion && (
+                        <div className='bg-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
+                          <div className='flex items-center justify-between mb-5'>
+                            <div className='flex items-center gap-2'>
+                              <div className='w-1 h-6 bg-[#c2a381] rounded-full' />
+                              <h3 className='font-bold text-gray-900 text-lg'>
+                                Incluido en curso
+                              </h3>
+                            </div>
+                            <span className='text-xs font-semibold text-gray-400 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-100'>
+                              {(values.caracteristicas || []).length} seleccionados
+                            </span>
+                          </div>
+
+                          {/* Checklist */}
+                          {opcionesIncluidas.length > 0 ? (
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-5'>
+                              {opcionesIncluidas.map((item, idx) => {
+                                const caracteristicaIdVal = item.caracteristicaId
+                                const isChecked =
+                                  Array.isArray(opcionesIncluidas) &&
+                                  opcionesIncluidas.some(
+                                    (val) => String(val) === String(caracteristicaIdVal)
+                                  )
+                                return (
+                                  <label
+                                    key={item.caracteristicaId || idx}
+                                    className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all cursor-pointer ${
+                                      isChecked
+                                        ? 'border-[#c2a381]/50 bg-[#faf7f5] text-gray-900 shadow-xs'
+                                        : 'border-gray-100 bg-gray-50/50 text-gray-600 hover:bg-gray-50'
+                                    }`}
+                                  >
+                                    <Field
+                                      type='checkbox'
+                                      name='caracteristicas'
+                                      value={String(caracteristicaIdVal)}
+                                      className='w-4 h-4 rounded border-gray-300 text-[#c2a381] focus:ring-[#c2a381] cursor-pointer'
+                                    />
+                                    <span className='text-sm font-medium flex-1 select-none'>
+                                      {item.nombre?.includes(':valor')
+                                        ? item.nombre.replaceAll(
+                                            ':valor',
+                                            values.duracion || ''
+                                          )
+                                        : item.nombre || item}
+                                    </span>
+                                  </label>
+                                )
+                              })}
+                            </div>
+                          ) : (
+                            <p className='text-sm text-gray-500'>
+                              No hay características disponibles
+                            </p>
+                          )}
+                        </div>
+                      )}
 
                       {/* Lecciones */}
                       {esEdicion && (

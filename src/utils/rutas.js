@@ -14,6 +14,7 @@ const routesBackend = Object.freeze({
     logout: '/user/logout',
     me: '/user/me',
     socialLogin: '/user/social-login',
+    getInstructores: '/user/info-instructores',
   },
   contenido: {
     getAllContenido: '/contenido',
@@ -28,6 +29,7 @@ const routesBackend = Object.freeze({
     getCursosPopulares: '/cursos/top',
     getMisCursos: '/cursos/mis-cursos',
     getEstadisticas: '/cursos/estadisticas',
+    getCaracteristicas: '/cursos/caracteristicas-curso',
     createCurso: '/cursos',
     updateCurso: '/cursos',
     deleteCurso: '/cursos?cursoId=:id',
