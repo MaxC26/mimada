@@ -46,6 +46,7 @@ const selectClass = (hasError) =>
 /* ─────────────────────────────────────── */
 
 const CrearCurso = ({ curso = null, onBack }) => {
+  console.log('🚀 ~ CrearCurso ~ curso:', curso)
   const Loading = (text) => toast.loading(text)
   const Success = (text) => toast.success(text)
   // const Warning = (text) => toast.warning(text)
@@ -312,10 +313,13 @@ const CrearCurso = ({ curso = null, onBack }) => {
               porcentaje: calcPorcentajeDescuento(curso?.descuento, curso?.precio),
               dificultad: curso?.nivel || '',
               estado: curso?.estadoId || '',
-              instructor: curso?.mmdusuarioid || '',
+              instructor: curso?.instructor?.usuarioId || '',
               duracion: curso?.duracionTotal || '',
               thumbnail: curso?.imagenPortada || null,
-              caracteristicas: [],
+              caracteristicas:
+                (curso?.caracteristicas || curso?.caracteristicasId)?.map((c) =>
+                  String(typeof c === 'object' ? c.caracteristicaId || c.id : c)
+                ) || [],
             }}
             validationSchema={validarCurso(esEdicion)}
             onSubmit={handleSubmit}
@@ -796,9 +800,14 @@ const CrearCurso = ({ curso = null, onBack }) => {
                               {opcionesIncluidas.map((item, idx) => {
                                 const caracteristicaIdVal = item.caracteristicaId
                                 const isChecked =
-                                  Array.isArray(opcionesIncluidas) &&
-                                  opcionesIncluidas.some(
-                                    (val) => String(val) === String(caracteristicaIdVal)
+                                  Array.isArray(values.caracteristicas) &&
+                                  values.caracteristicas.some(
+                                    (val) =>
+                                      String(
+                                        typeof val === 'object'
+                                          ? val.caracteristicaId || val.id
+                                          : val
+                                      ) === String(caracteristicaIdVal)
                                   )
                                 return (
                                   <label
