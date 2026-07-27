@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode'
+import { routes } from './rutas'
 
 export const decodeToken = (jwt) => {
   if (!jwt) return null
@@ -20,4 +21,23 @@ export const calcPorcentajeDescuento = (descuento, precio) => {
   const p = Number(precio)
   if (!d || !p) return ''
   return ((d / p) * 100).toFixed(0)
+}
+
+
+/**
+ * Determines if a route path is active based on the current pathname.
+ * @param {string} pathname - The current location.pathname.
+ * @param {string} path - The route path to check against.
+ * @param {'exact'|'startsWith'|'home'} mode - Matching strategy:
+ *   - 'exact': matches path or path + '/' (default)
+ *   - 'startsWith': matches if pathname begins with path
+ *   - 'home': matches against the known home route aliases
+ */
+export const isRouteActive = (pathname, path, mode = 'exact') => {
+  if (mode === 'home') {
+    const homeRoutes = [routes.inicio, routes.home, routes.home + '/']
+    return homeRoutes.includes(pathname)
+  }
+  if (mode === 'startsWith') return pathname.startsWith(path)
+  return pathname === path || pathname === path + '/'
 }

@@ -10,6 +10,7 @@ import { logout } from '../../services/login'
 import { signOutFromGoogle } from '../../services/google'
 import { useState } from 'react'
 import UserAvatar from '../utils/UserAvatar'
+import { isRouteActive } from '../../utils/utils'
 
 export const Navbar = ({ isExplore = false }) => {
   const { user, isAuthenticated } = useAuth()
@@ -26,7 +27,7 @@ export const Navbar = ({ isExplore = false }) => {
     user
   )
   const [showDropdown, setShowDropdown] = useState(false)
-  const location = useLocation()
+  const { pathname } = useLocation()
 
   const handleLogout = async () => {
     await signOutFromGoogle()
@@ -78,8 +79,33 @@ export const Navbar = ({ isExplore = false }) => {
     </div>
   )
 
-  const homeRoutes = [routes.inicio, routes.home, routes.home + '/']
-  const isHomeActive = homeRoutes.includes(location.pathname)
+  // ── Reusable NavLink (text-only, no pill) ──
+  const NavLink = ({ to, label, active, size = 'base', inactiveColor = 'text-gray-800' }) => (
+    <li>
+      <Link
+        to={to}
+        className={`${size === 'sm' ? 'text-sm lg:text-base' : 'text-base'} font-medium transition-colors ${
+          active ? 'text-[#c2a381] font-semibold' : `${inactiveColor} hover:text-[#c2a381]`
+        }`}
+      >
+        {label}
+      </Link>
+    </li>
+  )
+
+  // ── Navigation items per mode ──
+  const homeNavItems = [
+    { label: 'Inicio', to: routes.inicio, active: isRouteActive(pathname, routes.inicio, 'home') },
+    { label: 'Explorar', to: routes.explore.inicio, active: isRouteActive(pathname, routes.explore.base, 'startsWith') },
+  ]
+
+  const exploreNavItems = [
+    { label: 'Inicio', to: routes.inicio, active: isRouteActive(pathname, routes.inicio, 'home') },
+    { label: 'Explorar', to: routes.explore.inicio, active: isRouteActive(pathname, routes.explore.inicio) },
+    ...(login
+      ? [{ label: 'Cursos', to: routes.explore.cursos, active: isRouteActive(pathname, routes.explore.cursos, 'startsWith') }]
+      : []),
+  ]
 
   return (
     <div
@@ -121,27 +147,18 @@ export const Navbar = ({ isExplore = false }) => {
           <nav className='hidden md:block mr-6'>
             {!isExplore ? (
               <ul className='flex space-x-8 items-center justify-end'>
-                <li>
-                  <Link
-                    to={routes.inicio}
-                    className={`text-base font-medium transition-colors ${isHomeActive ? 'text-[#c2a381] font-semibold' : 'text-gray-800 hover:text-[#c2a381]'}`}
-                  >
-                    Inicio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={routes.explore.inicio}
-                    className='text-gray-800 text-base font-medium hover:text-[#c2a381] transition-colors'
-                  >
-                    Explorar
-                  </Link>
-                </li>
+                {homeNavItems.map((item) => (
+                  <NavLink key={item.label} {...item} />
+                ))}
                 {login && rol === ROLES.ADMINISTRADOR && (
                   <li>
                     <Link
                       to={routes.settings}
-                      className='text-gray-800 text-base font-medium hover:text-[#c2a381] transition-colors bg-gray-50 px-4 py-2 rounded-full'
+                      className={`text-base font-medium transition-colors px-4 py-2 rounded-full ${
+                        isRouteActive(pathname, routes.settings, 'startsWith')
+                          ? 'bg-[#c2a381] text-white font-semibold shadow-sm'
+                          : 'text-gray-800 bg-gray-50 hover:text-[#c2a381]'
+                      }`}
                     >
                       Configuración
                     </Link>
@@ -150,42 +167,9 @@ export const Navbar = ({ isExplore = false }) => {
               </ul>
             ) : (
               <ul className='flex space-x-6 lg:space-x-8 items-center justify-end'>
-                <li>
-                  <Link
-                    to={routes.inicio}
-                    className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
-                  >
-                    Inicio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={routes.explore.inicio}
-                    className='text-[#c2a381] text-sm lg:text-base font-medium transition-colors'
-                  >
-                    Explorar
-                  </Link>
-                </li>
-                {login && (
-                  <>
-                    <li>
-                      <Link
-                        to={routes.explore.cursos}
-                        className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
-                      >
-                        Cursos
-                      </Link>
-                    </li>
-                    {/* <li>
-                      <a
-                        href='#'
-                        className='text-gray-600 text-sm lg:text-base font-medium hover:text-[#c2a381] transition-colors'
-                      >
-                        Perfil
-                      </a>
-                    </li> */}
-                  </>
-                )}
+                {exploreNavItems.map((item) => (
+                  <NavLink key={item.label} {...item} size='sm' inactiveColor='text-gray-600' />
+                ))}
               </ul>
             )}
           </nav>
