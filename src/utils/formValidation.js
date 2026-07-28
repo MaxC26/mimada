@@ -70,3 +70,16 @@ export const validarUsuario = (isEditing = false) =>
           .required('La contraseña es obligatoria'),
     telefono: Yup.string().trim().required('El teléfono es obligatorio'),
   })
+
+export const validarInstructor = (isEditing = false) =>
+  Yup.object().shape({
+    nombre: Yup.string().trim().required('El nombre es obligatorio'),
+    apellido: Yup.string().trim().required('El apellido es obligatorio'),
+    titulo: Yup.string().trim().required('El título es obligatorio'),
+    experiencia: Yup.number()
+      .typeError('La experiencia debe ser un número')
+      .min(0, 'La experiencia no puede ser negativa')
+      .required('Los años de experiencia son obligatorios'),
+    nacionalidad: Yup.string().trim().required('La nacionalidad es obligatoria'),
+    descripcion: Yup.string().trim().required('La descripción es obligatoria'),
+  })

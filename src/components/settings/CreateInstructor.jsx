@@ -1,9 +1,7 @@
-import { useState } from 'react'
-import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { Formik, Form, Field } from 'formik'
-import { toast } from 'sonner'
-import { apiCrearInstructor, apiActualizarInstructor } from '../../services/usuarios'
 import { validarInstructor } from '../../utils/formValidation'
+import { toast } from 'sonner'
+import { apiActualizarInstructor, apiCrearInstructor } from '../../services/instructor'
 
 const CreateInstructor = ({
   onSuccess,
@@ -14,7 +12,6 @@ const CreateInstructor = ({
   const Success = (text) => toast.success(text)
   const ErrorMessage = (text) => toast.error(text)
 
-  const [showPassword, setShowPassword] = useState(false)
   const isEditing = !!instructorToEdit
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -23,9 +20,8 @@ const CreateInstructor = ({
     )
     const dataToSend = {
       ...values,
-      roleid: 2,
       ...(isEditing && {
-        userId: instructorToEdit.mmdusuarioid,
+        instructorId: instructorToEdit.instructorId,
       }),
     }
 
@@ -76,9 +72,10 @@ const CreateInstructor = ({
         initialValues={{
           nombre: instructorToEdit?.nombre || instructorToEdit?.name || '',
           apellido: instructorToEdit?.apellido || '',
-          email: instructorToEdit?.email || '',
-          contrasena: '',
-          telefono: instructorToEdit?.telefono || instructorToEdit?.phone || '',
+          titulo: instructorToEdit?.titulo || '',
+          experiencia: instructorToEdit?.experiencia || '',
+          nacionalidad: instructorToEdit?.nacionalidad || '',
+          descripcion: instructorToEdit?.descripcion || '',
         }}
         validationSchema={validarInstructor(isEditing)}
         onSubmit={handleSubmit}
@@ -131,89 +128,92 @@ const CreateInstructor = ({
                 </div>
               </div>
 
-              {/* Email */}
-              <div>
-                <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
-                  Correo Electrónico
-                </label>
-                <Field
-                  type='email'
-                  name='email'
-                  disabled={isSubmitting}
-                  placeholder='Ej: maria@correo.com'
-                  className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
-                    touched.email && errors.email
-                      ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                      : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
-                  }`}
-                />
-                {touched.email && errors.email && (
-                  <p className='text-red-500 text-xs mt-1'>* {errors.email}</p>
-                )}
-              </div>
-
-              {/* Contraseña */}
-              <div>
-                <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
-                  Contraseña{' '}
-                  {isEditing && (
-                    <span className='text-gray-400 text-xs font-normal capitalize'>
-                      (Opcional al editar)
-                    </span>
-                  )}
-                </label>
-                <div className='relative'>
+              {/* Título y Nacionalidad en una fila */}
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                {/* Título */}
+                <div>
+                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
+                    Título
+                  </label>
                   <Field
-                    type={showPassword ? 'text' : 'password'}
-                    name='contrasena'
+                    type='text'
+                    name='titulo'
                     disabled={isSubmitting}
-                    placeholder={
-                      isEditing ? '•••••••• (Dejar en blanco para conservar)' : '••••••••'
-                    }
-                    className={`w-full border rounded-xl px-4 py-3 pr-11 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
-                      touched.contrasena && errors.contrasena
+                    placeholder='Ej: Especialista en Estética'
+                    className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
+                      touched.titulo && errors.titulo
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
                         : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
                     }`}
                   />
-                  <button
-                    type='button'
-                    onClick={() => setShowPassword((v) => !v)}
-                    className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c2a381] transition-colors'
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <IconEyeOff size={18} stroke={1.5} />
-                    ) : (
-                      <IconEye size={18} stroke={1.5} />
-                    )}
-                  </button>
+                  {touched.titulo && errors.titulo && (
+                    <p className='text-red-500 text-xs mt-1'>* {errors.titulo}</p>
+                  )}
                 </div>
-                {touched.contrasena && errors.contrasena && (
-                  <p className='text-red-500 text-xs mt-1'>* {errors.contrasena}</p>
-                )}
+
+                {/* Nacionalidad */}
+                <div>
+                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
+                    Nacionalidad
+                  </label>
+                  <Field
+                    type='text'
+                    name='nacionalidad'
+                    disabled={isSubmitting}
+                    placeholder='Ej: Salvadoreña'
+                    className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
+                      touched.nacionalidad && errors.nacionalidad
+                        ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
+                    }`}
+                  />
+                  {touched.nacionalidad && errors.nacionalidad && (
+                    <p className='text-red-500 text-xs mt-1'>* {errors.nacionalidad}</p>
+                  )}
+                </div>
               </div>
 
-              {/* Teléfono */}
+              {/* Experiencia */}
               <div>
                 <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
-                  Teléfono
+                  Años de Experiencia
                 </label>
                 <Field
-                  type='tel'
-                  name='telefono'
+                  type='number'
+                  name='experiencia'
                   disabled={isSubmitting}
-                  maxLength={8}
-                  minLength={8}
-                  placeholder='Ej: 77777777'
+                  min={0}
+                  placeholder='Ej: 8'
                   className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
-                    touched.telefono && errors.telefono
+                    touched.experiencia && errors.experiencia
                       ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
                       : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
                   }`}
                 />
-                {touched.telefono && errors.telefono && (
-                  <p className='text-red-500 text-xs mt-1'>* {errors.telefono}</p>
+                {touched.experiencia && errors.experiencia && (
+                  <p className='text-red-500 text-xs mt-1'>* {errors.experiencia}</p>
+                )}
+              </div>
+
+              {/* Descripción */}
+              <div>
+                <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
+                  Descripción
+                </label>
+                <Field
+                  as='textarea'
+                  name='descripcion'
+                  disabled={isSubmitting}
+                  rows={4}
+                  placeholder='Ej: Breve reseña profesional del instructor...'
+                  className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all resize-none disabled:opacity-60 disabled:bg-gray-50 ${
+                    touched.descripcion && errors.descripcion
+                      ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                      : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
+                  }`}
+                />
+                {touched.descripcion && errors.descripcion && (
+                  <p className='text-red-500 text-xs mt-1'>* {errors.descripcion}</p>
                 )}
               </div>
             </div>

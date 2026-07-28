@@ -16,7 +16,13 @@ const routesBackend = Object.freeze({
     logout: '/user/logout',
     me: '/user/me',
     socialLogin: '/user/social-login',
-    getInstructores: '/user/info-instructores',
+    getUsuarios: '/user/info-users',
+  },
+  instructor: {
+    register: '/instructor',
+    updateInstructor: '/instructor/update-instructor',
+    deleteInstructor: '/instructor/delete-instructor?instructorId=:id',
+    getInstructores: '/instructor/info-instructores',
   },
   contenido: {
     getAllContenido: '/contenido',
@@ -88,6 +94,7 @@ export const routes = Object.freeze({
     editarCurso: context + '/settings/cursos/editar/:id',
     categorias: context + '/settings/categorias',
     usuarios: context + '/settings/usuarios',
+    instructores: context + '/settings/instructores',
   },
   previsualizarInicio: context + '/previsualizar/inicio',
   previsualizarHistoria: context + '/previsualizar/historia',
