@@ -9,6 +9,7 @@ import {
   IconX,
   IconExternalLink,
   IconLayoutGrid,
+  IconUserPlus,
 } from '@tabler/icons-react'
 import { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -49,6 +50,12 @@ const navItems = [
     label: 'Categorías',
     icon: IconLayoutGrid,
     path: routes.dashboard.categorias,
+  },
+  {
+    id: SECCIONES_DASHBOARD.INSTRUCTORES,
+    label: 'Instructores',
+    icon: IconUserPlus,
+    path: routes.dashboard.instructores,
   },
 ]
 

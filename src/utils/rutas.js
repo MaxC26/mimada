@@ -10,7 +10,9 @@ const routesBackend = Object.freeze({
   url: `${urlBackend}${urlContext}`,
   user: {
     login: '/user/login',
-    register: '/user/register',
+    register: '/user',
+    updateUser: '/user/update-user',
+    deleteUser: '/user/delete-user?userId=:id',
     logout: '/user/logout',
     me: '/user/me',
     socialLogin: '/user/social-login',
@@ -85,6 +87,7 @@ export const routes = Object.freeze({
     nuevoCurso: context + '/settings/cursos/nuevo',
     editarCurso: context + '/settings/cursos/editar/:id',
     categorias: context + '/settings/categorias',
+    instructores: context + '/settings/instructores',
   },
   previsualizarInicio: context + '/previsualizar/inicio',
   previsualizarHistoria: context + '/previsualizar/historia',

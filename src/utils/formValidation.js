@@ -28,9 +28,9 @@ export const validarCurso = (esEdicion) =>
           if (typeof value === 'string') return true
           if (!(value instanceof File)) return false
           return ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(
-            value.type,
+            value.type
           )
-        },
+        }
       )
       .test('fileSize', 'La imagen no debe superar los 5 MB.', (value) => {
         if (typeof value === 'string') return true
@@ -42,10 +42,7 @@ export const validarCurso = (esEdicion) =>
           .typeError('El descuento debe ser un número.')
           .min(0, 'El descuento no puede ser negativo.')
           .when('precio', ([precio], schema) =>
-            schema.max(
-              Number(precio) || 0,
-              'El descuento no puede ser mayor al precio.',
-            ),
+            schema.max(Number(precio) || 0, 'El descuento no puede ser mayor al precio.')
           )
       : Yup.number(),
   })
@@ -58,3 +55,18 @@ export const validarVideoCurso = Yup.object({
     .min(5, 'La descripción debe tener al menos 5 caracteres')
     .required('La descripción es obligatoria'),
 })
+
+export const validarInstructor = (isEditing = false) =>
+  Yup.object().shape({
+    nombre: Yup.string().trim().required('El nombre es obligatorio'),
+    apellido: Yup.string().trim().required('El apellido es obligatorio'),
+    email: Yup.string()
+      .email('Ingresa un correo electrónico válido')
+      .required('El correo electrónico es obligatorio'),
+    contrasena: isEditing
+      ? Yup.string().min(6, 'La contraseña debe tener al menos 6 caracteres')
+      : Yup.string()
+          .min(6, 'La contraseña debe tener al menos 6 caracteres')
+          .required('La contraseña es obligatoria'),
+    telefono: Yup.string().trim().required('El teléfono es obligatorio'),
+  })
