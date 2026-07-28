@@ -46,7 +46,6 @@ const selectClass = (hasError) =>
 /* ─────────────────────────────────────── */
 
 const CrearCurso = ({ curso = null, onBack }) => {
-  console.log('🚀 ~ CrearCurso ~ curso:', curso)
   const Loading = (text) => toast.loading(text)
   const Success = (text) => toast.success(text)
   // const Warning = (text) => toast.warning(text)
@@ -118,7 +117,6 @@ const CrearCurso = ({ curso = null, onBack }) => {
         ErrorMessage('Error al cargar los estados')
       }
 
-      console.log('🚀 ~ fetchData ~ instructoresResult:', instructoresResult)
       if (instructoresResult?.status === 'fulfilled') {
         setInstructores(instructoresResult.value.data ?? [])
       } else if (instructoresResult?.status === 'rejected') {
@@ -261,8 +259,6 @@ const CrearCurso = ({ curso = null, onBack }) => {
         if (values.instructor) {
           formData.append('instructorId', values.instructor)
         }
-
-        console.log([...formData.entries()])
 
         await updateCurso(formData)
       } else {

@@ -8,10 +8,13 @@ import {
   IconArrowLeft,
   IconShoppingCart,
   IconCheck,
+  IconShieldCheck,
 } from '@tabler/icons-react'
 import RatingStars from '../utils/RatingStars'
 import { useCart } from '../../context/CartContext'
+import UserAvatar from '../utils/UserAvatar'
 import { calcPorcentajeDescuento } from '../../utils/utils'
+import { useAuth } from '../../context/AuthContext'
 
 /* ── Sub: Accordion item ── */
 const AccordionItem = ({ index, titulo }) => {
@@ -27,8 +30,27 @@ const AccordionItem = ({ index, titulo }) => {
   )
 }
 
+/* ── Icon picker for caracteristicas ── */
+const ICON_RULES = [
+  { keywords: ['hora', 'video', 'duraci'], icon: IconClock },
+  { keywords: ['apunte', 'pdf', 'libro', 'material', 'recurso'], icon: IconBook2 },
+  { keywords: ['certificado', 'diploma', 'conclusi', 'finaliz'], icon: IconCertificate },
+  { keywords: ['vitalicio', 'acceso', 'ilimitado', 'lifetime'], icon: IconStar },
+  { keywords: ['garant'], icon: IconShieldCheck },
+]
+
+const pickIcon = (nombre = '') => {
+  const lower = nombre.toLowerCase()
+  const match = ICON_RULES.find(({ keywords }) =>
+    keywords.some((kw) => lower.includes(kw))
+  )
+  return match?.icon ?? IconCheck
+}
+
 /* ── Componente principal ── */
 const CursoDetalle = ({ data, cursoId, onBack }) => {
+  const { user } = useAuth()
+  console.log('🚀 ~ CursoDetalle ~ data:', data)
   const [tab, setTab] = useState('descripcion')
   const [showAllReviews, setShowAllReviews] = useState(false)
   const { addToCart, isInCart, openCart } = useCart()
@@ -64,19 +86,32 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
     }),
     rating: parseFloat(ratingData.promedio) || 0,
     totalReviews: ratingData.total || 0,
-    garantia: '7 días de garantía incondicional',
-    incluye: [
-      { icon: IconClock, texto: `${curso.duracionTotal} horas de contenido en video` },
-      { icon: IconBook2, texto: 'Apuntes PDF completos' },
-      { icon: IconCertificate, texto: 'Certificado de conclusión' },
-      { icon: IconStar, texto: 'Acceso vitalicio' },
-    ],
+    incluye: (curso?.caracteristicas || [])
+      .filter((c) => !c.nombre.toLowerCase().includes('garant'))
+      .map((c) => ({
+        icon: pickIcon(c.nombre),
+        texto: c.nombre.replace(':valor', curso.duracionTotal ?? '?'),
+      })),
+    garantia: (() => {
+      const g = (curso?.caracteristicas || []).find((c) =>
+        c.nombre.toLowerCase().includes('garant')
+      )
+      if (g) {
+        return {
+          icon: pickIcon(g.nombre),
+          texto: g.nombre.replace(':valor', curso.duracionTotal ?? '?'),
+        }
+      }
+      return { icon: IconShieldCheck, texto: '5 días de garantía incondicional' }
+    })(),
     instructor: {
-      nombre: 'Dra. Helena Silva',
-      titulo: 'Especialista en Estética Avanzada',
-      tags: ['15 AÑOS DE EXP.', 'PROFA NACIONAL'],
-      avatar: 'https://i.pravatar.cc/150?img=47',
-      bio: 'Referencia nacional de lujo, la Dra. Helena Silva formó más de 5.000 alumnas en todo el Brasil. Su metodología fusiona la excelencia del arte con el humanismo de los atenciones estéticos.',
+      nombre: curso?.instructor?.nombre,
+      titulo: curso?.instructor?.titulo,
+      tags: [
+        `${curso?.instructor?.experiencia} AÑOS DE EXP.`,
+        curso?.instructor?.nacionalidad?.toUpperCase(),
+      ],
+      bio: curso?.instructor?.descripcion,
     },
     // NOTE - ESTO ES SOLO PARA PROBAR
     // reviews: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => ({
@@ -194,11 +229,12 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
           {tab === 'instructor' && (
             <div className='bg-white rounded-2xl border border-gray-100 shadow-sm p-6'>
               <div className='flex items-start gap-4'>
-                <img
+                <UserAvatar user={user} />
+                {/* <img
                   src={detalle?.instructor?.avatar}
                   alt={detalle?.instructor?.nombre}
                   className='w-16 h-16 rounded-full object-cover border-2 border-[#f3ece5] shrink-0'
-                />
+                /> */}
                 <div>
                   <h4 className='font-black text-gray-900 text-lg'>
                     {detalle?.instructor?.nombre}
@@ -367,16 +403,6 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
               )}
             </>
 
-            {/* Botones */}
-            {/* <button
-              onClick={() => {
-                addToCart(curso)
-                openCart()
-              }}
-              className='w-full py-3.5 rounded-full bg-[#c2a381] text-white font-black shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm'
-            >
-              Comprar curso ahora
-            </button> */}
             {detalle?.isMine ? (
               <div className='w-full py-3.5 rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-700 font-bold text-sm flex items-center justify-center gap-2'>
                 <IconCheck size={18} stroke={2.5} />
@@ -423,8 +449,13 @@ const CursoDetalle = ({ data, cursoId, onBack }) => {
 
             {/* Garantía */}
             <div className='flex items-center gap-2 border-t border-gray-100 pt-3'>
-              <IconCheck size={15} className='text-green-500 shrink-0' stroke={2.5} />
-              <p className='text-xs text-gray-600 font-medium'>{detalle?.garantia}</p>
+              {(() => {
+                const GIcon = detalle?.garantia?.icon ?? IconShieldCheck
+                return <GIcon size={15} className='text-green-500 shrink-0' stroke={2} />
+              })()}
+              <p className='text-xs text-gray-600 font-medium'>
+                {detalle?.garantia?.texto}
+              </p>
             </div>
           </div>
         </div>
