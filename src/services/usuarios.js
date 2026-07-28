@@ -12,6 +12,20 @@ export const apiCrearUsuario = async (data) => {
   }
 }
 
+export function getUsuarios() {
+  const url = `${routes.backend.url}${routes.backend.user.getUsuarios}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
+
 export const apiActualizarUsuario = async (data) => {
   try {
     const url = `${routes.backend.url}${routes.backend.user.updateUser}`

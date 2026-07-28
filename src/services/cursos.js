@@ -126,7 +126,7 @@ export function getEstadisticasCursos() {
 
 // Obtiene la lista de instructores disponibles
 export function getInstructores() {
-  const url = `${routes.backend.url}${routes.backend.user.getInstructores}`
+  const url = `${routes.backend.url}${routes.backend.instructor.getInstructores}`
   return new Promise((resolve, reject) => {
     axios
       .get(url)

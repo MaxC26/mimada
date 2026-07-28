@@ -46,6 +46,7 @@ const selectClass = (hasError) =>
 /* ─────────────────────────────────────── */
 
 const CrearCurso = ({ curso = null, onBack }) => {
+  console.log('🚀 ~ CrearCurso ~ curso:', curso)
   const Loading = (text) => toast.loading(text)
   const Success = (text) => toast.success(text)
   // const Warning = (text) => toast.warning(text)
@@ -117,6 +118,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
         ErrorMessage('Error al cargar los estados')
       }
 
+      console.log('🚀 ~ fetchData ~ instructoresResult:', instructoresResult)
       if (instructoresResult?.status === 'fulfilled') {
         setInstructores(instructoresResult.value.data ?? [])
       } else if (instructoresResult?.status === 'rejected') {
@@ -256,8 +258,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
           formData.append('caracteristicasId', JSON.stringify(caracteristicas))
         }
 
-        if (values.instructor) {
-          formData.append('instructorId', values.instructor)
+        if (values.instructorId) {
+          formData.append('instructorId', values.instructorId)
         }
 
         await updateCurso(formData)
@@ -312,7 +314,7 @@ const CrearCurso = ({ curso = null, onBack }) => {
               porcentaje: calcPorcentajeDescuento(curso?.descuento, curso?.precio),
               dificultad: curso?.nivel || '',
               estado: curso?.estadoId || '',
-              instructor: curso?.instructor?.usuarioId || '',
+              instructor: curso?.instructor?.instructorId || '',
               duracion: curso?.duracionTotal || '',
               thumbnail: curso?.imagenPortada || null,
               caracteristicas:
@@ -386,14 +388,6 @@ const CrearCurso = ({ curso = null, onBack }) => {
                           Descartar
                         </button>
                       )}
-                      {/* <button
-                        type='button'
-                        onClick={() => {}}
-                        disabled={isSubmitting || !esEdicion}
-                        className='px-5 py-2.5 rounded-full bg-[#c2a381] text-white font-bold shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed'
-                      >
-                        {'Publicar Curso'}
-                      </button> */}
                     </div>
                   </div>
 
@@ -692,8 +686,8 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                         <option value=''>Selecciona un instructor</option>
                                         {instructores?.map((inst) => (
                                           <option
-                                            key={inst.mmdusuarioid}
-                                            value={inst.mmdusuarioid}
+                                            key={inst.instructorId}
+                                            value={inst.instructorId}
                                           >
                                             {inst.nombre
                                               ? `${inst.nombre} ${inst.apellido || ''}`.trim()

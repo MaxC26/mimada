@@ -12,8 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { toast } from 'sonner'
 import LoadingSpinner from '../utils/LoadingSpinner'
-import { getInstructores } from '../../services/cursos'
-import { apiEliminarUsuario } from '../../services/usuarios'
+import { apiEliminarUsuario, getUsuarios } from '../../services/usuarios'
 
 const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
   const [usuarios, setUsuarios] = useState([])
@@ -25,13 +24,15 @@ const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
   const cargarUsuarios = async () => {
     setLoading(true)
     try {
-      const resp = await getInstructores()
+      const resp = await getUsuarios()
       // Soporta respuesta directa en array o envuelta en propiedad data/usuarios
       const lista = Array.isArray(resp) ? resp : resp?.usuarios || resp?.data || []
       setUsuarios(lista)
     } catch (error) {
       console.error('Error al cargar usuarios:', error)
-      toast.error('Error al obtener la lista de usuarios')
+      toast.error(
+        error?.response?.data?.message || 'Error al obtener la lista de usuarios'
+      )
       setUsuarios([])
     } finally {
       setLoading(false)

@@ -20,7 +20,6 @@ import { Inicio } from './components/settings/Inicio'
 import Servicios from './components/settings/Servicios'
 import Historia from './components/settings/Historia'
 import Categorias from './components/settings/Categorias'
-import InstructorSection from './pages/dashboard/UsuarioSection'
 import ExploreListPage from './pages/explore/ExploreListPage'
 import TodosCursosPage from './pages/explore/TodosCursosPage'
 import CursoDetallePage from './pages/explore/CursoDetallePage'
@@ -30,6 +29,8 @@ import { useAuth } from './context/AuthContext'
 import CartDrawer from './components/cart/CartDrawer'
 import CheckoutPage from './pages/CheckoutPage'
 import MisCursosPage from './pages/explore/MisCursosPage'
+import UsuarioSection from './pages/dashboard/UsuarioSection'
+import InstructorSection from './pages/dashboard/InstructorSection'
 
 function App() {
   ReactModal.setAppElement('#root')
@@ -119,7 +120,11 @@ function App() {
                 element={<CrearCursoSection />}
               />
               <Route path={routes.dashboard.categorias} element={<Categorias />} />
-              <Route path={routes.dashboard.usuarios} element={<InstructorSection />} />
+              <Route path={routes.dashboard.usuarios} element={<UsuarioSection />} />
+              <Route
+                path={routes.dashboard.instructores}
+                element={<InstructorSection />}
+              />
             </Route>
           ) : (
             <Route path={routes.settings + '/*'} element={<NotAllowedPage />} />
