@@ -258,9 +258,11 @@ const CrearCurso = ({ curso = null, onBack }) => {
           formData.append('caracteristicasId', JSON.stringify(caracteristicas))
         }
 
-        if (values.instructorId) {
-          formData.append('instructorId', values.instructorId)
+        if (values.instructor) {
+          formData.append('instructorId', values.instructor)
         }
+
+        console.log([...formData.entries()])
 
         await updateCurso(formData)
       } else {
