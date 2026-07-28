@@ -45,6 +45,9 @@ export const validarCurso = (esEdicion) =>
             schema.max(Number(precio) || 0, 'El descuento no puede ser mayor al precio.')
           )
       : Yup.number(),
+    caracteristicas: esEdicion
+      ? Yup.array().min(1, 'Selecciona al menos una característica del curso.')
+      : Yup.array(),
   })
 
 export const validarVideoCurso = Yup.object({
@@ -71,7 +74,7 @@ export const validarUsuario = (isEditing = false) =>
     telefono: Yup.string().trim().required('El teléfono es obligatorio'),
   })
 
-export const validarInstructor = (isEditing = false) =>
+export const validarInstructor = () =>
   Yup.object().shape({
     nombre: Yup.string().trim().required('El nombre es obligatorio'),
     apellido: Yup.string().trim().required('El apellido es obligatorio'),

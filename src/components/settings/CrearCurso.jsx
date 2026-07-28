@@ -813,6 +813,15 @@ const CrearCurso = ({ curso = null, onBack }) => {
                                       type='checkbox'
                                       name='caracteristicas'
                                       value={String(caracteristicaIdVal)}
+                                      onChange={(e) => {
+                                        const curr = values.caracteristicas || []
+                                        const val = e.target.value
+                                        const next = e.target.checked
+                                          ? [...curr, val]
+                                          : curr.filter((v) => v !== val)
+                                        setFieldValue('caracteristicas', next)
+                                        setFieldTouched('caracteristicas', true, false)
+                                      }}
                                       className='w-4 h-4 rounded border-gray-300 text-[#c2a381] focus:ring-[#c2a381] cursor-pointer'
                                     />
                                     <span className='text-sm font-medium flex-1 select-none'>
@@ -830,6 +839,13 @@ const CrearCurso = ({ curso = null, onBack }) => {
                           ) : (
                             <p className='text-sm text-gray-500'>
                               No hay características disponibles
+                            </p>
+                          )}
+
+                          {/* Error: al menos una caracteristica */}
+                          {touched.caracteristicas && errors.caracteristicas && (
+                            <p className='text-red-500 text-xs mt-1 font-medium'>
+                              * {errors.caracteristicas}
                             </p>
                           )}
                         </div>
