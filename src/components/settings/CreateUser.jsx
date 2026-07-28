@@ -1,61 +1,84 @@
 import { useState } from 'react'
-import { IconUserPlus, IconEye, IconEyeOff } from '@tabler/icons-react'
+import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { Formik, Form, Field } from 'formik'
 import { toast } from 'sonner'
-import { apiCrearUsuario } from '../../services/usuarios'
-import { validarCrearUsuario } from '../../utils/formValidation'
+import { apiCrearUsuario, apiActualizarUsuario } from '../../services/usuarios'
+import { validarUsuario } from '../../utils/formValidation'
 
-const CreateUser = () => {
+const CreateUser = ({ onSuccess, usuarioToEdit = null, onCancelEdit = null }) => {
+  const Loading = (text) => toast.loading(text)
+  const Success = (text) => toast.success(text)
+  const ErrorMessage = (text) => toast.error(text)
+
   const [showPassword, setShowPassword] = useState(false)
+  const isEditing = !!usuarioToEdit
 
   const handleSubmit = async (values, { resetForm }) => {
+    const toastId = Loading(isEditing ? 'Actualizando usuario...' : 'Creando usuario...')
+    const dataToSend = {
+      ...values,
+      roleid: 2,
+      ...(isEditing && {
+        userId: usuarioToEdit.mmdusuarioid,
+      }),
+    }
+
+    // Si está editando y el campo contraseña viene vacío, no enviarlo
+    if (isEditing && !dataToSend.contrasena) {
+      delete dataToSend.contrasena
+    }
+
     try {
-      await apiCrearUsuario(values)
-      toast.success('Usuario creado exitosamente')
+      if (isEditing) {
+        await apiActualizarUsuario(dataToSend)
+        toast.dismiss(toastId)
+        Success('Usuario actualizado exitosamente')
+      } else {
+        await apiCrearUsuario(dataToSend)
+        toast.dismiss(toastId)
+        Success('Usuario creado exitosamente')
+      }
       resetForm()
+      if (onCancelEdit) onCancelEdit()
+      if (onSuccess) onSuccess()
     } catch (error) {
-      const msg = error?.response?.data?.message || 'Error al crear el usuario'
-      toast.error(msg)
+      toast.dismiss(toastId)
+      const msg =
+        error?.response?.data?.message ||
+        `Error al ${isEditing ? 'actualizar' : 'crear'} el usuario`
+      ErrorMessage(msg)
     }
   }
 
   return (
-    <div className='w-full max-w-2xl mx-auto space-y-6'>
+    <div className='w-full max-w-4xl mx-auto space-y-6'>
       {/* Header */}
       <div>
-        <h2 className='text-2xl font-black text-gray-900'>Crear Usuario</h2>
+        <h2 className='text-2xl font-black text-gray-900'>
+          {isEditing ? 'Editar Usuario' : 'Crear Usuario'}
+        </h2>
         <p className='text-gray-500 text-sm mt-0.5'>
-          Registra un nuevo usuario en el sistema
+          {isEditing
+            ? 'Modifica la información del usuario seleccionado'
+            : 'Registra un nuevo usuario en el sistema'}
         </p>
       </div>
 
       {/* Formulario Formik */}
       <Formik
+        enableReinitialize
         initialValues={{
-          nombre: '',
-          apellido: '',
-          email: '',
+          nombre: usuarioToEdit?.nombre || usuarioToEdit?.name || '',
+          apellido: usuarioToEdit?.apellido || '',
+          email: usuarioToEdit?.email || '',
           contrasena: '',
-          telefono: '',
+          telefono: usuarioToEdit?.telefono || usuarioToEdit?.phone || '',
         }}
-        validationSchema={validarCrearUsuario}
+        validationSchema={validarUsuario(isEditing)}
         onSubmit={handleSubmit}
       >
         {({ errors, touched, isSubmitting, resetForm }) => (
           <Form className='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
-            {/* Barra decorativa superior */}
-            <div className='bg-[#faf7f5] px-6 py-4 border-b border-[#f3ece5] flex items-center gap-2'>
-              <div className='w-9 h-9 rounded-full bg-[#c2a381]/10 flex items-center justify-center text-[#c2a381]'>
-                <IconUserPlus size={18} stroke={2} />
-              </div>
-              <div>
-                <h3 className='font-bold text-gray-900 text-sm'>
-                  Información del Usuario
-                </h3>
-                <p className='text-xs text-gray-400'>Todos los campos son obligatorios</p>
-              </div>
-            </div>
-
             <div className='p-6 space-y-5'>
               {/* Nombre y Apellido en una fila */}
               <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
@@ -126,14 +149,21 @@ const CreateUser = () => {
               {/* Contraseña */}
               <div>
                 <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
-                  Contraseña
+                  Contraseña{' '}
+                  {isEditing && (
+                    <span className='text-gray-400 text-xs font-normal capitalize'>
+                      (Opcional al editar)
+                    </span>
+                  )}
                 </label>
                 <div className='relative'>
                   <Field
                     type={showPassword ? 'text' : 'password'}
                     name='contrasena'
                     disabled={isSubmitting}
-                    placeholder='••••••••'
+                    placeholder={
+                      isEditing ? '•••••••• (Dejar en blanco para conservar)' : '••••••••'
+                    }
                     className={`w-full border rounded-xl px-4 py-3 pr-11 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
                       touched.contrasena && errors.contrasena
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
@@ -167,7 +197,9 @@ const CreateUser = () => {
                   type='tel'
                   name='telefono'
                   disabled={isSubmitting}
-                  placeholder='Ej: +52 55 1234 5678'
+                  maxLength={8}
+                  minLength={8}
+                  placeholder='Ej: 77777777'
                   className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
                     touched.telefono && errors.telefono
                       ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
@@ -187,16 +219,36 @@ const CreateUser = () => {
                 disabled={isSubmitting}
                 className='flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-[#c2a381] text-white font-bold text-sm shadow-md shadow-[#c2a381]/30 hover:bg-[#a58b6c] hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0'
               >
-                {isSubmitting ? 'Creando...' : 'Crear Usuario'}
+                {isSubmitting
+                  ? isEditing
+                    ? 'Guardando...'
+                    : 'Creando...'
+                  : isEditing
+                    ? 'Guardar Cambios'
+                    : 'Crear Usuario'}
               </button>
-              <button
-                type='button'
-                onClick={() => resetForm()}
-                disabled={isSubmitting}
-                className='px-6 py-2.5 rounded-full border border-gray-200 bg-white text-gray-500 font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-              >
-                Limpiar
-              </button>
+              {isEditing ? (
+                <button
+                  type='button'
+                  onClick={() => {
+                    resetForm()
+                    if (onCancelEdit) onCancelEdit()
+                  }}
+                  disabled={isSubmitting}
+                  className='px-6 py-2.5 rounded-full border border-gray-200 bg-white text-gray-500 font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                >
+                  Cancelar Edición
+                </button>
+              ) : (
+                <button
+                  type='button'
+                  onClick={() => resetForm()}
+                  disabled={isSubmitting}
+                  className='px-6 py-2.5 rounded-full border border-gray-200 bg-white text-gray-500 font-semibold text-sm hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                >
+                  Limpiar
+                </button>
+              )}
             </div>
           </Form>
         )}

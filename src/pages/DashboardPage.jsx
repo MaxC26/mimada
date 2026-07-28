@@ -52,10 +52,10 @@ const navItems = [
     path: routes.dashboard.categorias,
   },
   {
-    id: SECCIONES_DASHBOARD.INSTRUCTORES,
-    label: 'Instructores',
+    id: SECCIONES_DASHBOARD.USUARIOS,
+    label: 'Usuarios',
     icon: IconUserPlus,
-    path: routes.dashboard.instructores,
+    path: routes.dashboard.usuarios,
   },
 ]
 
@@ -63,7 +63,7 @@ const DashboardPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  
+
   const { user } = useAuth()
   const rol = (user?.rol || user?.role || '').toUpperCase()
   const nombre = user?.nombre || user?.name || 'Usuario'

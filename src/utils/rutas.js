@@ -87,7 +87,7 @@ export const routes = Object.freeze({
     nuevoCurso: context + '/settings/cursos/nuevo',
     editarCurso: context + '/settings/cursos/editar/:id',
     categorias: context + '/settings/categorias',
-    instructores: context + '/settings/instructores',
+    usuarios: context + '/settings/usuarios',
   },
   previsualizarInicio: context + '/previsualizar/inicio',
   previsualizarHistoria: context + '/previsualizar/historia',

@@ -8,7 +8,7 @@ export const SECCIONES_DASHBOARD = Object.freeze({
   HISTORIA: 'historia',
   CURSOS: 'cursos',
   CATEGORIAS: 'categorias',
-  INSTRUCTORES: 'instructores',
+  USUARIOS: 'usuarios',
 })
 
 export const ESTADOS_CURSO = Object.freeze({

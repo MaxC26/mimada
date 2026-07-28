@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { Formik, Form, Field } from 'formik'
 import { toast } from 'sonner'
-import { apiCrearInstructor, apiActualizarInstructor } from '../../services/instructores'
+import { apiCrearInstructor, apiActualizarInstructor } from '../../services/usuarios'
 import { validarInstructor } from '../../utils/formValidation'
 
 const CreateInstructor = ({

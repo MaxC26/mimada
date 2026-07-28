@@ -56,7 +56,7 @@ export const validarVideoCurso = Yup.object({
     .required('La descripción es obligatoria'),
 })
 
-export const validarInstructor = (isEditing = false) =>
+export const validarUsuario = (isEditing = false) =>
   Yup.object().shape({
     nombre: Yup.string().trim().required('El nombre es obligatorio'),
     apellido: Yup.string().trim().required('El apellido es obligatorio'),

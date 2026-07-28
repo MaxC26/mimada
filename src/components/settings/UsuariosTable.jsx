@@ -13,40 +13,40 @@ import {
 import { toast } from 'sonner'
 import LoadingSpinner from '../utils/LoadingSpinner'
 import { getInstructores } from '../../services/cursos'
-import { apiEliminarInstructor } from '../../services/instructores'
+import { apiEliminarUsuario } from '../../services/usuarios'
 
-const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
-  const [instructores, setInstructores] = useState([])
+const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
+  const [usuarios, setUsuarios] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [confirmEliminarId, setConfirmEliminarId] = useState(null)
   const [isDeletingId, setIsDeletingId] = useState(null)
 
-  const cargarInstructores = async () => {
+  const cargarUsuarios = async () => {
     setLoading(true)
     try {
       const resp = await getInstructores()
-      // Soporta respuesta directa en array o envuelta en propiedad data/instructores
-      const lista = Array.isArray(resp) ? resp : resp?.instructores || resp?.data || []
-      setInstructores(lista)
+      // Soporta respuesta directa en array o envuelta en propiedad data/usuarios
+      const lista = Array.isArray(resp) ? resp : resp?.usuarios || resp?.data || []
+      setUsuarios(lista)
     } catch (error) {
-      console.error('Error al cargar instructores:', error)
-      toast.error('Error al obtener la lista de instructores')
-      setInstructores([])
+      console.error('Error al cargar usuarios:', error)
+      toast.error('Error al obtener la lista de usuarios')
+      setUsuarios([])
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    cargarInstructores()
+    cargarUsuarios()
   }, [reloadTrigger])
 
-  const eliminarInstructor = async (id) => {
+  const eliminarUsuarios = async (id) => {
     setIsDeletingId(id)
-    const toastId = toast.loading('Eliminando instructor...')
+    const toastId = toast.loading('Eliminando usuario...')
     try {
-      const resp = await apiEliminarInstructor(id)
+      const resp = await apiEliminarUsuario(id)
 
       // Validate the response — backend should return a truthy body;
       // some APIs also send { success: false } with a 200 status.
@@ -57,20 +57,20 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
       }
 
       toast.dismiss(toastId)
-      toast.success('Instructor eliminado exitosamente')
-      setInstructores((prev) => prev.filter((inst) => inst.mmdusuarioid !== id))
+      toast.success('Usuario eliminado exitosamente')
+      setUsuarios((prev) => prev.filter((inst) => inst.mmdusuarioid !== id))
       setConfirmEliminarId(null)
     } catch (error) {
       toast.dismiss(toastId)
       const msg =
-        error?.response?.data?.message || error?.message || 'Error al eliminar instructor'
+        error?.response?.data?.message || error?.message || 'Error al eliminar usuario'
       toast.error(msg)
     } finally {
       setIsDeletingId(null)
     }
   }
 
-  const instructoresFiltrados = instructores.filter((inst) => {
+  const usuariosFiltrados = usuarios.filter((inst) => {
     const query = search.toLowerCase().trim()
     if (!query) return true
 
@@ -88,9 +88,9 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
     <div className='w-full max-w-4xl mx-auto space-y-4'>
       {/* Container principal */}
       <div>
-        <h2 className='text-2xl font-black text-gray-900'>Instructores</h2>
+        <h2 className='text-2xl font-black text-gray-900'>Usuarios</h2>
         <p className='text-gray-500 text-sm mt-0.5'>
-          Listado general de instructores en la plataforma
+          Listado general de usuarios en la plataforma
         </p>
       </div>
       <div className='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
@@ -116,20 +116,18 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
           <div className='flex justify-center items-center py-12 text-[#c2a381]'>
             <LoadingSpinner />
           </div>
-        ) : instructoresFiltrados.length === 0 ? (
+        ) : usuariosFiltrados.length === 0 ? (
           <div className='px-6 py-12 text-center space-y-2'>
             <div className='w-12 h-12 rounded-full bg-[#faf7f5] text-[#c2a381] flex items-center justify-center mx-auto mb-2'>
               <IconUsers size={22} stroke={1.5} />
             </div>
             <p className='text-gray-600 font-semibold text-sm'>
-              {search
-                ? 'No se encontraron resultados'
-                : 'No hay instructores registrados'}
+              {search ? 'No se encontraron resultados' : 'No hay usuarios registrados'}
             </p>
             <p className='text-xs text-gray-400'>
               {search
                 ? 'Intenta con otro término de búsqueda.'
-                : 'Usa el formulario superior para registrar el primer instructor.'}
+                : 'Usa el formulario superior para registrar el primer usuario.'}
             </p>
           </div>
         ) : (
@@ -137,13 +135,13 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
             <table className='w-full text-left border-collapse'>
               <thead>
                 <tr className='border-b border-gray-100 bg-gray-50/50 text-[11px] font-black text-gray-400 uppercase tracking-widest'>
-                  <th className='px-6 py-3'>Instructor</th>
+                  <th className='px-6 py-3'>Usuario</th>
                   <th className='px-6 py-3'>Contacto</th>
                   <th className='px-6 py-3 text-right'>Acción</th>
                 </tr>
               </thead>
               <tbody className='divide-y divide-gray-50 text-sm'>
-                {instructoresFiltrados.map((inst) => {
+                {usuariosFiltrados.map((inst) => {
                   const instId = inst.mmdusuarioid
                   const nombre = inst.nombre || inst.name || 'Sin nombre'
                   const apellido = inst.apellido || ''
@@ -192,7 +190,7 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
                               ¿Eliminar?
                             </span>
                             <button
-                              onClick={() => eliminarInstructor(instId)}
+                              onClick={() => eliminarUsuarios(instId)}
                               disabled={isDeleting}
                               title='Confirmar eliminación'
                               className='px-2.5 py-1 rounded-lg bg-red-50 text-red-600 font-bold text-xs hover:bg-red-100 flex items-center gap-1 transition-colors disabled:opacity-50'
@@ -216,9 +214,9 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
                         ) : (
                           <div className='flex items-center justify-end gap-2'>
                             <button
-                              onClick={() => onEditInstructor && onEditInstructor(inst)}
+                              onClick={() => onEditUsuarios && onEditUsuarios(inst)}
                               className='px-3 py-1.5 rounded-lg text-xs font-bold text-[#c2a381] bg-[#faf7f5] hover:bg-[#f3ece5] transition-all flex items-center gap-1.5'
-                              title='Editar instructor'
+                              title='Editar usuario'
                             >
                               <IconPencil size={14} />
                               Editar
@@ -226,7 +224,7 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
                             <button
                               onClick={() => setConfirmEliminarId(instId)}
                               className='p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all'
-                              title='Eliminar instructor'
+                              title='Eliminar usuario'
                             >
                               <IconTrash size={15} />
                             </button>
@@ -245,4 +243,4 @@ const InstructoresTable = ({ reloadTrigger, onEditInstructor }) => {
   )
 }
 
-export default InstructoresTable
+export default UsuariosTable
