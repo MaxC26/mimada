@@ -29,6 +29,7 @@ const routesBackend = Object.freeze({
     getContenidoBySeccion: '/contenido/contenidoBySeccion?seccion=:seccion',
     updateSection: '/contenido/updateSeccion',
     updateSectionServicios: '/contenido/updateSeccionService',
+    getRoles: '/contenido/roles',
   },
   cursos: {
     getCursos: '/cursos',

@@ -48,9 +48,8 @@ const pickIcon = (nombre = '') => {
 }
 
 /* ── Componente principal ── */
-const CursoDetalle = ({ data, cursoId, onBack }) => {
+const CursoDetalle = ({ data, onBack }) => {
   const { user } = useAuth()
-  console.log('🚀 ~ CursoDetalle ~ data:', data)
   const [tab, setTab] = useState('descripcion')
   const [showAllReviews, setShowAllReviews] = useState(false)
   const { addToCart, isInCart, openCart } = useCart()

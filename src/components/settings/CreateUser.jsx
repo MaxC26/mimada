@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { Formik, Form, Field } from 'formik'
 import { toast } from 'sonner'
-import { apiCrearUsuario, apiActualizarUsuario } from '../../services/usuarios'
+import { apiCrearUsuario, apiActualizarUsuario, getRoles } from '../../services/usuarios'
 import { validarUsuario } from '../../utils/formValidation'
 
 const CreateUser = ({ onSuccess, usuarioToEdit = null, onCancelEdit = null }) => {
@@ -11,13 +11,23 @@ const CreateUser = ({ onSuccess, usuarioToEdit = null, onCancelEdit = null }) =>
   const ErrorMessage = (text) => toast.error(text)
 
   const [showPassword, setShowPassword] = useState(false)
+  const [roles, setRoles] = useState([])
   const isEditing = !!usuarioToEdit
+
+  useEffect(() => {
+    getRoles()
+      .then((resp) => {
+        setRoles(resp.data)
+      })
+      .catch(() => {
+        // Silently fall back to static options rendered in the select
+      })
+  }, [])
 
   const handleSubmit = async (values, { resetForm }) => {
     const toastId = Loading(isEditing ? 'Actualizando usuario...' : 'Creando usuario...')
     const dataToSend = {
       ...values,
-      roleid: 2,
       ...(isEditing && {
         userId: usuarioToEdit.mmdusuarioid,
       }),
@@ -73,6 +83,7 @@ const CreateUser = ({ onSuccess, usuarioToEdit = null, onCancelEdit = null }) =>
           email: usuarioToEdit?.email || '',
           contrasena: '',
           telefono: usuarioToEdit?.telefono || usuarioToEdit?.phone || '',
+          roleid: roles.find((r) => r.rol === usuarioToEdit?.rol)?.roleId ?? '',
         }}
         validationSchema={validarUsuario(isEditing)}
         onSubmit={handleSubmit}
@@ -188,27 +199,67 @@ const CreateUser = ({ onSuccess, usuarioToEdit = null, onCancelEdit = null }) =>
                 )}
               </div>
 
-              {/* Teléfono */}
-              <div>
-                <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
-                  Teléfono
-                </label>
-                <Field
-                  type='tel'
-                  name='telefono'
-                  disabled={isSubmitting}
-                  maxLength={8}
-                  minLength={8}
-                  placeholder='Ej: 77777777'
-                  className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
-                    touched.telefono && errors.telefono
-                      ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
-                      : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
-                  }`}
-                />
-                {touched.telefono && errors.telefono && (
-                  <p className='text-red-500 text-xs mt-1'>* {errors.telefono}</p>
-                )}
+              {/* Teléfono y Rol */}
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                {/* Teléfono */}
+                <div>
+                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
+                    Teléfono
+                  </label>
+                  <Field
+                    type='tel'
+                    name='telefono'
+                    disabled={isSubmitting}
+                    maxLength={8}
+                    minLength={8}
+                    placeholder='Ej: 77777777'
+                    className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 ${
+                      touched.telefono && errors.telefono
+                        ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
+                    }`}
+                  />
+                  {touched.telefono && errors.telefono && (
+                    <p className='text-red-500 text-xs mt-1'>* {errors.telefono}</p>
+                  )}
+                </div>
+
+                {/* Rol */}
+                <div>
+                  <label className='text-xs font-bold text-gray-500 uppercase tracking-widest block mb-1.5'>
+                    Rol
+                  </label>
+                  <Field
+                    as='select'
+                    name='roleid'
+                    disabled={isSubmitting}
+                    className={`w-full border rounded-xl px-4 py-3 text-sm text-gray-800 outline-none transition-all disabled:opacity-60 disabled:bg-gray-50 bg-white ${
+                      touched.roleid && errors.roleid
+                        ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                        : 'border-gray-200 focus:border-[#c2a381] focus:ring-2 focus:ring-[#f3ece5]'
+                    }`}
+                  >
+                    {roles?.length > 0 ? (
+                      <>
+                        <option value='' disabled>
+                          Selecciona un rol
+                        </option>
+                        {roles.map((r) => (
+                          <option key={r.roleId} value={r.roleId}>
+                            {r.rol}
+                          </option>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <option disabled>Sin opciones disponibles</option>
+                      </>
+                    )}
+                  </Field>
+                  {touched.roleid && errors.roleid && (
+                    <p className='text-red-500 text-xs mt-1'>* {errors.roleid}</p>
+                  )}
+                </div>
               </div>
             </div>
 

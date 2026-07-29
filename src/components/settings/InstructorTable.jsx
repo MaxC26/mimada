@@ -15,7 +15,6 @@ import { getInstructores } from '../../services/cursos'
 
 const InstructorTable = ({ reloadTrigger, onEditInstructor }) => {
   const [instructores, setInstructores] = useState([])
-  console.log('🚀 ~ InstructorTable ~ instructores:', instructores)
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [confirmEliminarId, setConfirmEliminarId] = useState(null)
@@ -168,7 +167,10 @@ const InstructorTable = ({ reloadTrigger, onEditInstructor }) => {
 
                       {/* Título */}
                       <td className='px-6 py-3.5'>
-                        <p className='text-xs text-gray-600 max-w-[200px] truncate' title={titulo}>
+                        <p
+                          className='text-xs text-gray-600 max-w-[200px] truncate'
+                          title={titulo}
+                        >
                           {titulo}
                         </p>
                       </td>

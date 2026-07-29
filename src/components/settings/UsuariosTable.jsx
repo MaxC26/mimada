@@ -138,6 +138,7 @@ const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
                 <tr className='border-b border-gray-100 bg-gray-50/50 text-[11px] font-black text-gray-400 uppercase tracking-widest'>
                   <th className='px-6 py-3'>Usuario</th>
                   <th className='px-6 py-3'>Contacto</th>
+                  <th className='px-6 py-3'>Rol</th>
                   <th className='px-6 py-3 text-right'>Acción</th>
                 </tr>
               </thead>
@@ -149,6 +150,7 @@ const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
                   const nombreCompleto = `${nombre} ${apellido}`.trim()
                   const email = inst.email || 'Sin correo'
                   const telefono = inst.telefono || inst.phone || '-'
+                  const rolLabel = inst.rol || 'Sin rol'
                   const isConfirming = confirmEliminarId === instId
                   const isDeleting = isDeletingId === instId
 
@@ -181,6 +183,15 @@ const UsuariosTable = ({ reloadTrigger, onEditUsuarios }) => {
                             <span>{telefono}</span>
                           </div>
                         )}
+                      </td>
+
+                      {/* Rol */}
+                      <td className='px-6 py-3.5'>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs`}
+                        >
+                          {rolLabel}
+                        </span>
                       </td>
 
                       {/* Acciones: Editar / Eliminar */}

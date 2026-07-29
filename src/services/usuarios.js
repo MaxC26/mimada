@@ -47,3 +47,17 @@ export const apiEliminarUsuario = async (id) => {
     throw error
   }
 }
+
+export function getRoles() {
+  const url = `${routes.backend.url}${routes.backend.contenido.getRoles}`
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then(function (response) {
+        resolve(response)
+      })
+      .catch(function (error) {
+        reject(error)
+      })
+  })
+}
